@@ -1,0 +1,648 @@
+{
+  "app": {
+    "title": "Adjust the tip",
+    "subtitle": "Tipskalkulator for den reisende"
+  },
+  "onboarding": {
+    "welcome": "Velkommen til Adjust the tip",
+    "subtitle": "La oss sette opp dine preferanser",
+    "nameLabel": "Ditt navn (valgfritt)",
+    "namePlaceholder": "F.eks. Alex",
+    "currencyLabel": "Din hjemmevaluta",
+    "currencyHint": "Brukes til å vise omtrentlige omregninger",
+    "searchPlaceholder": "Søk valutaer",
+    "getStarted": "Kom i gang"
+  },
+  "location": {
+    "button": "Hvor er du?",
+    "title": "Velg et land",
+    "search": "Søk land..."
+  },
+  "picker": {
+    "favourites": "Favoritter",
+    "recentlyUsed": "Nylig brukt"
+  },
+  "continent": {
+    "europa": "Europa",
+    "nord-amerika": "Nord-Amerika",
+    "sor-amerika": "Sør-Amerika",
+    "asia": "Asia",
+    "oseania": "Oseania",
+    "afrika": "Afrika",
+    "mellom-osten": "Midt-Østen"
+  },
+  "amount": {
+    "label": "Total regning",
+    "serviceType": "Hva slags regning?",
+    "placeholder": "0.00",
+    "scan": "Skann bon"
+  },
+  "satisfaction": {
+    "label": "Hvor fornøyd var du?",
+    "poor": "Misfornøyd",
+    "ok": "Fornøyd",
+    "excellent": "Veldig fornøyd",
+    "custom": "Egendefinert %",
+    "customPlaceholder": "Skriv inn %"
+  },
+  "split": {
+    "label": "Del regningen",
+    "people": "{{n}} personer",
+    "onePerson": "1 person"
+  },
+  "result": {
+    "title": "Resultat",
+    "original": "Opprinnelig beløp",
+    "tip": "Tips ({{percent}}%)",
+    "total": "Total med tips",
+    "perPerson": "Per person",
+    "home": "Tilsvarer ca. {{amount}} {{currency}}",
+    "noRate": "Valutakurs ikke tilgjengelig",
+    "save": "💾 Lagre"
+  },
+  "roundup": {
+    "label": "Avrund til"
+  },
+  "culture": {
+    "title": "Tippekultur",
+    "button": "Tippeskikker",
+    "overview": "Oversikt",
+    "restaurants": "Restaurant",
+    "taxis": "Taxi",
+    "shops": "Butikk",
+    "services": "Tjeneste",
+    "countries": {
+      "Norge": {
+        "general": "Tips er ikke forventet, men alltid satt pris på — en liten gest på 5–10 % viser ekte tilfredshet.",
+        "restaurants": "Tips er ikke forventet, men 5–10 % for god service settes pris på.",
+        "taxis": "Avrund til nærmeste 10 NOK, eller gi 10 % for utmerket service.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og spabehandlinger er en hyggelig gest, men ikke obligatorisk."
+      },
+      "Sverige": {
+        "general": "Tips er ikke obligatorisk, men et lite tips for god service mottas alltid godt.",
+        "restaurants": "Ikke vanlig, men 5–10 % er velkomment for god service.",
+        "taxis": "Avrund eller gi 10 % for hjelpsom sjåfør.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % for frisør og spa settes pris på."
+      },
+      "Danmark": {
+        "general": "Tips er ikke nødvendig; service er inkludert i prisene, men små gester mottas varmt.",
+        "restaurants": "Ikke forventet, men 5–10 % er en hyggelig gest for god service.",
+        "taxis": "Avrund til nærmeste 10 DKK.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % for personlige tjenester settes pris på."
+      },
+      "Finland": {
+        "general": "Tips er uvanlig og ikke forventet, men et lite beløp for utmerket service settes pris på.",
+        "restaurants": "Ikke forventet, men 5–10 % for utmerket service settes pris på.",
+        "taxis": "Det holder å avrunde beløpet.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og massasje er en hyggelig gest."
+      },
+      "Island": {
+        "general": "Tips er ikke en del av lokal kultur; servicegebyr er inkludert i de fleste regninger.",
+        "restaurants": "Tips er ikke tradisjonelt på Island; servicegebyr er ofte inkludert i regningen.",
+        "taxis": "Tips forventes ikke.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Servicegebyr er vanligvis inkludert; ekstra tips forventes ikke."
+      },
+      "Storbritannia": {
+        "general": "Tips er forventet for god service, spesielt på restauranter og i taxi — 10–15 % er normen.",
+        "restaurants": "10–12,5 % servicegebyr er ofte lagt til; hvis ikke, er 10–15 % vanlig.",
+        "taxis": "Avrund med 10–15 % for god service.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10–15 % til frisør og skjønnhetssalong er standard."
+      },
+      "Irland": {
+        "general": "Tips for god service er vanlig praksis, typisk 10–15 % på restauranter og for taxi.",
+        "restaurants": "10–15 % er vanlig hvis servicegebyr ikke allerede er inkludert.",
+        "taxis": "Avrund eller gi €1–2 ekstra for en hjelpsom sjåfør.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og skjønnhetsbehandlinger settes pris på."
+      },
+      "Frankrike": {
+        "general": "Service er lovpålagt inkludert i alle regninger, men ekstra tips for god service er en vennlig gest.",
+        "restaurants": "Service er lovpålagt inkludert (service compris), men 5–10 % ekstra for god service mottas gjerne.",
+        "taxis": "Avrund til nærmeste euro.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og spabehandlinger er vanlig."
+      },
+      "Italia": {
+        "general": "Kuvertavgift (coperto) er standard; tips i tillegg settes pris på, men er ikke obligatorisk.",
+        "restaurants": "Coperto (kuvertavgift) er vanlig; 5–10 % ekstra tips settes pris på, men er ikke påkrevd.",
+        "taxis": "Avrund til nærmeste euro.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og skjønnhetstjenester settes pris på."
+      },
+      "Spania": {
+        "general": "Service er vanligvis inkludert; små ekstra tips mottas gjerne, men er ikke forventet.",
+        "restaurants": "Servicegebyr er vanligvis inkludert; litt veksel eller 5–10 % ekstra mottas gjerne.",
+        "taxis": "Avrund til nærmeste euro.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og personlig pleie er vanlig."
+      },
+      "Portugal": {
+        "general": "Tips er ikke obligatorisk, men 5–10 % for god service settes pris på.",
+        "restaurants": "Ikke obligatorisk, men 5–10 % for god service settes pris på.",
+        "taxis": "Avrund til nærmeste euro.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og personlige tjenester er en hyggelig gest."
+      },
+      "Tyskland": {
+        "general": "Tips forventes — oppgi det totale beløpet inkludert tips ved betaling.",
+        "restaurants": "Oppgi det avrundede totalbeløpet ved betaling — 5–10 % over regningen er normen.",
+        "taxis": "Avrund med 10 % og oppgi totalbeløpet.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og personlig pleie forventes."
+      },
+      "Nederland": {
+        "general": "Avrunding eller 5–10 % ekstra for god service er vanlig og settes pris på.",
+        "restaurants": "Avrund eller legg til 5–10 % for god service.",
+        "taxis": "Avrund til nærmeste euro.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og personlig pleie settes pris på."
+      },
+      "Belgia": {
+        "general": "Service er vanligvis inkludert; et lite ekstra tips for god service er en vennlig gest.",
+        "restaurants": "Servicegebyr er vanligvis inkludert; 5–10 % ekstra mottas gjerne.",
+        "taxis": "Avrund til nærmeste euro.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Sveits": {
+        "general": "Service er vanligvis inkludert; 5–10 % ekstra for utmerket service settes pris på.",
+        "restaurants": "Service er vanligvis inkludert; 5–10 % ekstra for utmerket service settes pris på.",
+        "taxis": "Avrund med 10 %; sjåfører setter pris på et lite tips.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og spabehandlinger er vanlig."
+      },
+      "Østerrike": {
+        "general": "Tips er vanlig — oppgi det avrundede totalbeløpet fremfor å legge igjen kontanter.",
+        "restaurants": "Oppgi det avrundede totalbeløpet til tjeneren; 5–10 % er vanlig.",
+        "taxis": "Avrund med 10 % og oppgi totalbeløpet.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester er standard."
+      },
+      "Hellas": {
+        "general": "Tips er vanlig, spesielt i turistområder — 5–10 % for god service settes pris på.",
+        "restaurants": "5–10 % settes pris på; servicegebyr kan være inkludert eller ikke.",
+        "taxis": "Avrund til nærmeste euro.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og personlig pleie er vanlig."
+      },
+      "Tyrkia": {
+        "general": "Tips er mye forventet; 10–15 % på restauranter og avrunding i taxi er normen.",
+        "restaurants": "10–15 % forventes hvis servicegebyr ikke er inkludert i regningen.",
+        "taxis": "Avrund til nærmeste lira.",
+        "shops": "Tips forventes ikke, men guider setter pris på det.",
+        "services": "10 % til frisør og personlige tjenester er standard."
+      },
+      "Polen": {
+        "general": "Tips er vanlig og satt pris på — 10 % er standard for god service.",
+        "restaurants": "10 % er normen for god service på restauranter.",
+        "taxis": "Avrund til nærmeste zloty eller legg til 10 %.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlig pleie settes pris på."
+      },
+      "Tsjekkia": {
+        "general": "Tips er vanlig; oppgi det totale beløpet du vil betale inkludert 10–15 % drikkepenger.",
+        "restaurants": "10–15 % settes pris på; avrund eller oppgi totalbeløpet.",
+        "taxis": "Avrund med 10 % og oppgi totalbeløpet.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester forventes."
+      },
+      "Ungarn": {
+        "general": "Tips er standard praksis; 10 % forventes i de fleste servicesituasjoner.",
+        "restaurants": "10 % er vanlig; noen restauranter legger til servicegebyr automatisk.",
+        "taxis": "Avrund eller legg til 10 % for god service.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør er standard; spabehandlinger inkluderer ofte drikkepenger."
+      },
+      "Kroatia": {
+        "general": "Tips settes pris på og er stadig mer vanlig, spesielt i turistområder.",
+        "restaurants": "10 % for god service settes pris på; servicegebyr er ikke alltid inkludert.",
+        "taxis": "Avrund til nærmeste euro.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester er vanlig."
+      },
+      "Romania": {
+        "general": "Tips er vanlig og forventet — 10 % kontant er normen for god service.",
+        "restaurants": "10 % er normen; legg igjen kontanter eller oppgi beløpet ved betaling.",
+        "taxis": "Avrund eller legg til 10 % for god service.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlig pleie settes pris på."
+      },
+      "Bulgaria": {
+        "general": "Tips er vanlig og satt pris på; 10 % er standard for god service.",
+        "restaurants": "10 % er vanlig og setter god service i perspektiv.",
+        "taxis": "Avrund til nærmeste lev.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester er standard."
+      },
+      "Russland": {
+        "general": "Kontanttips er vanlig på restauranter og for personlige tjenester — 10 % er normen.",
+        "restaurants": "10 % er vanlig på restauranter, vanligvis betalt kontant.",
+        "taxis": "Avtal pris på forhånd; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester er standard."
+      },
+      "USA": {
+        "general": "Tips er en integrert del av serviceøkonomien — 15–20 % er det forventede minimum.",
+        "restaurants": "15–20 % er standard og forventes på restauranter med servering.",
+        "taxis": "15–20 % tips forventes; Uber og Lyft ber også om tips.",
+        "shops": "Ingen tips i butikker, men tipskrukker er vanlig på kafeer.",
+        "services": "15–20 % til frisør, massasje og personlig service er normen."
+      },
+      "Canada": {
+        "general": "Tipskultur ligner USA nøye — 15–20 % forventes for de fleste tjenester.",
+        "restaurants": "15–20 % er standard på restauranter, tilsvarende som i USA.",
+        "taxis": "15–20 % tips forventes.",
+        "shops": "Ingen tips i butikker, men tipskrukker er vanlig på kafeer.",
+        "services": "15–20 % til frisør og personlig service er normen."
+      },
+      "Mexico": {
+        "general": "Tips er vanlig og viktig for servicearbeidere som er avhengige av drikkepenger.",
+        "restaurants": "10–15 % er vanlig; servicegebyr er noen ganger inkludert.",
+        "taxis": "Avrund eller legg til 10–15 % for god service.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10–15 % til frisør og personlig service settes pris på."
+      },
+      "Brasil": {
+        "general": "10 % servicegebyr er vanligvis inkludert; tips utover det er en generøs gest.",
+        "restaurants": "10 % servicegebyr (taxa de serviço) er vanligvis inkludert; ekstra tips mottas gjerne.",
+        "taxis": "Avrund til nærmeste real.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester er vanlig."
+      },
+      "Argentina": {
+        "general": "Tips er vanlig og viktig; servicearbeidere er avhengige av drikkepenger for å supplere lave lønninger.",
+        "restaurants": "10 % er vanlig; serveringspersonalet er avhengig av tips ettersom lønningene er lave.",
+        "taxis": "Avrund; bilservices (remises) forventer ikke tips.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester er standard."
+      },
+      "Chile": {
+        "general": "10 % propina er standard og legges noen ganger til automatisk.",
+        "restaurants": "10 % propina er vanlig og legges noen ganger til automatisk.",
+        "taxis": "Avrund til nærmeste peso.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Colombia": {
+        "general": "10 % propina er normen; legges ofte til automatisk på eksklusive restauranter.",
+        "restaurants": "10 % propina er standard; noen restauranter inkluderer det automatisk.",
+        "taxis": "Avrund eller gi noen vekslepenger.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlig pleie er vanlig."
+      },
+      "Peru": {
+        "general": "Tips settes pris på, spesielt på turistrestauranter og for guider.",
+        "restaurants": "10 % forventes på mellomklasse- og eksklusive restauranter.",
+        "taxis": "Avtal pris på forhånd; tips forventes ikke.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlig pleie settes pris på."
+      },
+      "Ecuador": {
+        "general": "Tips settes pris på; 10 % er vanlig når servicegebyr ikke er inkludert.",
+        "restaurants": "10 % servicegebyr er noen ganger inkludert; hvis ikke, settes 10 % pris på.",
+        "taxis": "Avrund til nærmeste dollar.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør er vanlig."
+      },
+      "Uruguay": {
+        "general": "10 % propina er standard praksis i de fleste servicesituasjoner.",
+        "restaurants": "10 % propina er standard på de fleste restauranter.",
+        "taxis": "Avrund til nærmeste peso.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Japan": {
+        "general": "Tips praktiseres ikke og kan anses som uhøflig — utmerket service er ganske enkelt forventet.",
+        "restaurants": "Tips er ikke vanlig og kan oppfattes som uhøflig — utmerket service er rett og slett standarden.",
+        "taxis": "Ingen tips; betal nøyaktig beløp eller ta igjen vekslepengene.",
+        "shops": "Tips gis aldri i butikker.",
+        "services": "Tips gis ikke for noen tjenester; takknemlighet vises gjennom høflighet."
+      },
+      "Kina": {
+        "general": "Tips er ikke tradisjonelt, men blir mer akseptert i turistområder og eksklusive steder.",
+        "restaurants": "Tips er ikke tradisjonelt, men aksepteres i turistområder og eksklusive restauranter.",
+        "taxis": "Tips forventes ikke; bruk taksameter.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % på eksklusive hoteller mottas, men forventes ikke generelt."
+      },
+      "Sør-Korea": {
+        "general": "Tips er ikke vanlig og kan kjennes ubehagelig; utmerket service er sin egen belønning.",
+        "restaurants": "Tips er ikke vanlig og kan virke ubehagelig; servicegebyr er inkludert på eksklusive steder.",
+        "taxis": "Ingen tips; bruk taksameter.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Ingen tips i tradisjonelle tjenester; noen internasjonale spa kan akseptere det."
+      },
+      "Thailand": {
+        "general": "Tips settes pris på, men er ikke obligatorisk; små tips er en hyggelig gest for god service.",
+        "restaurants": "20–50 THB per person for god service settes pris på; noen restauranter legger til servicegebyr.",
+        "taxis": "Avrund til nærmeste 5 THB; for tuk-tuk, avtal pris.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "50–100 THB for massasje og skjønnhetstjenester er standard og settes pris på."
+      },
+      "Vietnam": {
+        "general": "Tips er ikke påkrevd, men settes pris på, spesielt i turistområder og for personlige tjenester.",
+        "restaurants": "Ikke påkrevd, men 10 % settes pris på på turistrestauranter.",
+        "taxis": "Avrund; avtal pris med mopedtaxi.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "20 000–50 000 VND for massasje og spa er en hyggelig gest."
+      },
+      "Indonesia": {
+        "general": "Tips er ikke obligatorisk, men små tips for god service mottas gjerne.",
+        "restaurants": "5–10 % hvis servicegebyr ikke er inkludert; legg igjen kontanter.",
+        "taxis": "Avrund; avtal pris med ride-hailing apper.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % for massasje og personlige tjenester settes pris på."
+      },
+      "Malaysia": {
+        "general": "Servicegebyrer er ofte inkludert; ekstra tips mottas gjerne, men er ikke nødvendig.",
+        "restaurants": "Servicegebyr og statlig avgift er ofte inkludert; ekstra tips mottas gjerne.",
+        "taxis": "Tips forventes ikke; bruk taksameter eller avtal pris.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % for personlige tjenester er en hyggelig gest."
+      },
+      "Filippinene": {
+        "general": "Tips settes pris på for god service og blir mer vanlig i byene.",
+        "restaurants": "10 % settes pris på hvis servicegebyr ikke allerede er inkludert.",
+        "taxis": "Avrund til nærmeste peso.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlig pleie er standard."
+      },
+      "Singapore": {
+        "general": "Servicegebyr og GST er nesten alltid inkludert — ekstra tips er ikke nødvendig.",
+        "restaurants": "10 % servicegebyr og 9 % GST er nesten alltid inkludert; ekstra tips ikke nødvendig.",
+        "taxis": "Tips forventes ikke; taksameter brukes.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Servicegebyr er vanligvis inkludert; ekstra tips ikke nødvendig."
+      },
+      "India": {
+        "general": "Tips settes pris på, men er ikke alltid forventet; kontanttips ved siden av kortbetaling er vanlig.",
+        "restaurants": "10 % settes pris på hvis servicegebyr ikke er inkludert; lite kontanttips i tillegg til kortbetaling er vanlig.",
+        "taxis": "Avrund eller legg til 10–15 % for hjelpsomme sjåfører.",
+        "shops": "Tips gis ikke i butikker, men små tips til bærere settes pris på.",
+        "services": "10–15 % til frisør og personlig pleie er vanlig."
+      },
+      "Sri Lanka": {
+        "general": "Tips settes pris på, spesielt i turistområder; kontanter foretrekkes fremfor korttips.",
+        "restaurants": "10 % for god service settes pris på; servicegebyr er noen ganger inkludert.",
+        "taxis": "Avtal pris på forhånd; tips forventes ikke.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % for spa og personlig pleie er en hyggelig gest."
+      },
+      "Nepal": {
+        "general": "Tips er viktig for servicearbeidere, spesielt guider, bærere og hotellansatte.",
+        "restaurants": "10–15 % settes pris på på turistrestauranter.",
+        "taxis": "Avtal pris på forhånd; tips er ikke vanlig.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10–15 % til trekking-guider og bærere er viktig og forventes."
+      },
+      "Pakistan": {
+        "general": "Tips settes pris på på eksklusive steder; enklere steder forventer det generelt ikke.",
+        "restaurants": "10 % settes pris på på eksklusive restauranter; enklere steder forventer det ikke.",
+        "taxis": "Avtalte priser er standard; tips forventes ikke.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør settes pris på i byene."
+      },
+      "Bangladesh": {
+        "general": "Tips mottas gjerne på mellomklasse- og eksklusive steder.",
+        "restaurants": "10 % mottas gjerne på mellomklasse- og eksklusive restauranter.",
+        "taxis": "Priser avtales; små tips settes pris på for god service.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlig pleie settes pris på."
+      },
+      "Hong Kong": {
+        "general": "10 % servicegebyr er vanligvis inkludert; et ekstra kontanttips er en hyggelig gest.",
+        "restaurants": "10 % servicegebyr er vanligvis inkludert; 5–10 % ekstra kontanttips er en vennlig gest.",
+        "taxis": "Avrund til neste dollar; store sedler settes ikke pris på for små beløp.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % for personlige tjenester er standard."
+      },
+      "Taiwan": {
+        "general": "Tips er ikke vanlig; utmerket service er standardforventningen.",
+        "restaurants": "Tips er ikke vanlig; utmerket service er normen.",
+        "taxis": "Ingen tips; bruk taksameter.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Servicegebyr er av og til inkludert på eksklusive steder; ellers forventes ikke tips."
+      },
+      "Australia": {
+        "general": "Tips er ikke obligatorisk, men 10 % for god service er en velkommen gest.",
+        "restaurants": "Ikke obligatorisk, men 10 % for god service settes pris på.",
+        "taxis": "Avrund eller legg til 10 % for god service.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlig pleie er en hyggelig gest."
+      },
+      "New Zealand": {
+        "general": "Tips er ikke en sterk tradisjon; 10 % for god service settes pris på, men forventes ikke.",
+        "restaurants": "Ikke vanlig, men 10 % for god service settes pris på.",
+        "taxis": "Avrund; ingen sterk tippekultur.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør settes pris på, men er ikke sterkt forventet."
+      },
+      "Fiji": {
+        "general": "Tips settes pris på i turistområder; små tips for god service mottas gjerne.",
+        "restaurants": "5–10 % for god service settes pris på, spesielt i turistområder.",
+        "taxis": "Avrund eller gi et lite tips til hjelpsomme sjåfører.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % for spa og personlige tjenester settes pris på."
+      },
+      "Sør-Afrika": {
+        "general": "Tips er viktig — servicearbeidere har ofte veldig lave grunnlønninger og er avhengige av drikkepenger.",
+        "restaurants": "10–15 % forventes og er viktig; serveringspersonalet har ofte veldig lave grunnlønninger.",
+        "taxis": "10–15 % for god service forventes; for minibuss-taxi, avrund.",
+        "shops": "Tips gis ikke i butikker, men bensinstasjonsansatte forventer et lite tips.",
+        "services": "10–15 % til frisør og personlige tjenester er standard."
+      },
+      "Egypt": {
+        "general": "Drikkepenger (baksheesh) er dypt forankret i kulturen og forventes i alle servicebransjer.",
+        "restaurants": "10–15 % (baksheesh) forventes og er vanlig i alle servicebransjer.",
+        "taxis": "Avtal pris på forhånd; avrund til slutt.",
+        "shops": "Små tips til assistenter og guider settes pris på.",
+        "services": "10–15 % for spa og personlige tjenester er vanlig."
+      },
+      "Marokko": {
+        "general": "Tips er vanlig og forventet; service er sjelden inkludert i regningen.",
+        "restaurants": "10 % er vanlig; service er sjelden inkludert.",
+        "taxis": "Avtal pris først; avrund til slutt.",
+        "shops": "Små tips til assistenter og guider settes pris på.",
+        "services": "10 % til hammam, spa og personlig pleie er standard."
+      },
+      "Tunisia": {
+        "general": "Tips settes pris på og er vanlig; service er ikke alltid inkludert i regningen.",
+        "restaurants": "10 % settes pris på; service kan være inkludert eller ikke.",
+        "taxis": "Avtal pris først; avrund til slutt.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til personlig pleie og hammam settes pris på."
+      },
+      "Kenya": {
+        "general": "Tips forventes, spesielt i turistområder, og er viktig for servicearbeideres levebrød.",
+        "restaurants": "10 % forventes i turistområder; tips støtter lavtlønnte servicearbeidere.",
+        "taxis": "Avtal pris på forhånd; tips settes pris på, men er ikke påkrevd.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10–15 % til safariguider og lodger er viktig og forventes."
+      },
+      "Tanzania": {
+        "general": "Tips settes pris på og er viktig, spesielt for safariguider og trekkingstab.",
+        "restaurants": "10 % settes pris på; servicegebyr er noen ganger inkludert.",
+        "taxis": "Avtal pris først; tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10–15 % til safariguider og trekkingbærere er forventet og viktig."
+      },
+      "Ghana": {
+        "general": "Tips settes pris på på restauranter og for personlige tjenester; forventes ikke sterkt.",
+        "restaurants": "10 % settes pris på på eksklusive og turistrestauranter.",
+        "taxis": "Avtal pris først; tips er ikke obligatorisk.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Nigeria": {
+        "general": "Tips er vanlig på eksklusive steder og for god service i de fleste bransjer.",
+        "restaurants": "10 % settes pris på på eksklusive restauranter; uformelle steder forventer det ikke.",
+        "taxis": "Avtal pris før du setter deg inn; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester er standard."
+      },
+      "De forente arabiske emirater": {
+        "general": "Tips settes pris på, men er ikke obligatorisk; servicegebyrer er ofte allerede inkludert.",
+        "restaurants": "10 % servicegebyr er ofte inkludert; 10 % ekstra kontanttips settes pris på.",
+        "taxis": "Tips forventes ikke; taksameter brukes i Dubai og Abu Dhabi.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10–15 % til spa, hotell og personlige tjenester settes pris på."
+      },
+      "Saudi-Arabia": {
+        "general": "Tips settes pris på og mottas gjerne, spesielt for hotell- og restaurantservice.",
+        "restaurants": "10 % settes pris på; servicegebyr er noen ganger inkludert.",
+        "taxis": "Tips forventes ikke; Uber og lignende er vanlig.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til bærere og hotellansatte settes pris på."
+      },
+      "Qatar": {
+        "general": "Tips settes pris på; servicegebyrer er vanlige, men ekstra tips mottas alltid gjerne.",
+        "restaurants": "10 % servicegebyr er vanlig; ekstra tips mottas gjerne.",
+        "taxis": "Tips forventes ikke; taksameter og ride-hailing apper er standard.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til hotell og personlig pleie settes pris på."
+      },
+      "Kuwait": {
+        "general": "Tips er en hyggelig gest og settes pris på, selv om det ikke sterkt forventes.",
+        "restaurants": "10 % settes pris på; servicegebyr kan være inkludert.",
+        "taxis": "Tips forventes ikke; avtal pris for taxi uten meter.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til hotell og personlig pleie er en hyggelig gest."
+      },
+      "Oman": {
+        "general": "Tips mottas gjerne og settes pris på; omanere er kjent for sin varme gjestfrihet.",
+        "restaurants": "10 % settes pris på; omanere er kjent for sin gjestfrihet.",
+        "taxis": "Avtal pris på forhånd; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til hotellansatte og personlige tjenester mottas gjerne."
+      },
+      "Bahrain": {
+        "general": "Tips settes pris på; servicegebyrer er noen ganger inkludert på turiststeder.",
+        "restaurants": "10 % settes pris på; servicegebyr er noen ganger inkludert på turiststeder.",
+        "taxis": "Tips forventes ikke; ride-hailing apper er vanlig.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til hotell og personlige tjenester settes pris på."
+      },
+      "Israel": {
+        "general": "Tips er vanlig praksis; 10–12 % er standard for restauranter og personlige tjenester.",
+        "restaurants": "10–12 % er standard; servicegebyr legges noen ganger til på turiststeder.",
+        "taxis": "Avrund til nærmeste shekel; ingen sterk tippekultur for taxi.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og skjønnhetstjenester er vanlig."
+      },
+      "Libanon": {
+        "general": "Tips er vanlig og satt pris på; service er sjelden inkludert i regningen.",
+        "restaurants": "10–15 % settes pris på; service er sjelden inkludert i regningen.",
+        "taxis": "Avtal pris på forhånd; tips forventes ikke.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10–15 % til frisør og personlige tjenester er standard."
+      },
+      "Jordan": {
+        "general": "Tips settes pris på og er vanlig for hotell-, restaurant- og personlige tjenester.",
+        "restaurants": "10 % settes pris på; servicegebyr er noen ganger inkludert.",
+        "taxis": "Avtal pris før reisen; tips forventes ikke.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til hotellansatte og personlige tjenester settes pris på."
+      }
+    }
+  },
+  "scan": {
+    "title": "Skann bon",
+    "capture": "Ta bilde",
+    "retake": "Ta nytt bilde",
+    "use": "Bruk beløp",
+    "itemized": "Velg poster å inkludere",
+    "itemizedHint": "Trykk for å velge/fjerne poster",
+    "useSelected": "Bruk valgte poster ({{sum}})",
+    "unavailable": "Skanning av bon krever en development build og er ikke tilgjengelig i Expo Go.",
+    "noAmount": "Fant ingen beløp på bildet",
+    "error": "Kunne ikke lese bilde – skriv inn manuelt",
+    "permission": "Kameratilgang kreves",
+    "permissionBtn": "Gi tilgang"
+  },
+  "history": {
+    "title": "Historikk",
+    "empty": "Ingen beregnede tips ennå",
+    "emptyHint": "Beregn et tips for å se det her",
+    "people": "{{n}} pers.",
+    "delete": "Slett"
+  },
+  "settings": {
+    "title": "Innstillinger",
+    "profileSection": "Profil",
+    "userName": "Ditt navn",
+    "userNamePlaceholder": "Navn (valgfritt)",
+    "homeCurrency": "Hjemmevaluta",
+    "homeCurrencyHint": "Omregninger vises i denne valutaen",
+    "defaultsSection": "Standardverdier",
+    "defaultPeople": "Standard antall personer",
+    "defaultSatisfaction": "Standard tilfredshetsnivå",
+    "defaultSatisfactionNone": "Ingen (ikke forhåndsvalgt)",
+    "appSection": "App",
+    "keepScreenAwake": "Hold skjermen på",
+    "keepScreenAwakeHint": "Forhindrer at skjermen låses mens appen er åpen",
+    "darkMode": "Mørk modus",
+    "dangerSection": "Data",
+    "clearHistory": "Tøm historikk",
+    "clearHistoryConfirm": "Er du sikker? Dette kan ikke angres.",
+    "language": "Språk",
+    "rates": "Oppdater valutakurser",
+    "ratesLoading": "Henter kurser...",
+    "ratesDefault": "Lokale kurser (januar 2026)",
+    "ratesUpdated": "Oppdatert: {{time}} ({{count}} valutaer)",
+    "ratesError": "Kunne ikke oppdatere – bruker lokale kurser",
+    "version": "Versjon"
+  },
+  "about": {
+    "title": "Om appen",
+    "description": "Adjust the tip er en drikkepengekalkulator for reisende. Den gir kulturelt tilpassede retningslinjer for drikkepenger i 60+ land — for restauranter, taxi, butikker og tjenester.",
+    "feedbackTitle": "Tilbakemelding",
+    "feedbackBody": "Har du et forslag eller funnet en feil? Vi vil gjerne høre fra deg.",
+    "feedbackBtn": "Send tilbakemelding på e-post"
+  },
+  "help": {
+    "title": "Slik bruker du appen",
+    "intro": "En kort guide til alle funksjonene i Adjust the tip.",
+    "step1Title": "1. Velg sted",
+    "step1Body": "Trykk på stedfeltet og velg landet du er i. Appen kan også foreslå din posisjon automatisk via GPS.",
+    "step2Title": "2. Velg type regning",
+    "step2Body": "Velg om du betaler på restaurant, tar taxi, handler eller bruker en tjeneste. Dette justerer anbefalte drikkepenger.",
+    "step3Title": "3. Drikkepengeskikker",
+    "step3Body": "Trykk på 📖-ikonet ved siden av landvelgeren for å lese om lokale drikkepengskikker for valgt land og regningstype.",
+    "step4Title": "4. Skriv inn beløp",
+    "step4Body": "Skriv inn totalbeløpet på regningen. Du kan også skanne en bon med kameraknappen.",
+    "step5Title": "5. Vurder opplevelsen",
+    "step5Body": "Velg 😕 Misfornøyd, 🙂 OK eller 😄 Utmerket — hver tilsvarer en lokalt passende prosentsats. Bruk ✏️ Egendefinert for å angi din egen.",
+    "step6Title": "6. Se resultatet",
+    "step6Body": "Resultatkortet viser drikkepengbeløpet og totalen. Trykk på avrundingsknappene for å betale et rundt beløp. Trykk Lagre for å beholde beregningen i historikken.",
+    "step7Title": "7. Del regningen",
+    "step7Body": "Bruk splitter-funksjonen under resultatet for å dele totalen på flere personer. Beløpet per person vises automatisk.",
+    "step8Title": "8. Favoritter",
+    "step8Body": "I landvelgeren, trykk ★ ved siden av et land for å lagre det som favoritt. Favoritter vises øverst. Uten favoritter vises de 3 sist brukte landene der."
+  }
+}

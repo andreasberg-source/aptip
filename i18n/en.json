@@ -1,0 +1,648 @@
+{
+  "app": {
+    "title": "Adjust the tip",
+    "subtitle": "Tip calculator for the traveller"
+  },
+  "onboarding": {
+    "welcome": "Welcome to Adjust the tip",
+    "subtitle": "Let's set up your preferences",
+    "nameLabel": "Your name (optional)",
+    "namePlaceholder": "E.g. Alex",
+    "currencyLabel": "Your home currency",
+    "currencyHint": "Used to show approximate conversions",
+    "searchPlaceholder": "Search currencies",
+    "getStarted": "Get started"
+  },
+  "location": {
+    "button": "Where are you?",
+    "title": "Select a country",
+    "search": "Search countries..."
+  },
+  "picker": {
+    "favourites": "Favourites",
+    "recentlyUsed": "Recently used"
+  },
+  "continent": {
+    "europa": "Europe",
+    "nord-amerika": "North America",
+    "sor-amerika": "South America",
+    "asia": "Asia",
+    "oseania": "Oceania",
+    "afrika": "Africa",
+    "mellom-osten": "Middle East"
+  },
+  "amount": {
+    "label": "Total bill",
+    "serviceType": "What kind of bill?",
+    "placeholder": "0.00",
+    "scan": "Scan receipt"
+  },
+  "satisfaction": {
+    "label": "How satisfied were you?",
+    "poor": "Unsatisfied",
+    "ok": "Satisfied",
+    "excellent": "Very satisfied",
+    "custom": "Custom %",
+    "customPlaceholder": "Enter %"
+  },
+  "split": {
+    "label": "Split the bill",
+    "people": "{{n}} people",
+    "onePerson": "1 person"
+  },
+  "result": {
+    "title": "Result",
+    "original": "Original amount",
+    "tip": "Tip ({{percent}}%)",
+    "total": "Total with tip",
+    "perPerson": "Per person",
+    "home": "Approx. {{amount}} {{currency}}",
+    "noRate": "Exchange rate unavailable",
+    "save": "💾 Save"
+  },
+  "roundup": {
+    "label": "Round up to"
+  },
+  "culture": {
+    "title": "Tipping culture",
+    "button": "Tipping customs",
+    "overview": "Overview",
+    "restaurants": "Restaurant",
+    "taxis": "Taxi",
+    "shops": "Shop",
+    "services": "Service",
+    "countries": {
+      "Norge": {
+        "general": "Tipping is not expected but always appreciated — a small gesture of 5–10% signals genuine satisfaction.",
+        "restaurants": "Tipping is not expected, but 5–10% for good service is a warm gesture.",
+        "taxis": "Round up to the nearest 10 NOK, or add 10% for excellent service.",
+        "shops": "No tipping in shops.",
+        "services": "5–10% for hairdressers and spa treatments is appreciated but not obligatory."
+      },
+      "Sverige": {
+        "general": "Tipping is not obligatory, but a small tip for good service is always well received.",
+        "restaurants": "Not customary, but 5–10% is welcome for good service.",
+        "taxis": "Round up or add 10% for helpful drivers.",
+        "shops": "No tipping expected.",
+        "services": "5–10% for hairdressers and spa services is appreciated."
+      },
+      "Danmark": {
+        "general": "Tipping is not required; service is included in prices, but small gestures are warmly received.",
+        "restaurants": "Not expected, but 5–10% is a warm gesture for good service.",
+        "taxis": "Round up to the nearest 10 DKK.",
+        "shops": "No tipping in shops.",
+        "services": "5–10% for personal services is appreciated."
+      },
+      "Finland": {
+        "general": "Tipping is uncommon and not expected, but a small amount for excellent service is appreciated.",
+        "restaurants": "Not expected, but 5–10% for excellent service is appreciated.",
+        "taxis": "Rounding up is sufficient.",
+        "shops": "No tipping in shops.",
+        "services": "5–10% for hairdressers and massage is a kind gesture."
+      },
+      "Island": {
+        "general": "Tipping is not part of local culture; service charges are built into most bills.",
+        "restaurants": "Tipping is not traditional; service charges are often built into the bill.",
+        "taxis": "No tipping expected.",
+        "shops": "No tipping in shops.",
+        "services": "Service charges are usually included; extra tips are not expected."
+      },
+      "Storbritannia": {
+        "general": "Tipping is expected for good service, especially in restaurants and taxis — 10–15% is the norm.",
+        "restaurants": "10–12.5% service charge is often added; if not, 10–15% is customary.",
+        "taxis": "Round up 10–15% for good service.",
+        "shops": "No tipping in shops.",
+        "services": "10–15% for hairdressers and beauty services is standard."
+      },
+      "Irland": {
+        "general": "Tipping for good service is common practice, typically 10–15% in restaurants and for taxis.",
+        "restaurants": "10–15% is common if service charge is not already included.",
+        "taxis": "Round up or add €1–2 for a helpful driver.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers and beauty treatments is appreciated."
+      },
+      "Frankrike": {
+        "general": "Service is legally included in all bills, but an extra tip for great service is a warm gesture.",
+        "restaurants": "Service is legally included (service compris), but an extra 5–10% for great service is welcomed.",
+        "taxis": "Round up to the nearest euro.",
+        "shops": "No tipping in shops.",
+        "services": "5–10% for hairdressers and spa treatments is customary."
+      },
+      "Italia": {
+        "general": "A cover charge (coperto) is standard; tipping on top is appreciated but not obligatory.",
+        "restaurants": "A coperto (cover charge) is common; an extra 5–10% tip is appreciated but not required.",
+        "taxis": "Round up to the nearest euro.",
+        "shops": "No tipping in shops.",
+        "services": "5–10% for hairdressers and beauty services is appreciated."
+      },
+      "Spania": {
+        "general": "Service is usually included; small extra tips are welcome but not expected.",
+        "restaurants": "Service charge is usually included; leaving small change or 5–10% extra is appreciated.",
+        "taxis": "Round up to the nearest euro.",
+        "shops": "No tipping in shops.",
+        "services": "5–10% for hairdressers and personal care is customary."
+      },
+      "Portugal": {
+        "general": "Tipping is not mandatory but 5–10% for good service is appreciated.",
+        "restaurants": "Not mandatory, but 5–10% for good service is appreciated.",
+        "taxis": "Round up to the nearest euro.",
+        "shops": "No tipping in shops.",
+        "services": "5–10% for hairdressers and personal services is a kind gesture."
+      },
+      "Tyskland": {
+        "general": "Tipping is expected — round up or state the total including your tip when paying.",
+        "restaurants": "State the rounded total when paying — 5–10% above the bill is the norm.",
+        "taxis": "Round up 10% and state the total amount.",
+        "shops": "No tipping in shops.",
+        "services": "5–10% for hairdressers and personal care is expected."
+      },
+      "Nederland": {
+        "general": "Rounding up or adding 5–10% for good service is customary and appreciated.",
+        "restaurants": "Round up or add 5–10% for good service.",
+        "taxis": "Round up to the nearest euro.",
+        "shops": "No tipping in shops.",
+        "services": "5–10% for hairdressers and personal care is appreciated."
+      },
+      "Belgia": {
+        "general": "Service is usually included; a small extra tip for good service is a friendly gesture.",
+        "restaurants": "Service charge is usually included; an extra 5–10% is a welcome gesture.",
+        "taxis": "Round up to the nearest euro.",
+        "shops": "No tipping in shops.",
+        "services": "5–10% for hairdressers and personal services is appreciated."
+      },
+      "Sveits": {
+        "general": "Service is typically included; an extra 5–10% for excellent service is appreciated.",
+        "restaurants": "Service is usually included; an extra 5–10% for excellent service is appreciated.",
+        "taxis": "Round up 10%; drivers often appreciate a small gratuity.",
+        "shops": "No tipping in shops.",
+        "services": "5–10% for hairdressers and spa treatments is customary."
+      },
+      "Østerrike": {
+        "general": "Tipping is customary — state the rounded total when paying rather than leaving cash on the table.",
+        "restaurants": "Tell the waiter the rounded total when paying; 5–10% is customary.",
+        "taxis": "Round up 10% and state the total.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers and personal services is standard."
+      },
+      "Hellas": {
+        "general": "Tipping is common, especially in tourist areas — 5–10% for good service is appreciated.",
+        "restaurants": "5–10% is appreciated; service charge may or may not be included.",
+        "taxis": "Round up to the nearest euro.",
+        "shops": "No tipping in shops.",
+        "services": "5–10% for hairdressers and personal care is customary."
+      },
+      "Tyrkia": {
+        "general": "Tipping is widely expected; 10–15% in restaurants and rounding up for taxis is the norm.",
+        "restaurants": "10–15% is expected if a service charge is not included in the bill.",
+        "taxis": "Round up to the nearest lira.",
+        "shops": "No tipping expected, though tour guides appreciate tips.",
+        "services": "10% for hairdressers and personal services is standard."
+      },
+      "Polen": {
+        "general": "Tipping is common and appreciated — 10% is the standard for good service.",
+        "restaurants": "10% is the norm for good service in restaurants.",
+        "taxis": "Round up to the nearest zloty or add 10%.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers and personal care is appreciated."
+      },
+      "Tsjekkia": {
+        "general": "Tipping is customary; state the total you want to pay, including a 10–15% gratuity.",
+        "restaurants": "10–15% is appreciated; round up or state the total amount.",
+        "taxis": "Round up 10% and state the total.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers and personal services is expected."
+      },
+      "Ungarn": {
+        "general": "Tipping is standard practice; 10% is expected in most service situations.",
+        "restaurants": "10% is customary; some restaurants automatically add a service charge.",
+        "taxis": "Round up or add 10% for helpful service.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers is standard; spa services often include gratuity."
+      },
+      "Kroatia": {
+        "general": "Tipping is appreciated and increasingly common, especially in tourist areas.",
+        "restaurants": "10% for good service is appreciated; service charge is not always included.",
+        "taxis": "Round up to the nearest euro.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers and personal services is customary."
+      },
+      "Romania": {
+        "general": "Tipping is common and expected — 10% in cash is the norm for good service.",
+        "restaurants": "10% is the norm; leave cash on the table or state the amount when paying.",
+        "taxis": "Round up or add 10% for good service.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers and personal care is appreciated."
+      },
+      "Bulgaria": {
+        "general": "Tipping is common and appreciated; 10% is the standard for good service.",
+        "restaurants": "10% is customary and appreciated for good service.",
+        "taxis": "Round up to the nearest lev.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers and personal services is standard."
+      },
+      "Russland": {
+        "general": "Tipping in cash is customary in restaurants and for personal services — 10% is the norm.",
+        "restaurants": "10% is customary in sit-down restaurants, usually left in cash.",
+        "taxis": "Agree on a price beforehand; small tips are appreciated.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers and personal services is standard."
+      },
+      "USA": {
+        "general": "Tipping is an integral part of the service economy — 15–20% is the expected minimum.",
+        "restaurants": "15–20% is the standard expected tip for sit-down restaurants.",
+        "taxis": "15–20% tip is expected; rideshare apps also prompt for tips.",
+        "shops": "No tipping in shops, but tip jars are common at cafés.",
+        "services": "15–20% for hairdressers, massage, and personal services is standard."
+      },
+      "Canada": {
+        "general": "Tipping culture closely mirrors the US — 15–20% is expected for most services.",
+        "restaurants": "15–20% is the standard tip for sit-down restaurants, similar to the US.",
+        "taxis": "15–20% tip is expected.",
+        "shops": "No tipping in shops, but tip jars are common at cafés.",
+        "services": "15–20% for hairdressers and personal services is the norm."
+      },
+      "Mexico": {
+        "general": "Tipping is common and important for service workers who rely on gratuities.",
+        "restaurants": "10–15% tip is customary; service charge is sometimes included.",
+        "taxis": "Round up or add 10–15% for good service.",
+        "shops": "No tipping in shops.",
+        "services": "10–15% for hairdressers and personal services is appreciated."
+      },
+      "Brasil": {
+        "general": "A 10% service charge is usually included; tipping beyond that is a generous gesture.",
+        "restaurants": "10% service charge (taxa de serviço) is usually included; extra tips are welcome.",
+        "taxis": "Round up to the nearest real.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers and personal services is customary."
+      },
+      "Argentina": {
+        "general": "Tipping is common and important; service workers rely on tips to supplement low wages.",
+        "restaurants": "10% is customary; service staff rely on tips as wages are low.",
+        "taxis": "Round up; car services (remises) do not expect tips.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers and personal services is standard."
+      },
+      "Chile": {
+        "general": "A 10% propina is standard and sometimes added automatically.",
+        "restaurants": "10% propina is customary and sometimes automatically added.",
+        "taxis": "Round up to the nearest peso.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers and personal services is appreciated."
+      },
+      "Colombia": {
+        "general": "A 10% propina is the norm; often added automatically in upscale restaurants.",
+        "restaurants": "10% propina is standard; some restaurants include it automatically.",
+        "taxis": "Round up or add small change.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers and personal care is customary."
+      },
+      "Peru": {
+        "general": "Tipping is appreciated, especially in tourist restaurants and for guides.",
+        "restaurants": "10% is expected in mid-range and upscale restaurants.",
+        "taxis": "Negotiate the fare beforehand; tips are not expected.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers and personal care is appreciated."
+      },
+      "Ecuador": {
+        "general": "Tipping is appreciated; 10% is customary when a service charge is not included.",
+        "restaurants": "10% service charge is sometimes included; if not, 10% tip is appreciated.",
+        "taxis": "Round up to the nearest dollar.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers is customary."
+      },
+      "Uruguay": {
+        "general": "A 10% propina is standard practice in most service situations.",
+        "restaurants": "10% propina is standard in most restaurants.",
+        "taxis": "Round up to the nearest peso.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers and personal services is appreciated."
+      },
+      "Japan": {
+        "general": "Tipping is not practiced and can be considered impolite — excellent service is simply expected.",
+        "restaurants": "Tipping is not customary and can be considered rude — excellent service is simply the standard.",
+        "taxis": "No tipping; hand the exact fare or accept your change.",
+        "shops": "Never tip in shops.",
+        "services": "Do not tip for any service; gratitude is expressed through politeness, not money."
+      },
+      "Kina": {
+        "general": "Tipping is not traditional but is becoming more accepted in tourist areas and luxury venues.",
+        "restaurants": "Tipping is not traditional, but is becoming accepted in tourist areas and upscale restaurants.",
+        "taxis": "No tipping expected; use the meter.",
+        "shops": "No tipping in shops.",
+        "services": "5–10% at upscale hotels is welcomed, but not expected in general."
+      },
+      "Sør-Korea": {
+        "general": "Tipping is not customary and can feel awkward; excellent service is its own reward.",
+        "restaurants": "Tipping is not customary and can feel awkward; service charges are included at upscale venues.",
+        "taxis": "No tipping; use the metered fare.",
+        "shops": "No tipping in shops.",
+        "services": "No tipping in traditional services; some international-style spas may accept tips."
+      },
+      "Thailand": {
+        "general": "Tipping is appreciated but not obligatory; small tips are a kind gesture for good service.",
+        "restaurants": "20–50 THB per person for good service is appreciated; some restaurants add a service charge.",
+        "taxis": "Round up to the nearest 5 THB; for tuk-tuks, negotiate the fare.",
+        "shops": "No tipping in shops.",
+        "services": "50–100 THB for massage and beauty services is standard and appreciated."
+      },
+      "Vietnam": {
+        "general": "Tipping is not required but appreciated, especially in tourist areas and for personal services.",
+        "restaurants": "Not required, but 10% is appreciated in tourist restaurants.",
+        "taxis": "Round up; negotiate fares for motorbike taxis.",
+        "shops": "No tipping in shops.",
+        "services": "20,000–50,000 VND for massage and spa services is a kind gesture."
+      },
+      "Indonesia": {
+        "general": "Tipping is not obligatory but small tips for good service are welcomed.",
+        "restaurants": "5–10% if no service charge is included; leave cash on the table.",
+        "taxis": "Round up; negotiate rates with ride-hailing apps.",
+        "shops": "No tipping in shops.",
+        "services": "5–10% for massage and personal services is appreciated."
+      },
+      "Malaysia": {
+        "general": "Service charges are often included; extra tipping is a welcome but not required gesture.",
+        "restaurants": "Service charge and government tax are often included; extra tipping is welcome but not required.",
+        "taxis": "No tipping expected; use the meter or agree on a fare.",
+        "shops": "No tipping in shops.",
+        "services": "5–10% for personal services is a kind gesture."
+      },
+      "Filippinene": {
+        "general": "Tipping is appreciated for good service and is becoming more common in urban areas.",
+        "restaurants": "10% is appreciated if a service charge is not already included.",
+        "taxis": "Round up to the nearest peso.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers and personal care is standard."
+      },
+      "Singapore": {
+        "general": "Service charge and GST are almost always included — no additional tipping is needed.",
+        "restaurants": "10% service charge and 9% GST are almost always included; no additional tip needed.",
+        "taxis": "No tipping expected; meters are used.",
+        "shops": "No tipping in shops.",
+        "services": "Service charges are typically included; extra tips are not required."
+      },
+      "India": {
+        "general": "Tipping is appreciated but not always expected; cash tips alongside card payments are common.",
+        "restaurants": "10% is appreciated if no service charge is included; a small cash tip in addition to card payment is common.",
+        "taxis": "Round up or add 10–15% for helpful drivers.",
+        "shops": "No tipping in shops, but small tips to porters are appreciated.",
+        "services": "10–15% for hairdressers and personal care is customary."
+      },
+      "Sri Lanka": {
+        "general": "Tipping is appreciated, especially in tourist areas; cash is preferred over card tips.",
+        "restaurants": "10% for good service is appreciated; service charge is sometimes included.",
+        "taxis": "Negotiate fares in advance; tips are not expected.",
+        "shops": "No tipping in shops.",
+        "services": "10% for spas and personal care is a kind gesture."
+      },
+      "Nepal": {
+        "general": "Tipping is important for service workers, especially guides, porters, and hospitality staff.",
+        "restaurants": "10–15% is appreciated in tourist restaurants.",
+        "taxis": "Negotiate fares beforehand; tips are not customary.",
+        "shops": "No tipping in shops.",
+        "services": "10–15% for trekking guides and porters is important and expected."
+      },
+      "Pakistan": {
+        "general": "Tipping is appreciated in upscale settings; smaller venues don't generally expect it.",
+        "restaurants": "10% is appreciated in upscale restaurants; smaller venues don't expect tips.",
+        "taxis": "Negotiated fares are standard; tips are not expected.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers is appreciated in urban areas."
+      },
+      "Bangladesh": {
+        "general": "Tipping is welcomed in mid-range and upscale establishments.",
+        "restaurants": "10% is welcomed in mid-range and upscale restaurants.",
+        "taxis": "Fares are negotiated; small tips are appreciated for good service.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers and personal care is appreciated."
+      },
+      "Hong Kong": {
+        "general": "A 10% service charge is usually included; an extra cash tip is a kind gesture.",
+        "restaurants": "10% service charge is typically included; an extra 5–10% in cash is a warm gesture.",
+        "taxis": "Round up to the next dollar; large notes are not appreciated for small fares.",
+        "shops": "No tipping in shops.",
+        "services": "10% for personal services is standard."
+      },
+      "Taiwan": {
+        "general": "Tipping is not customary; excellent service is the standard expectation.",
+        "restaurants": "Tipping is not customary; excellent service is the norm.",
+        "taxis": "No tipping; use the metered fare.",
+        "shops": "No tipping in shops.",
+        "services": "Service charges are occasionally included at upscale venues; no tipping expected otherwise."
+      },
+      "Australia": {
+        "general": "Tipping is not obligatory but 10% for good service is a welcome gesture.",
+        "restaurants": "Not obligatory, but 10% for good service is appreciated.",
+        "taxis": "Round up or add 10% for helpful service.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers and personal care is a nice gesture."
+      },
+      "New Zealand": {
+        "general": "Tipping is not a strong tradition; 10% for good service is appreciated but not expected.",
+        "restaurants": "Not customary, but 10% for good service is appreciated.",
+        "taxis": "Round up; no strong tipping culture.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers is appreciated but not strongly expected."
+      },
+      "Fiji": {
+        "general": "Tipping is appreciated in tourist areas; small tips for good service are welcomed.",
+        "restaurants": "5–10% for good service is appreciated, especially in tourist areas.",
+        "taxis": "Round up or add a small tip for helpful drivers.",
+        "shops": "No tipping in shops.",
+        "services": "5–10% for spa and personal services is appreciated."
+      },
+      "Sør-Afrika": {
+        "general": "Tipping is important — service workers often earn very low base wages and rely on gratuities.",
+        "restaurants": "10–15% is expected and important; service staff often earn very low base wages.",
+        "taxis": "10–15% for good service; for minibus taxis, round up.",
+        "shops": "No tipping in shops, but petrol station attendants expect a small tip.",
+        "services": "10–15% for hairdressers and personal services is standard."
+      },
+      "Egypt": {
+        "general": "Tipping (baksheesh) is deeply embedded in culture and expected across all service industries.",
+        "restaurants": "10–15% (baksheesh) is expected and common across all service industries.",
+        "taxis": "Negotiate fares in advance; round up at the end.",
+        "shops": "Small tips for assistants and guides are appreciated.",
+        "services": "10–15% for spas and personal services is customary."
+      },
+      "Marokko": {
+        "general": "Tipping is customary and expected; service is rarely included in the bill.",
+        "restaurants": "10% is customary; service is rarely included.",
+        "taxis": "Negotiate the fare first; round up at the end.",
+        "shops": "Small tips for assistance or guides are appreciated.",
+        "services": "10% for hammam, spas, and personal care is standard."
+      },
+      "Tunisia": {
+        "general": "Tipping is appreciated and common; service is not always included in the bill.",
+        "restaurants": "10% is appreciated; service may or may not be included.",
+        "taxis": "Negotiate fares first; round up at the end.",
+        "shops": "No tipping in shops.",
+        "services": "10% for personal care and hammam is appreciated."
+      },
+      "Kenya": {
+        "general": "Tipping is expected, especially in tourist areas, and is important for service workers' livelihoods.",
+        "restaurants": "10% is expected in tourist areas; tips support low-income service workers.",
+        "taxis": "Negotiate fares beforehand; tips are appreciated but not required.",
+        "shops": "No tipping in shops.",
+        "services": "10–15% for safari guides and lodges is important and expected."
+      },
+      "Tanzania": {
+        "general": "Tipping is appreciated and important, especially for safari guides and trekking staff.",
+        "restaurants": "10% is appreciated; service charge is sometimes included.",
+        "taxis": "Negotiate fares first; tips are appreciated.",
+        "shops": "No tipping in shops.",
+        "services": "10–15% for safari guides and trekking porters is expected and important."
+      },
+      "Ghana": {
+        "general": "Tipping is appreciated in restaurants and for personal services; it is not strongly expected.",
+        "restaurants": "10% is appreciated in upscale and tourist restaurants.",
+        "taxis": "Negotiate fares first; tips are not obligatory.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers and personal services is appreciated."
+      },
+      "Nigeria": {
+        "general": "Tipping is common in upscale settings and for good service across most industries.",
+        "restaurants": "10% is appreciated in upscale restaurants; informal venues don't expect tips.",
+        "taxis": "Negotiate fares before boarding; small tips are appreciated.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers and personal services is standard."
+      },
+      "De forente arabiske emirater": {
+        "general": "Tipping is appreciated but not mandatory; service charges are often already included.",
+        "restaurants": "10% service charge is often included; an extra 10% in cash is appreciated.",
+        "taxis": "No tipping expected; meters are used in Dubai and Abu Dhabi.",
+        "shops": "No tipping in shops.",
+        "services": "10–15% for spa, hotel, and personal services is appreciated."
+      },
+      "Saudi-Arabia": {
+        "general": "Tipping is appreciated and welcomed, especially for hotel and restaurant service.",
+        "restaurants": "10% is appreciated; service charge is sometimes included.",
+        "taxis": "No tipping expected; ride-hailing apps like Uber are common.",
+        "shops": "No tipping in shops.",
+        "services": "Small tips for porters and hotel staff are appreciated."
+      },
+      "Qatar": {
+        "general": "Tipping is appreciated; service charges are common but extra tips are always welcomed.",
+        "restaurants": "10% service charge is common; extra tips are welcomed by workers.",
+        "taxis": "No tipping expected; meters and ride-hailing apps are standard.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hotel services and personal care is appreciated."
+      },
+      "Kuwait": {
+        "general": "Tipping is a kind gesture and appreciated, though not strongly expected.",
+        "restaurants": "10% is appreciated; service charge may be included.",
+        "taxis": "No tipping expected; negotiate fares for unmetered taxis.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hotel services and personal care is a kind gesture."
+      },
+      "Oman": {
+        "general": "Tipping is welcomed and appreciated; Omanis are known for warm hospitality.",
+        "restaurants": "10% is appreciated; Omanis are known for gracious hospitality.",
+        "taxis": "Negotiate fares beforehand; small tips are appreciated.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hotel staff and personal services is welcomed."
+      },
+      "Bahrain": {
+        "general": "Tipping is appreciated; service charges are sometimes included in tourist restaurants.",
+        "restaurants": "10% is appreciated; service charge is sometimes included in tourist restaurants.",
+        "taxis": "No tipping expected; ride-hailing apps are common.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hotel and personal services is appreciated."
+      },
+      "Israel": {
+        "general": "Tipping is common practice; 10–12% is standard for restaurants and personal services.",
+        "restaurants": "10–12% is standard; service charge is sometimes added in tourist areas.",
+        "taxis": "Round up to the nearest shekel; no strong tipping culture for taxis.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hairdressers and beauty services is customary."
+      },
+      "Libanon": {
+        "general": "Tipping is common and appreciated; service is rarely included in the bill.",
+        "restaurants": "10–15% is appreciated; service is rarely included in the bill.",
+        "taxis": "Negotiate fares beforehand; tips are not expected.",
+        "shops": "No tipping in shops.",
+        "services": "10–15% for hairdressers and personal services is standard."
+      },
+      "Jordan": {
+        "general": "Tipping is appreciated and common for hotel, restaurant, and personal services.",
+        "restaurants": "10% is appreciated; service charge is sometimes included.",
+        "taxis": "Negotiate fares before the journey; tips are not expected.",
+        "shops": "No tipping in shops.",
+        "services": "10% for hotel staff and personal services is appreciated."
+      }
+    }
+  },
+  "scan": {
+    "title": "Scan receipt",
+    "capture": "Take photo",
+    "retake": "Retake",
+    "use": "Use amount",
+    "itemized": "Select items to include",
+    "itemizedHint": "Tap to select/deselect items",
+    "useSelected": "Use selected items ({{sum}})",
+    "unavailable": "Receipt scanning requires a development build and is not available in Expo Go. See the README for build instructions.",
+    "noAmount": "No amounts found in photo",
+    "error": "Could not read image – enter manually",
+    "permission": "Camera access required",
+    "permissionBtn": "Grant access"
+  },
+  "history": {
+    "title": "History",
+    "empty": "No tip calculations yet",
+    "emptyHint": "Calculate a tip to see it here",
+    "people": "{{n}} ppl.",
+    "delete": "Delete"
+  },
+  "settings": {
+    "title": "Settings",
+    "profileSection": "Profile",
+    "userName": "Your name",
+    "userNamePlaceholder": "Name (optional)",
+    "homeCurrency": "Home currency",
+    "homeCurrencyHint": "Conversions are shown in this currency",
+    "defaultsSection": "Defaults",
+    "defaultPeople": "Default number of people",
+    "defaultSatisfaction": "Default satisfaction level",
+    "defaultSatisfactionNone": "None (no pre-selection)",
+    "appSection": "App",
+    "keepScreenAwake": "Keep screen on",
+    "keepScreenAwakeHint": "Prevents the screen from locking while the app is open",
+    "darkMode": "Dark mode",
+    "dangerSection": "Data",
+    "clearHistory": "Clear history",
+    "clearHistoryConfirm": "Are you sure? This cannot be undone.",
+    "language": "Language",
+    "rates": "Update exchange rates",
+    "ratesLoading": "Fetching rates...",
+    "ratesDefault": "Local rates (January 2026)",
+    "ratesUpdated": "Updated: {{time}} ({{count}} currencies)",
+    "ratesError": "Could not update – using local rates",
+    "version": "Version"
+  },
+  "about": {
+    "title": "About the app",
+    "description": "Adjust the tip is a tip calculator for travellers. It provides culturally-aware tipping guidelines for 60+ countries across restaurants, taxis, shops, and services — so you always tip the right amount.",
+    "feedbackTitle": "Feedback",
+    "feedbackBody": "Have a suggestion or found a bug? We'd love to hear from you.",
+    "feedbackBtn": "Send feedback by email"
+  },
+  "help": {
+    "title": "How to use",
+    "intro": "A quick guide to all the features in Adjust the tip.",
+    "step1Title": "1. Select your location",
+    "step1Body": "Tap the location field and choose the country you're in. The app can also suggest your location automatically using GPS.",
+    "step2Title": "2. Choose bill type",
+    "step2Body": "Select whether you're paying at a restaurant, taking a taxi, shopping, or using a service. This adjusts the recommended tip to match local customs.",
+    "step3Title": "3. Tipping customs",
+    "step3Body": "Tap the 📖 icon next to the country selector to read about local tipping culture for the selected country and bill type.",
+    "step4Title": "4. Enter the amount",
+    "step4Body": "Type the bill total. You can also scan a receipt with the camera button (requires a development build).",
+    "step5Title": "5. Rate your experience",
+    "step5Body": "Choose 😕 Unsatisfied, 🙂 OK, or 😄 Excellent — each maps to a locally appropriate tip percentage. Use ✏️ Custom to enter your own.",
+    "step6Title": "6. See your result",
+    "step6Body": "The result card shows the tip amount and total. Tap the round-up buttons to pay a clean round number. Tap Save to keep the calculation in your history.",
+    "step7Title": "7. Split the bill",
+    "step7Body": "Use the splitter below the result to divide the total among several people. The per-person amount appears automatically.",
+    "step8Title": "8. Favourites",
+    "step8Body": "In the country picker, tap ★ next to any country to save it as a favourite. Favourites appear at the top of the list. Without favourites, your 3 most recently used countries appear there instead."
+  }
+}

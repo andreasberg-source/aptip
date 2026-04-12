@@ -1,0 +1,648 @@
+{
+  "app": {
+    "title": "Adjust the tip",
+    "subtitle": "Calculadora de propinas para el viajero"
+  },
+  "onboarding": {
+    "welcome": "Bienvenido a Adjust the tip",
+    "subtitle": "Configuremos tus preferencias",
+    "nameLabel": "Tu nombre (opcional)",
+    "namePlaceholder": "Ej. Alex",
+    "currencyLabel": "Tu moneda local",
+    "currencyHint": "Usada para mostrar conversiones aproximadas",
+    "searchPlaceholder": "Buscar monedas",
+    "getStarted": "Empezar"
+  },
+  "location": {
+    "button": "¿Dónde estás?",
+    "title": "Selecciona un país",
+    "search": "Buscar país..."
+  },
+  "picker": {
+    "favourites": "Favoritos",
+    "recentlyUsed": "Usados recientemente"
+  },
+  "continent": {
+    "europa": "Europa",
+    "nord-amerika": "América del Norte",
+    "sor-amerika": "América del Sur",
+    "asia": "Asia",
+    "oseania": "Oceanía",
+    "afrika": "África",
+    "mellom-osten": "Oriente Medio"
+  },
+  "amount": {
+    "label": "Total de la cuenta",
+    "serviceType": "¿Qué tipo de cuenta?",
+    "placeholder": "0,00",
+    "scan": "Escanear recibo"
+  },
+  "satisfaction": {
+    "label": "¿Cuán satisfecho/a estuviste?",
+    "poor": "Insatisfecho/a",
+    "ok": "Satisfecho/a",
+    "excellent": "Muy satisfecho/a",
+    "custom": "% personalizado",
+    "customPlaceholder": "Ingresar %"
+  },
+  "split": {
+    "label": "Dividir la cuenta",
+    "people": "{{n}} personas",
+    "onePerson": "1 persona"
+  },
+  "result": {
+    "title": "Resultado",
+    "original": "Importe original",
+    "tip": "Propina ({{percent}}%)",
+    "total": "Total con propina",
+    "perPerson": "Por persona",
+    "home": "Aprox. {{amount}} {{currency}}",
+    "noRate": "Tipo de cambio no disponible",
+    "save": "💾 Guardar"
+  },
+  "roundup": {
+    "label": "Redondear a"
+  },
+  "culture": {
+    "title": "Cultura de propinas",
+    "button": "Costumbres locales",
+    "overview": "Resumen",
+    "restaurants": "Restaurante",
+    "taxis": "Taxi",
+    "shops": "Tienda",
+    "services": "Servicio",
+    "countries": {
+      "Norge": {
+        "general": "La propina no se espera, pero siempre se agradece — un gesto del 5–10 % muestra verdadera satisfacción.",
+        "restaurants": "No se espera propina, pero un 5–10 % por buen servicio es un gesto agradable.",
+        "taxis": "Redondea a los 10 NOK más cercanos o añade un 10 % por excelente servicio.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 5–10 % para peluqueros y spas es apreciado, aunque no obligatorio."
+      },
+      "Sverige": {
+        "general": "La propina no es obligatoria, pero un pequeño gesto por buen servicio siempre es bien recibido.",
+        "restaurants": "No es costumbre, pero un 5–10 % es bien recibido por buen servicio.",
+        "taxis": "Redondea o añade un 10 % para conductores serviciales.",
+        "shops": "No se espera propina.",
+        "services": "Un 5–10 % para peluqueros y spas es apreciado."
+      },
+      "Danmark": {
+        "general": "La propina no es necesaria; el servicio está incluido en los precios, pero los pequeños gestos son bien recibidos.",
+        "restaurants": "No se espera, pero un 5–10 % es un gesto cálido por buen servicio.",
+        "taxis": "Redondea a los 10 DKK más cercanos.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 5–10 % por servicios personales es apreciado."
+      },
+      "Finland": {
+        "general": "La propina es poco frecuente y no se espera, pero un pequeño extra por servicio excelente es apreciado.",
+        "restaurants": "No se espera, pero un 5–10 % por servicio excelente es apreciado.",
+        "taxis": "Con redondear es suficiente.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 5–10 % para peluqueros y masajistas es un gesto amable."
+      },
+      "Island": {
+        "general": "La propina no forma parte de la cultura local; los cargos por servicio están incluidos en la mayoría de las cuentas.",
+        "restaurants": "La propina no es tradicional en Islandia; el cargo por servicio suele estar incluido.",
+        "taxis": "No se espera propina.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Los cargos por servicio suelen estar incluidos; no se esperan propinas adicionales."
+      },
+      "Storbritannia": {
+        "general": "Se espera propina por buen servicio, especialmente en restaurantes y taxis — el 10–15 % es la norma.",
+        "restaurants": "Suele añadirse un 10–12,5 % de cargo por servicio; si no, un 10–15 % es costumbre.",
+        "taxis": "Redondea un 10–15 % por buen servicio.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10–15 % para peluqueros y servicios de belleza es lo estándar."
+      },
+      "Irland": {
+        "general": "Dejar propina por buen servicio es una práctica habitual, normalmente el 10–15 % en restaurantes y taxis.",
+        "restaurants": "Un 10–15 % es habitual si el cargo por servicio no está incluido.",
+        "taxis": "Redondea o añade 1–2 € para un conductor servicial.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros y tratamientos de belleza es apreciado."
+      },
+      "Frankrike": {
+        "general": "El servicio está legalmente incluido en todas las cuentas, pero una propina extra por excelente servicio es un gesto cálido.",
+        "restaurants": "El servicio está legalmente incluido (service compris), pero un 5–10 % extra por excelente servicio es bien recibido.",
+        "taxis": "Redondea al euro más cercano.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 5–10 % para peluqueros y spas es costumbre."
+      },
+      "Italia": {
+        "general": "El cubierto (coperto) es estándar; una propina adicional se aprecia pero no es obligatoria.",
+        "restaurants": "El coperto (cubierto) es habitual; una propina adicional del 5–10 % es apreciada pero no obligatoria.",
+        "taxis": "Redondea al euro más cercano.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 5–10 % para peluqueros y servicios de belleza es apreciado."
+      },
+      "Spania": {
+        "general": "El servicio suele estar incluido; las pequeñas propinas adicionales son bienvenidas pero no esperadas.",
+        "restaurants": "El cargo por servicio suele estar incluido; dejar cambio suelto o un 5–10 % extra es apreciado.",
+        "taxis": "Redondea al euro más cercano.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 5–10 % para peluqueros y cuidado personal es costumbre."
+      },
+      "Portugal": {
+        "general": "La propina no es obligatoria, pero un 5–10 % por buen servicio es apreciado.",
+        "restaurants": "No es obligatorio, pero un 5–10 % por buen servicio es apreciado.",
+        "taxis": "Redondea al euro más cercano.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 5–10 % para peluqueros y servicios personales es un bonito detalle."
+      },
+      "Tyskland": {
+        "general": "Se espera propina — indica el total incluyendo el importe al pagar.",
+        "restaurants": "Indica el total redondeado al pagar — un 5–10 % sobre la cuenta es la norma.",
+        "taxis": "Redondea un 10 % e indica el total.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 5–10 % para peluqueros y cuidado personal se espera."
+      },
+      "Nederland": {
+        "general": "Redondear o añadir un 5–10 % por buen servicio es habitual y apreciado.",
+        "restaurants": "Redondea o añade un 5–10 % por buen servicio.",
+        "taxis": "Redondea al euro más cercano.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 5–10 % para peluqueros y cuidado personal es apreciado."
+      },
+      "Belgia": {
+        "general": "El servicio suele estar incluido; una pequeña propina extra es un gesto amigable.",
+        "restaurants": "El cargo por servicio suele estar incluido; un 5–10 % extra es un gesto bien recibido.",
+        "taxis": "Redondea al euro más cercano.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 5–10 % para peluqueros y servicios personales es apreciado."
+      },
+      "Sveits": {
+        "general": "El servicio suele estar incluido; un 5–10 % extra por servicio excelente es apreciado.",
+        "restaurants": "El servicio suele estar incluido; un 5–10 % extra por excelente servicio es apreciado.",
+        "taxis": "Redondea un 10 %; los conductores suelen agradecer una pequeña propina.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 5–10 % para peluqueros y spas es costumbre."
+      },
+      "Østerrike": {
+        "general": "La propina es habitual — indica el total redondeado al pagar en lugar de dejar efectivo.",
+        "restaurants": "Indica el total redondeado al camarero; un 5–10 % es costumbre.",
+        "taxis": "Redondea un 10 % e indica el total.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros y servicios personales es lo estándar."
+      },
+      "Hellas": {
+        "general": "La propina es habitual, especialmente en zonas turísticas — un 5–10 % por buen servicio es apreciado.",
+        "restaurants": "Un 5–10 % es apreciado; el cargo por servicio puede o no estar incluido.",
+        "taxis": "Redondea al euro más cercano.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 5–10 % para peluqueros y cuidado personal es costumbre."
+      },
+      "Tyrkia": {
+        "general": "La propina es ampliamente esperada; el 10–15 % en restaurantes y redondear en taxis es la norma.",
+        "restaurants": "Se espera un 10–15 % si no se incluye cargo por servicio en la cuenta.",
+        "taxis": "Redondea a la lira más cercana.",
+        "shops": "No se espera propina, aunque los guías turísticos aprecian las propinas.",
+        "services": "Un 10 % para peluqueros y servicios personales es lo estándar."
+      },
+      "Polen": {
+        "general": "La propina es habitual y apreciada — el 10 % es el estándar por buen servicio.",
+        "restaurants": "Un 10 % es la norma por buen servicio en restaurantes.",
+        "taxis": "Redondea al zloty más cercano o añade un 10 %.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros y cuidado personal es apreciado."
+      },
+      "Tsjekkia": {
+        "general": "La propina es costumbre; indica el total deseado incluyendo el 10–15 % de gratificación.",
+        "restaurants": "Un 10–15 % es apreciado; redondea o indica el total.",
+        "taxis": "Redondea un 10 % e indica el total.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros y servicios personales se espera."
+      },
+      "Ungarn": {
+        "general": "La propina es práctica estándar; el 10 % se espera en la mayoría de situaciones de servicio.",
+        "restaurants": "Un 10 % es costumbre; algunos restaurantes añaden un cargo por servicio automáticamente.",
+        "taxis": "Redondea o añade un 10 % por buen servicio.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros es lo estándar; los spas suelen incluir gratificación."
+      },
+      "Kroatia": {
+        "general": "La propina es apreciada y cada vez más habitual, especialmente en zonas turísticas.",
+        "restaurants": "Un 10 % por buen servicio es apreciado; el cargo por servicio no siempre está incluido.",
+        "taxis": "Redondea al euro más cercano.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros y servicios personales es costumbre."
+      },
+      "Romania": {
+        "general": "La propina es habitual y esperada — el 10 % en efectivo es la norma por buen servicio.",
+        "restaurants": "Un 10 % es la norma; deja efectivo sobre la mesa o indica el importe al pagar.",
+        "taxis": "Redondea o añade un 10 % por buen servicio.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros y cuidado personal es apreciado."
+      },
+      "Bulgaria": {
+        "general": "La propina es habitual y apreciada; el 10 % es el estándar por buen servicio.",
+        "restaurants": "Un 10 % es costumbre y apreciado por buen servicio.",
+        "taxis": "Redondea al lev más cercano.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros y servicios personales es lo estándar."
+      },
+      "Russland": {
+        "general": "Dejar propina en efectivo es costumbre en restaurantes y para servicios personales — el 10 % es la norma.",
+        "restaurants": "Un 10 % es costumbre en restaurantes con servicio, generalmente en efectivo.",
+        "taxis": "Acuerda el precio de antemano; las pequeñas propinas son apreciadas.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros y servicios personales es lo estándar."
+      },
+      "USA": {
+        "general": "La propina es una parte integral de la economía de servicios — el 15–20 % es el mínimo esperado.",
+        "restaurants": "Un 15–20 % es la propina estándar y esperada en restaurantes con servicio.",
+        "taxis": "Se espera un 15–20 %; las apps de transporte también solicitan propinas.",
+        "shops": "No se da propina en tiendas, pero los botes de propinas son habituales en cafeterías.",
+        "services": "Un 15–20 % para peluqueros, masajes y servicios personales es lo estándar."
+      },
+      "Canada": {
+        "general": "La cultura de propinas se parece mucho a la de EE. UU. — se espera un 15–20 % en la mayoría de servicios.",
+        "restaurants": "Un 15–20 % es la propina estándar, similar a EE. UU.",
+        "taxis": "Se espera un 15–20 %.",
+        "shops": "No se da propina en tiendas, pero los botes de propinas son habituales en cafeterías.",
+        "services": "Un 15–20 % para peluqueros y servicios personales es la norma."
+      },
+      "Mexico": {
+        "general": "La propina es habitual e importante para los trabajadores de servicio que dependen de ella.",
+        "restaurants": "Un 10–15 % es costumbre; el cargo por servicio a veces está incluido.",
+        "taxis": "Redondea o añade un 10–15 % por buen servicio.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10–15 % para peluqueros y servicios personales es apreciado."
+      },
+      "Brasil": {
+        "general": "El 10 % de cargo por servicio suele estar incluido; dar propina adicional es un gesto generoso.",
+        "restaurants": "El 10 % de cargo por servicio (taxa de serviço) suele estar incluido; las propinas adicionales son bienvenidas.",
+        "taxis": "Redondea al real más cercano.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros y servicios personales es costumbre."
+      },
+      "Argentina": {
+        "general": "La propina es habitual e importante; los trabajadores de servicio dependen de ella para complementar los bajos salarios.",
+        "restaurants": "Un 10 % es costumbre; el personal depende de las propinas ya que los salarios son bajos.",
+        "taxis": "Redondea; los servicios de coche (remises) no esperan propinas.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros y servicios personales es lo estándar."
+      },
+      "Chile": {
+        "general": "La propina del 10 % es estándar y a veces se añade automáticamente.",
+        "restaurants": "Un 10 % de propina es costumbre y a veces se añade automáticamente.",
+        "taxis": "Redondea al peso más cercano.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros y servicios personales es apreciado."
+      },
+      "Colombia": {
+        "general": "La propina del 10 % es la norma; a menudo se añade automáticamente en restaurantes de lujo.",
+        "restaurants": "Un 10 % de propina es lo estándar; algunos restaurantes lo incluyen automáticamente.",
+        "taxis": "Redondea o deja el cambio.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros y cuidado personal es costumbre."
+      },
+      "Peru": {
+        "general": "La propina es apreciada, especialmente en restaurantes turísticos y para guías.",
+        "restaurants": "Se espera un 10 % en restaurantes de categoría media y alta.",
+        "taxis": "Negocia la tarifa de antemano; no se espera propina.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros y cuidado personal es apreciado."
+      },
+      "Ecuador": {
+        "general": "La propina es apreciada; el 10 % es costumbre cuando no se incluye cargo por servicio.",
+        "restaurants": "A veces se incluye un 10 % de cargo por servicio; si no, un 10 % es apreciado.",
+        "taxis": "Redondea al dólar más cercano.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros es costumbre."
+      },
+      "Uruguay": {
+        "general": "La propina del 10 % es práctica habitual en la mayoría de las situaciones de servicio.",
+        "restaurants": "Un 10 % de propina es lo estándar en la mayoría de los restaurantes.",
+        "taxis": "Redondea al peso más cercano.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros y servicios personales es apreciado."
+      },
+      "Japan": {
+        "general": "No se practica la propina y puede considerarse de mala educación — el servicio excelente es simplemente lo esperado.",
+        "restaurants": "La propina no es costumbre y puede considerarse una falta de respeto — el servicio excelente es simplemente el estándar.",
+        "taxis": "Sin propina; paga el importe exacto o acepta el cambio.",
+        "shops": "Nunca dar propina en tiendas.",
+        "services": "No se da propina por ningún servicio; la gratitud se expresa con cortesía."
+      },
+      "Kina": {
+        "general": "La propina no es tradicional, pero es cada vez más aceptada en zonas turísticas y establecimientos de lujo.",
+        "restaurants": "La propina no es tradicional, pero se acepta en zonas turísticas y restaurantes de lujo.",
+        "taxis": "No se espera propina; usa el taxímetro.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 5–10 % en hoteles de lujo es bienvenido, pero no se espera en general."
+      },
+      "Sør-Korea": {
+        "general": "La propina no es costumbre y puede resultar incómoda; el servicio excelente es su propia recompensa.",
+        "restaurants": "La propina no es costumbre y puede resultar incómoda; los cargos por servicio están incluidos en los locales de lujo.",
+        "taxis": "Sin propina; usa la tarifa del taxímetro.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Sin propina en servicios tradicionales; algunos spas de estilo internacional pueden aceptarla."
+      },
+      "Thailand": {
+        "general": "La propina es apreciada pero no obligatoria; las pequeñas propinas son un gesto amable por buen servicio.",
+        "restaurants": "20–50 THB por persona por buen servicio es apreciado; algunos restaurantes añaden cargo por servicio.",
+        "taxis": "Redondea a los 5 THB más cercanos; para los tuk-tuks, negocia la tarifa.",
+        "shops": "No se da propina en tiendas.",
+        "services": "50–100 THB para masajes y servicios de belleza es lo estándar y apreciado."
+      },
+      "Vietnam": {
+        "general": "La propina no es obligatoria pero sí apreciada, especialmente en zonas turísticas y servicios personales.",
+        "restaurants": "No es obligatorio, pero un 10 % es apreciado en restaurantes turísticos.",
+        "taxis": "Redondea; negocia tarifas con los taxi-moto.",
+        "shops": "No se da propina en tiendas.",
+        "services": "20.000–50.000 VND para masajes y spas es un gesto amable."
+      },
+      "Indonesia": {
+        "general": "La propina no es obligatoria, pero las pequeñas propinas por buen servicio son bienvenidas.",
+        "restaurants": "Un 5–10 % si no se incluye cargo por servicio; deja efectivo sobre la mesa.",
+        "taxis": "Redondea; negocia tarifas con las apps de transporte.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 5–10 % para masajes y servicios personales es apreciado."
+      },
+      "Malaysia": {
+        "general": "El cargo por servicio suele estar incluido; dar propina adicional es un gesto bienvenido aunque no obligatorio.",
+        "restaurants": "El cargo por servicio y el impuesto suelen estar incluidos; las propinas adicionales son bienvenidas pero no obligatorias.",
+        "taxis": "No se espera propina; usa el taxímetro o acuerda una tarifa.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 5–10 % por servicios personales es un bonito detalle."
+      },
+      "Filippinene": {
+        "general": "La propina es apreciada por buen servicio y es cada vez más habitual en zonas urbanas.",
+        "restaurants": "Un 10 % es apreciado si el cargo por servicio no está incluido.",
+        "taxis": "Redondea al peso más cercano.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros y cuidado personal es lo estándar."
+      },
+      "Singapore": {
+        "general": "El cargo por servicio y el GST casi siempre están incluidos — no se necesita propina adicional.",
+        "restaurants": "El 10 % de cargo por servicio y el 9 % de GST casi siempre están incluidos; no se necesita propina adicional.",
+        "taxis": "No se espera propina; se usan taxímetros.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Los cargos por servicio suelen estar incluidos; no se requiere propina adicional."
+      },
+      "India": {
+        "general": "La propina es apreciada aunque no siempre esperada; las propinas en efectivo junto al pago con tarjeta son habituales.",
+        "restaurants": "Un 10 % es apreciado si no se incluye cargo por servicio; una pequeña propina en efectivo además del pago con tarjeta es habitual.",
+        "taxis": "Redondea o añade un 10–15 % para conductores serviciales.",
+        "shops": "No se da propina en tiendas, pero las pequeñas propinas a los maleteros son apreciadas.",
+        "services": "Un 10–15 % para peluqueros y cuidado personal es costumbre."
+      },
+      "Sri Lanka": {
+        "general": "La propina es apreciada, especialmente en zonas turísticas; se prefiere el efectivo.",
+        "restaurants": "Un 10 % por buen servicio es apreciado; el cargo por servicio a veces está incluido.",
+        "taxis": "Negocia las tarifas de antemano; no se esperan propinas.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para spas y cuidado personal es un bonito detalle."
+      },
+      "Nepal": {
+        "general": "La propina es importante para los trabajadores de servicio, especialmente guías, porteadores y personal de hostelería.",
+        "restaurants": "Un 10–15 % es apreciado en restaurantes turísticos.",
+        "taxis": "Negocia las tarifas de antemano; la propina no es costumbre.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10–15 % para guías de trekking y porteadores es importante y esperado."
+      },
+      "Pakistan": {
+        "general": "La propina es apreciada en establecimientos de lujo; los locales más modestos no la esperan generalmente.",
+        "restaurants": "Un 10 % es apreciado en restaurantes de lujo; los locales modestos no lo esperan.",
+        "taxis": "Las tarifas negociadas son la norma; no se esperan propinas.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros es apreciado en zonas urbanas."
+      },
+      "Bangladesh": {
+        "general": "La propina es bien recibida en establecimientos de categoría media y alta.",
+        "restaurants": "Un 10 % es bienvenido en restaurantes de categoría media y alta.",
+        "taxis": "Las tarifas se negocian; las pequeñas propinas son apreciadas por buen servicio.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros y cuidado personal es apreciado."
+      },
+      "Hong Kong": {
+        "general": "El 10 % de cargo por servicio suele estar incluido; una propina extra en efectivo es un gesto amable.",
+        "restaurants": "El 10 % de cargo por servicio suele estar incluido; un 5–10 % adicional en efectivo es un gesto amable.",
+        "taxis": "Redondea al siguiente dólar; los billetes grandes no son bienvenidos para tarifas pequeñas.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para servicios personales es lo estándar."
+      },
+      "Taiwan": {
+        "general": "La propina no es costumbre; el servicio excelente es la norma esperada.",
+        "restaurants": "La propina no es costumbre; el servicio excelente es la norma.",
+        "taxis": "Sin propina; usa la tarifa del taxímetro.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Ocasionalmente se incluyen cargos por servicio en locales de lujo; de lo contrario no se espera propina."
+      },
+      "Australia": {
+        "general": "La propina no es obligatoria, pero un 10 % por buen servicio es un gesto bienvenido.",
+        "restaurants": "No es obligatorio, pero un 10 % por buen servicio es apreciado.",
+        "taxis": "Redondea o añade un 10 % por buen servicio.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros y cuidado personal es un bonito detalle."
+      },
+      "New Zealand": {
+        "general": "La propina no es una tradición arraigada; el 10 % por buen servicio es apreciado pero no esperado.",
+        "restaurants": "No es costumbre, pero un 10 % por buen servicio es apreciado.",
+        "taxis": "Redondea; la cultura de la propina no está muy arraigada.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros es apreciado pero no muy esperado."
+      },
+      "Fiji": {
+        "general": "La propina es apreciada en zonas turísticas; las pequeñas propinas por buen servicio son bienvenidas.",
+        "restaurants": "Un 5–10 % por buen servicio es apreciado, especialmente en zonas turísticas.",
+        "taxis": "Redondea o deja una pequeña propina para conductores serviciales.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 5–10 % para spas y servicios personales es apreciado."
+      },
+      "Sør-Afrika": {
+        "general": "La propina es importante — los trabajadores de servicio suelen ganar salarios base muy bajos y dependen de ella.",
+        "restaurants": "Se espera un 10–15 % y es importante; el personal de servicio suele ganar salarios base muy bajos.",
+        "taxis": "Se espera un 10–15 % por buen servicio; para los minibuses, redondea.",
+        "shops": "No se da propina en tiendas, pero los empleados de gasolineras esperan una pequeña propina.",
+        "services": "Un 10–15 % para peluqueros y servicios personales es lo estándar."
+      },
+      "Egypt": {
+        "general": "La propina (baksheesh) está profundamente arraigada en la cultura y se espera en todos los sectores de servicio.",
+        "restaurants": "Se espera un 10–15 % (baksheesh) y es habitual en todos los sectores de servicio.",
+        "taxis": "Negocia las tarifas de antemano; redondea al final.",
+        "shops": "Las pequeñas propinas para asistentes y guías son apreciadas.",
+        "services": "Un 10–15 % para spas y servicios personales es costumbre."
+      },
+      "Marokko": {
+        "general": "La propina es costumbre y se espera; el servicio rara vez está incluido en la cuenta.",
+        "restaurants": "Un 10 % es costumbre; el servicio rara vez está incluido.",
+        "taxis": "Negocia primero la tarifa; redondea al final.",
+        "shops": "Las pequeñas propinas para guías son apreciadas.",
+        "services": "Un 10 % para el hammam, spas y cuidado personal es lo estándar."
+      },
+      "Tunisia": {
+        "general": "La propina es apreciada y habitual; el servicio no siempre está incluido en la cuenta.",
+        "restaurants": "Un 10 % es apreciado; el servicio puede o no estar incluido.",
+        "taxis": "Negocia primero; redondea al final.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para cuidado personal y hammam es apreciado."
+      },
+      "Kenya": {
+        "general": "La propina es esperada, especialmente en zonas turísticas, y es importante para el sustento de los trabajadores.",
+        "restaurants": "Se espera un 10 % en zonas turísticas; las propinas apoyan a los trabajadores de bajos ingresos.",
+        "taxis": "Negocia de antemano; las propinas son apreciadas pero no obligatorias.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10–15 % para guías de safari y lodges es importante y esperado."
+      },
+      "Tanzania": {
+        "general": "La propina es apreciada e importante, especialmente para guías de safari y personal de trekking.",
+        "restaurants": "Un 10 % es apreciado; el cargo por servicio a veces está incluido.",
+        "taxis": "Negocia primero; las propinas son apreciadas.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10–15 % para guías de safari y porteadores de trekking es esperado e importante."
+      },
+      "Ghana": {
+        "general": "La propina es apreciada en restaurantes y servicios personales; no se espera con fuerza.",
+        "restaurants": "Un 10 % es apreciado en restaurantes de lujo y turísticos.",
+        "taxis": "Negocia primero; las propinas no son obligatorias.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros y servicios personales es apreciado."
+      },
+      "Nigeria": {
+        "general": "La propina es habitual en establecimientos de lujo y por buen servicio en la mayoría de sectores.",
+        "restaurants": "Un 10 % es apreciado en restaurantes de lujo; los locales informales no lo esperan.",
+        "taxis": "Negocia antes de subir; las pequeñas propinas son apreciadas.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros y servicios personales es lo estándar."
+      },
+      "De forente arabiske emirater": {
+        "general": "La propina es apreciada pero no obligatoria; el cargo por servicio suele estar incluido.",
+        "restaurants": "A menudo se incluye un 10 % de cargo por servicio; un 10 % adicional en efectivo es apreciado.",
+        "taxis": "No se espera propina; se usan taxímetros en Dubái y Abu Dabi.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10–15 % para spas, hoteles y servicios personales es apreciado."
+      },
+      "Saudi-Arabia": {
+        "general": "La propina es apreciada y bien recibida, especialmente en hoteles y restaurantes.",
+        "restaurants": "Un 10 % es apreciado; el cargo por servicio a veces está incluido.",
+        "taxis": "No se espera propina; las apps como Uber son comunes.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Las pequeñas propinas para maleteros y personal de hotel son apreciadas."
+      },
+      "Qatar": {
+        "general": "La propina es apreciada; el cargo por servicio es habitual, pero las propinas adicionales siempre son bienvenidas.",
+        "restaurants": "El 10 % de cargo por servicio es habitual; las propinas adicionales son bien recibidas.",
+        "taxis": "No se espera propina; los taxímetros y apps son la norma.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para servicios de hotel y cuidado personal es apreciado."
+      },
+      "Kuwait": {
+        "general": "La propina es un gesto amable y apreciado, aunque no se espera con fuerza.",
+        "restaurants": "Un 10 % es apreciado; el cargo por servicio puede estar incluido.",
+        "taxis": "No se espera propina; negocia para taxis sin taxímetro.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para servicios de hotel y cuidado personal es un bonito detalle."
+      },
+      "Oman": {
+        "general": "La propina es bienvenida y apreciada; los omaníes son conocidos por su cálida hospitalidad.",
+        "restaurants": "Un 10 % es apreciado; los omaníes son conocidos por su hospitalidad generosa.",
+        "taxis": "Negocia las tarifas de antemano; las pequeñas propinas son apreciadas.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para el personal de hotel y servicios personales es bienvenido."
+      },
+      "Bahrain": {
+        "general": "La propina es apreciada; el cargo por servicio a veces está incluido en restaurantes turísticos.",
+        "restaurants": "Un 10 % es apreciado; el cargo por servicio a veces está incluido en restaurantes turísticos.",
+        "taxis": "No se espera propina; las apps de transporte son comunes.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para servicios de hotel y personales es apreciado."
+      },
+      "Israel": {
+        "general": "La propina es práctica habitual; el 10–12 % es lo estándar en restaurantes y servicios personales.",
+        "restaurants": "Un 10–12 % es lo estándar; el cargo por servicio a veces se añade en zonas turísticas.",
+        "taxis": "Redondea al shekel más cercano; no hay una fuerte cultura de propinas en taxis.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para peluqueros y servicios de belleza es costumbre."
+      },
+      "Libanon": {
+        "general": "La propina es habitual y apreciada; el servicio rara vez está incluido en la cuenta.",
+        "restaurants": "Un 10–15 % es apreciado; el servicio rara vez está incluido en la cuenta.",
+        "taxis": "Negocia las tarifas de antemano; no se esperan propinas.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10–15 % para peluqueros y servicios personales es lo estándar."
+      },
+      "Jordan": {
+        "general": "La propina es apreciada y habitual en servicios de hotel, restaurante y personales.",
+        "restaurants": "Un 10 % es apreciado; el cargo por servicio a veces está incluido.",
+        "taxis": "Negocia la tarifa antes del trayecto; no se esperan propinas.",
+        "shops": "No se da propina en tiendas.",
+        "services": "Un 10 % para el personal de hotel y servicios personales es apreciado."
+      }
+    }
+  },
+  "scan": {
+    "title": "Escanear recibo",
+    "capture": "Tomar foto",
+    "retake": "Volver a tomar",
+    "use": "Usar importe",
+    "itemized": "Seleccionar artículos",
+    "itemizedHint": "Pulsa para seleccionar/deseleccionar",
+    "useSelected": "Usar selección ({{sum}})",
+    "unavailable": "El escaneo de recibos requiere un build de desarrollo y no está disponible en Expo Go.",
+    "noAmount": "No se encontraron importes",
+    "error": "No se pudo leer la imagen – ingresar manualmente",
+    "permission": "Se requiere acceso a la cámara",
+    "permissionBtn": "Conceder acceso"
+  },
+  "history": {
+    "title": "Historial",
+    "empty": "Sin cálculos de propina aún",
+    "emptyHint": "Calcula una propina para verla aquí",
+    "people": "{{n}} pers.",
+    "delete": "Eliminar"
+  },
+  "settings": {
+    "title": "Configuración",
+    "profileSection": "Perfil",
+    "userName": "Tu nombre",
+    "userNamePlaceholder": "Nombre (opcional)",
+    "homeCurrency": "Moneda local",
+    "homeCurrencyHint": "Las conversiones se muestran en esta moneda",
+    "defaultsSection": "Valores predeterminados",
+    "defaultPeople": "Número de personas predeterminado",
+    "defaultSatisfaction": "Nivel de satisfacción predeterminado",
+    "defaultSatisfactionNone": "Ninguno (sin preselección)",
+    "appSection": "Aplicación",
+    "keepScreenAwake": "Mantener pantalla encendida",
+    "keepScreenAwakeHint": "Evita que la pantalla se bloquee",
+    "darkMode": "Modo oscuro",
+    "dangerSection": "Datos",
+    "clearHistory": "Borrar historial",
+    "clearHistoryConfirm": "¿Estás seguro? Esta acción no se puede deshacer.",
+    "language": "Idioma",
+    "rates": "Actualizar tipos de cambio",
+    "ratesLoading": "Obteniendo tipos...",
+    "ratesDefault": "Tipos locales (enero 2026)",
+    "ratesUpdated": "Actualizado: {{time}} ({{count}} divisas)",
+    "ratesError": "No se pudo actualizar – usando tipos locales",
+    "version": "Versión"
+  },
+  "about": {
+    "title": "Acerca de",
+    "description": "Adjust the tip es una calculadora de propinas para viajeros. Ofrece recomendaciones culturalmente adaptadas para más de 60 países — restaurantes, taxis, tiendas y servicios.",
+    "feedbackTitle": "Comentarios",
+    "feedbackBody": "¿Tienes una sugerencia o encontraste un error? Nos encantaría saber de ti.",
+    "feedbackBtn": "Enviar comentarios por correo"
+  },
+  "help": {
+    "title": "Cómo usar",
+    "intro": "Una guía rápida de todas las funciones de Adjust the tip.",
+    "step1Title": "1. Selecciona tu ubicación",
+    "step1Body": "Toca el campo de ubicación y elige el país donde estás. La app también puede detectar tu posición mediante GPS.",
+    "step2Title": "2. Tipo de cuenta",
+    "step2Body": "Selecciona si pagas en un restaurante, taxi, tienda o servicio. Esto ajusta la propina recomendada a las costumbres locales.",
+    "step3Title": "3. Costumbres de propina",
+    "step3Body": "Toca el icono 📖 junto al selector de país para leer sobre las costumbres locales de propina.",
+    "step4Title": "4. Ingresa el importe",
+    "step4Body": "Escribe el total de la cuenta. También puedes escanear un recibo con el botón de cámara.",
+    "step5Title": "5. Valora tu experiencia",
+    "step5Body": "Elige 😕 Insatisfecho, 🙂 OK o 😄 Excelente — cada uno corresponde a un porcentaje localmente apropiado. Usa ✏️ Personalizado para ingresar el tuyo.",
+    "step6Title": "6. Ver el resultado",
+    "step6Body": "La tarjeta de resultado muestra el importe de propina y el total. Usa los botones de redondeo para pagar un número redondo. Toca Guardar para conservar el cálculo.",
+    "step7Title": "7. Dividir la cuenta",
+    "step7Body": "Usa el divisor bajo el resultado para repartir el total entre varias personas. El importe por persona aparece automáticamente.",
+    "step8Title": "8. Favoritos",
+    "step8Body": "En el selector de países, toca ★ junto a cualquier país para guardarlo como favorito. Los favoritos aparecen al principio de la lista."
+  }
+}

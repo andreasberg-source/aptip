@@ -1,0 +1,648 @@
+{
+  "app": {
+    "title": "Adjust the tip",
+    "subtitle": "Trinkgeldrechner für Reisende"
+  },
+  "onboarding": {
+    "welcome": "Willkommen bei Adjust the tip",
+    "subtitle": "Richten wir deine Einstellungen ein",
+    "nameLabel": "Dein Name (optional)",
+    "namePlaceholder": "Z.B. Alex",
+    "currencyLabel": "Deine Heimwährung",
+    "currencyHint": "Wird für ungefähre Umrechnungen verwendet",
+    "searchPlaceholder": "Währungen suchen",
+    "getStarted": "Loslegen"
+  },
+  "location": {
+    "button": "Wo bist du?",
+    "title": "Land auswählen",
+    "search": "Land suchen..."
+  },
+  "picker": {
+    "favourites": "Favoriten",
+    "recentlyUsed": "Zuletzt verwendet"
+  },
+  "continent": {
+    "europa": "Europa",
+    "nord-amerika": "Nordamerika",
+    "sor-amerika": "Südamerika",
+    "asia": "Asien",
+    "oseania": "Ozeanien",
+    "afrika": "Afrika",
+    "mellom-osten": "Naher Osten"
+  },
+  "amount": {
+    "label": "Gesamtbetrag",
+    "serviceType": "Was für eine Rechnung?",
+    "placeholder": "0,00",
+    "scan": "Bon scannen"
+  },
+  "satisfaction": {
+    "label": "Wie zufrieden waren Sie?",
+    "poor": "Unzufrieden",
+    "ok": "Zufrieden",
+    "excellent": "Sehr zufrieden",
+    "custom": "Benutzerdefiniert %",
+    "customPlaceholder": "% eingeben"
+  },
+  "split": {
+    "label": "Rechnung teilen",
+    "people": "{{n}} Personen",
+    "onePerson": "1 Person"
+  },
+  "result": {
+    "title": "Ergebnis",
+    "original": "Ursprünglicher Betrag",
+    "tip": "Trinkgeld ({{percent}}%)",
+    "total": "Gesamt mit Trinkgeld",
+    "perPerson": "Pro Person",
+    "home": "Ca. {{amount}} {{currency}}",
+    "noRate": "Wechselkurs nicht verfügbar",
+    "save": "💾 Speichern"
+  },
+  "roundup": {
+    "label": "Aufrunden auf"
+  },
+  "culture": {
+    "title": "Trinkgeldkultur",
+    "button": "Lokale Gepflogenheiten",
+    "overview": "Überblick",
+    "restaurants": "Restaurant",
+    "taxis": "Taxi",
+    "shops": "Geschäft",
+    "services": "Service",
+    "countries": {
+      "Norge": {
+        "general": "Trinkgeld wird nicht erwartet, ist aber immer willkommen — 5–10 % zeigen echte Wertschätzung.",
+        "restaurants": "Trinkgeld wird nicht erwartet, aber 5–10 % für guten Service ist eine nette Geste.",
+        "taxis": "Auf die nächsten 10 NOK aufrunden oder 10 % für exzellenten Service geben.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "5–10 % für Friseure und Spa-Behandlungen wird geschätzt, ist aber nicht verpflichtend."
+      },
+      "Sverige": {
+        "general": "Trinkgeld ist nicht verpflichtend, aber ein kleines Trinkgeld für guten Service ist immer willkommen.",
+        "restaurants": "Nicht üblich, aber 5–10 % ist für guten Service willkommen.",
+        "taxis": "Aufrunden oder 10 % für hilfreiche Fahrer.",
+        "shops": "Kein Trinkgeld erwartet.",
+        "services": "5–10 % für Friseure und Spas wird geschätzt."
+      },
+      "Danmark": {
+        "general": "Trinkgeld ist nicht erforderlich; Service ist im Preis inbegriffen, aber kleine Gesten werden herzlich aufgenommen.",
+        "restaurants": "Nicht erwartet, aber 5–10 % ist eine herzliche Geste für guten Service.",
+        "taxis": "Auf die nächsten 10 DKK aufrunden.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "5–10 % für persönliche Dienstleistungen wird geschätzt."
+      },
+      "Finland": {
+        "general": "Trinkgeld ist unüblich und wird nicht erwartet, aber ein kleiner Betrag für exzellenten Service wird geschätzt.",
+        "restaurants": "Nicht erwartet, aber 5–10 % für exzellenten Service wird geschätzt.",
+        "taxis": "Aufrunden reicht aus.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "5–10 % für Friseure und Massage ist eine nette Geste."
+      },
+      "Island": {
+        "general": "Trinkgeld gehört nicht zur lokalen Kultur; Servicegebühren sind in den meisten Rechnungen enthalten.",
+        "restaurants": "Trinkgeld ist in Island nicht traditionell; Servicegebühren sind oft im Preis inbegriffen.",
+        "taxis": "Kein Trinkgeld erwartet.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "Servicegebühren sind meist inbegriffen; zusätzliche Trinkgelder werden nicht erwartet."
+      },
+      "Storbritannia": {
+        "general": "Trinkgeld wird für guten Service erwartet, besonders in Restaurants und Taxis — 10–15 % ist die Norm.",
+        "restaurants": "10–12,5 % Servicegebühr wird oft hinzugefügt; wenn nicht, sind 10–15 % üblich.",
+        "taxis": "10–15 % für guten Service aufrunden.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10–15 % für Friseure und Schönheitsdienstleistungen ist Standard."
+      },
+      "Irland": {
+        "general": "Trinkgeld für guten Service ist gängige Praxis, in der Regel 10–15 % in Restaurants und für Taxis.",
+        "restaurants": "10–15 % ist üblich, wenn keine Servicegebühr enthalten ist.",
+        "taxis": "Aufrunden oder 1–2 € extra für einen hilfreichen Fahrer.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure und Schönheitsbehandlungen wird geschätzt."
+      },
+      "Frankrike": {
+        "general": "Service ist in allen Rechnungen gesetzlich inbegriffen, aber ein Extra-Trinkgeld für großartigen Service ist eine herzliche Geste.",
+        "restaurants": "Service ist gesetzlich inbegriffen (service compris), aber 5–10 % extra für großartigen Service ist willkommen.",
+        "taxis": "Auf den nächsten Euro aufrunden.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "5–10 % für Friseure und Spa-Behandlungen ist üblich."
+      },
+      "Italia": {
+        "general": "Ein Gedeck (Coperto) ist Standard; zusätzliches Trinkgeld wird geschätzt, ist aber nicht obligatorisch.",
+        "restaurants": "Ein Coperto (Gedeck) ist üblich; ein zusätzliches Trinkgeld von 5–10 % wird geschätzt, aber nicht verlangt.",
+        "taxis": "Auf den nächsten Euro aufrunden.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "5–10 % für Friseure und Schönheitsdienstleistungen wird geschätzt."
+      },
+      "Spania": {
+        "general": "Service ist meist inbegriffen; kleine Zusatztrinkgelder sind willkommen, werden aber nicht erwartet.",
+        "restaurants": "Servicegebühr ist meist inbegriffen; Kleingeld oder 5–10 % extra wird geschätzt.",
+        "taxis": "Auf den nächsten Euro aufrunden.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "5–10 % für Friseure und persönliche Pflege ist üblich."
+      },
+      "Portugal": {
+        "general": "Trinkgeld ist nicht obligatorisch, aber 5–10 % für guten Service wird geschätzt.",
+        "restaurants": "Nicht obligatorisch, aber 5–10 % für guten Service wird geschätzt.",
+        "taxis": "Auf den nächsten Euro aufrunden.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "5–10 % für Friseure und persönliche Dienstleistungen ist eine nette Geste."
+      },
+      "Tyskland": {
+        "general": "Trinkgeld wird erwartet — nennen Sie den aufgerundeten Gesamtbetrag beim Zahlen statt Geld auf dem Tisch zu lassen.",
+        "restaurants": "Den aufgerundeten Gesamtbetrag beim Zahlen nennen — 5–10 % über der Rechnung ist die Norm.",
+        "taxis": "10 % aufrunden und den Gesamtbetrag nennen.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "5–10 % für Friseure und persönliche Pflege wird erwartet."
+      },
+      "Nederland": {
+        "general": "Aufrunden oder 5–10 % für guten Service hinzuzufügen ist üblich und wird geschätzt.",
+        "restaurants": "Aufrunden oder 5–10 % für guten Service hinzufügen.",
+        "taxis": "Auf den nächsten Euro aufrunden.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "5–10 % für Friseure und persönliche Pflege wird geschätzt."
+      },
+      "Belgia": {
+        "general": "Service ist meist inbegriffen; ein kleines Extra-Trinkgeld für guten Service ist eine freundliche Geste.",
+        "restaurants": "Servicegebühr ist meist inbegriffen; 5–10 % extra ist eine willkommene Geste.",
+        "taxis": "Auf den nächsten Euro aufrunden.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "5–10 % für Friseure und persönliche Dienstleistungen wird geschätzt."
+      },
+      "Sveits": {
+        "general": "Service ist in der Regel inbegriffen; 5–10 % extra für exzellenten Service wird geschätzt.",
+        "restaurants": "Service ist meist inbegriffen; 5–10 % extra für exzellenten Service wird geschätzt.",
+        "taxis": "10 % aufrunden; Fahrer schätzen eine kleine Anerkennung.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "5–10 % für Friseure und Spa-Behandlungen ist üblich."
+      },
+      "Østerrike": {
+        "general": "Trinkgeld ist üblich — nennen Sie den aufgerundeten Gesamtbetrag beim Zahlen statt Geld auf dem Tisch zu lassen.",
+        "restaurants": "Den aufgerundeten Gesamtbetrag dem Kellner nennen; 5–10 % ist üblich.",
+        "taxis": "10 % aufrunden und den Gesamtbetrag nennen.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure und persönliche Dienstleistungen ist Standard."
+      },
+      "Hellas": {
+        "general": "Trinkgeld ist verbreitet, besonders in Touristengegenden — 5–10 % für guten Service wird geschätzt.",
+        "restaurants": "5–10 % wird geschätzt; Servicegebühr kann inbegriffen sein oder nicht.",
+        "taxis": "Auf den nächsten Euro aufrunden.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "5–10 % für Friseure und persönliche Pflege ist üblich."
+      },
+      "Tyrkia": {
+        "general": "Trinkgeld wird weitgehend erwartet; 10–15 % in Restaurants und Aufrunden für Taxis ist die Norm.",
+        "restaurants": "10–15 % wird erwartet, wenn keine Servicegebühr auf der Rechnung enthalten ist.",
+        "taxis": "Auf die nächste Lira aufrunden.",
+        "shops": "Kein Trinkgeld erwartet, aber Reiseführer schätzen Trinkgelder.",
+        "services": "10 % für Friseure und persönliche Dienstleistungen ist Standard."
+      },
+      "Polen": {
+        "general": "Trinkgeld ist üblich und wird geschätzt — 10 % ist der Standard für guten Service.",
+        "restaurants": "10 % ist die Norm für guten Service in Restaurants.",
+        "taxis": "Auf den nächsten Złoty aufrunden oder 10 % hinzufügen.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure und persönliche Pflege wird geschätzt."
+      },
+      "Tsjekkia": {
+        "general": "Trinkgeld ist üblich; nennen Sie den Gesamtbetrag einschließlich 10–15 % Trinkgeld beim Zahlen.",
+        "restaurants": "10–15 % wird geschätzt; aufrunden oder den Gesamtbetrag nennen.",
+        "taxis": "10 % aufrunden und den Gesamtbetrag nennen.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure und persönliche Dienstleistungen wird erwartet."
+      },
+      "Ungarn": {
+        "general": "Trinkgeld ist gängige Praxis; 10 % wird in den meisten Servicesituationen erwartet.",
+        "restaurants": "10 % ist üblich; einige Restaurants fügen automatisch eine Servicegebühr hinzu.",
+        "taxis": "Aufrunden oder 10 % für guten Service hinzufügen.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure ist Standard; Spa-Leistungen beinhalten oft ein Trinkgeld."
+      },
+      "Kroatia": {
+        "general": "Trinkgeld wird geschätzt und ist zunehmend verbreitet, besonders in Touristengegenden.",
+        "restaurants": "10 % für guten Service wird geschätzt; Servicegebühr ist nicht immer inbegriffen.",
+        "taxis": "Auf den nächsten Euro aufrunden.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure und persönliche Dienstleistungen ist üblich."
+      },
+      "Romania": {
+        "general": "Trinkgeld ist üblich und wird erwartet — 10 % in bar ist die Norm für guten Service.",
+        "restaurants": "10 % ist die Norm; Bargeld auf dem Tisch lassen oder den Betrag beim Zahlen nennen.",
+        "taxis": "Aufrunden oder 10 % für guten Service hinzufügen.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure und persönliche Pflege wird geschätzt."
+      },
+      "Bulgaria": {
+        "general": "Trinkgeld ist verbreitet und wird geschätzt; 10 % ist der Standard für guten Service.",
+        "restaurants": "10 % ist üblich und wird für guten Service geschätzt.",
+        "taxis": "Auf den nächsten Lew aufrunden.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure und persönliche Dienstleistungen ist Standard."
+      },
+      "Russland": {
+        "general": "Bargeld-Trinkgeld ist in Restaurants und für persönliche Dienstleistungen üblich — 10 % ist die Norm.",
+        "restaurants": "10 % ist in Restaurants mit Bedienung üblich, meist als Bargeld.",
+        "taxis": "Preis vorher vereinbaren; kleine Trinkgelder werden geschätzt.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure und persönliche Dienstleistungen ist Standard."
+      },
+      "USA": {
+        "general": "Trinkgeld ist ein integraler Bestandteil der Servicebranche — 15–20 % ist die erwartete Mindesthöhe.",
+        "restaurants": "15–20 % ist das Standard-Trinkgeld und wird in Restaurants mit Bedienung erwartet.",
+        "taxis": "15–20 % wird erwartet; Ridesharing-Apps bitten ebenfalls um Trinkgeld.",
+        "shops": "Kein Trinkgeld in Geschäften, aber Trinkgeldgläser sind in Cafés üblich.",
+        "services": "15–20 % für Friseure, Massagen und persönliche Dienstleistungen ist Standard."
+      },
+      "Canada": {
+        "general": "Die Trinkgeldkultur ähnelt der der USA — 15–20 % wird für die meisten Dienstleistungen erwartet.",
+        "restaurants": "15–20 % ist das Standard-Trinkgeld, ähnlich wie in den USA.",
+        "taxis": "15–20 % wird erwartet.",
+        "shops": "Kein Trinkgeld in Geschäften, aber Trinkgeldgläser sind in Cafés üblich.",
+        "services": "15–20 % für Friseure und persönliche Dienstleistungen ist die Norm."
+      },
+      "Mexico": {
+        "general": "Trinkgeld ist üblich und wichtig für Servicemitarbeiter, die auf Trinkgelder angewiesen sind.",
+        "restaurants": "10–15 % ist üblich; Servicegebühr ist manchmal inbegriffen.",
+        "taxis": "Aufrunden oder 10–15 % für guten Service hinzufügen.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10–15 % für Friseure und persönliche Dienstleistungen wird geschätzt."
+      },
+      "Brasil": {
+        "general": "10 % Servicegebühr ist meist inbegriffen; zusätzliches Trinkgeld ist eine großzügige Geste.",
+        "restaurants": "10 % Servicegebühr (taxa de serviço) ist meist inbegriffen; zusätzliche Trinkgelder sind willkommen.",
+        "taxis": "Auf den nächsten Real aufrunden.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure und persönliche Dienstleistungen ist üblich."
+      },
+      "Argentina": {
+        "general": "Trinkgeld ist üblich und wichtig; Servicemitarbeiter sind auf Trinkgelder angewiesen, da die Löhne niedrig sind.",
+        "restaurants": "10 % ist üblich; das Personal ist auf Trinkgelder angewiesen, da Löhne niedrig sind.",
+        "taxis": "Aufrunden; Fahrdienstleister (Remises) erwarten kein Trinkgeld.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure und persönliche Dienstleistungen ist Standard."
+      },
+      "Chile": {
+        "general": "10 % Propina ist Standard und wird manchmal automatisch hinzugefügt.",
+        "restaurants": "10 % Propina ist üblich und wird manchmal automatisch hinzugefügt.",
+        "taxis": "Auf den nächsten Peso aufrunden.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure und persönliche Dienstleistungen wird geschätzt."
+      },
+      "Colombia": {
+        "general": "10 % Propina ist die Norm; oft wird es in gehobenen Restaurants automatisch hinzugefügt.",
+        "restaurants": "10 % Propina ist Standard; einige Restaurants fügen es automatisch hinzu.",
+        "taxis": "Aufrunden oder Kleingeld dalassen.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure und persönliche Pflege ist üblich."
+      },
+      "Peru": {
+        "general": "Trinkgeld wird geschätzt, besonders in Touristenrestaurants und für Guides.",
+        "restaurants": "10 % wird in mittelpreisigen und gehobenen Restaurants erwartet.",
+        "taxis": "Preis vorher verhandeln; kein Trinkgeld erwartet.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure und persönliche Pflege wird geschätzt."
+      },
+      "Ecuador": {
+        "general": "Trinkgeld wird geschätzt; 10 % ist üblich, wenn keine Servicegebühr enthalten ist.",
+        "restaurants": "10 % Servicegebühr ist manchmal inbegriffen; wenn nicht, werden 10 % geschätzt.",
+        "taxis": "Auf den nächsten Dollar aufrunden.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure ist üblich."
+      },
+      "Uruguay": {
+        "general": "10 % Propina ist in den meisten Servicesituationen gängige Praxis.",
+        "restaurants": "10 % Propina ist in den meisten Restaurants Standard.",
+        "taxis": "Auf den nächsten Peso aufrunden.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure und persönliche Dienstleistungen wird geschätzt."
+      },
+      "Japan": {
+        "general": "Trinkgeld wird nicht praktiziert und kann als unhöflich empfunden werden — exzellenter Service ist einfach der Standard.",
+        "restaurants": "Trinkgeld ist nicht üblich und kann als unhöflich empfunden werden — exzellenter Service ist einfach der Standard.",
+        "taxis": "Kein Trinkgeld; genauen Betrag zahlen oder Wechselgeld annehmen.",
+        "shops": "Niemals in Geschäften Trinkgeld geben.",
+        "services": "Kein Trinkgeld für Dienstleistungen; Dankbarkeit wird durch Höflichkeit ausgedrückt."
+      },
+      "Kina": {
+        "general": "Trinkgeld ist nicht traditionell, wird aber in Touristengegenden und Luxuslokalitäten zunehmend akzeptiert.",
+        "restaurants": "Trinkgeld ist nicht traditionell, wird aber in Touristengegenden und gehobenen Restaurants akzeptiert.",
+        "taxis": "Kein Trinkgeld erwartet; Taxameter verwenden.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "5–10 % in gehobenen Hotels wird akzeptiert, aber nicht allgemein erwartet."
+      },
+      "Sør-Korea": {
+        "general": "Trinkgeld ist nicht üblich und kann unangenehm wirken; exzellenter Service ist seine eigene Belohnung.",
+        "restaurants": "Trinkgeld ist nicht üblich und kann unangenehm wirken; Servicegebühren sind in gehobenen Lokalen inbegriffen.",
+        "taxis": "Kein Trinkgeld; Taxameter-Tarif verwenden.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "Kein Trinkgeld bei traditionellen Dienstleistungen; einige internationale Spas akzeptieren es."
+      },
+      "Thailand": {
+        "general": "Trinkgeld wird geschätzt, ist aber nicht obligatorisch; kleine Trinkgelder sind eine nette Geste für guten Service.",
+        "restaurants": "20–50 THB pro Person für guten Service wird geschätzt; einige Restaurants fügen Servicegebühren hinzu.",
+        "taxis": "Auf die nächsten 5 THB aufrunden; für Tuk-Tuks Preis verhandeln.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "50–100 THB für Massagen und Schönheitsdienstleistungen ist Standard."
+      },
+      "Vietnam": {
+        "general": "Trinkgeld ist nicht erforderlich, wird aber geschätzt, besonders in Touristengegenden und für persönliche Dienstleistungen.",
+        "restaurants": "Nicht erforderlich, aber 10 % wird in Touristenrestaurants geschätzt.",
+        "taxis": "Aufrunden; Tarife mit Motorrad-Taxis verhandeln.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "20.000–50.000 VND für Massagen und Spas ist eine nette Geste."
+      },
+      "Indonesia": {
+        "general": "Trinkgeld ist nicht obligatorisch, aber kleine Trinkgelder für guten Service werden willkommen geheißen.",
+        "restaurants": "5–10 % wenn keine Servicegebühr enthalten ist; Bargeld auf dem Tisch lassen.",
+        "taxis": "Aufrunden; Tarife mit Ridesharing-Apps verhandeln.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "5–10 % für Massagen und persönliche Dienstleistungen wird geschätzt."
+      },
+      "Malaysia": {
+        "general": "Servicegebühren sind oft inbegriffen; zusätzliches Trinkgeld ist willkommen, aber nicht erforderlich.",
+        "restaurants": "Servicegebühr und Steuer sind oft inbegriffen; zusätzliche Trinkgelder sind willkommen, aber nicht erforderlich.",
+        "taxis": "Kein Trinkgeld erwartet; Taxameter oder vereinbarten Tarif verwenden.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "5–10 % für persönliche Dienstleistungen ist eine nette Geste."
+      },
+      "Filippinene": {
+        "general": "Trinkgeld wird für guten Service geschätzt und wird in städtischen Gebieten immer verbreiteter.",
+        "restaurants": "10 % wird geschätzt, wenn keine Servicegebühr enthalten ist.",
+        "taxis": "Auf den nächsten Peso aufrunden.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure und persönliche Pflege ist Standard."
+      },
+      "Singapore": {
+        "general": "Servicegebühr und GST sind fast immer inbegriffen — kein zusätzliches Trinkgeld nötig.",
+        "restaurants": "10 % Servicegebühr und 9 % GST sind fast immer inbegriffen; kein zusätzliches Trinkgeld nötig.",
+        "taxis": "Kein Trinkgeld erwartet; Taxameter werden verwendet.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "Servicegebühren sind meist inbegriffen; kein zusätzliches Trinkgeld erforderlich."
+      },
+      "India": {
+        "general": "Trinkgeld wird geschätzt, aber nicht immer erwartet; Bargeld-Trinkgeld neben der Kartenzahlung ist üblich.",
+        "restaurants": "10 % wird geschätzt, wenn keine Servicegebühr enthalten ist; ein kleines Bargeld-Trinkgeld zusätzlich zur Kartenzahlung ist üblich.",
+        "taxis": "Aufrunden oder 10–15 % für hilfreiche Fahrer hinzufügen.",
+        "shops": "Kein Trinkgeld in Geschäften, aber kleine Trinkgelder für Gepäckträger werden geschätzt.",
+        "services": "10–15 % für Friseure und persönliche Pflege ist üblich."
+      },
+      "Sri Lanka": {
+        "general": "Trinkgeld wird geschätzt, besonders in Touristengegenden; Bargeld wird bevorzugt.",
+        "restaurants": "10 % für guten Service wird geschätzt; Servicegebühr ist manchmal inbegriffen.",
+        "taxis": "Tarife im Voraus verhandeln; kein Trinkgeld erwartet.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Spas und persönliche Pflege ist eine nette Geste."
+      },
+      "Nepal": {
+        "general": "Trinkgeld ist wichtig für Servicemitarbeiter, besonders für Guides, Träger und Hotelpersonal.",
+        "restaurants": "10–15 % wird in Touristenrestaurants geschätzt.",
+        "taxis": "Tarife im Voraus verhandeln; Trinkgeld ist nicht üblich.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10–15 % für Trekking-Guides und Träger ist wichtig und wird erwartet."
+      },
+      "Pakistan": {
+        "general": "Trinkgeld wird in gehobenen Einrichtungen geschätzt; einfachere Lokale erwarten es in der Regel nicht.",
+        "restaurants": "10 % wird in gehobenen Restaurants geschätzt; einfachere Lokale erwarten es nicht.",
+        "taxis": "Verhandelte Tarife sind Standard; Trinkgeld wird nicht erwartet.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure wird in städtischen Gebieten geschätzt."
+      },
+      "Bangladesh": {
+        "general": "Trinkgeld ist in mittelpreisigen und gehobenen Einrichtungen willkommen.",
+        "restaurants": "10 % ist in mittelpreisigen und gehobenen Restaurants willkommen.",
+        "taxis": "Tarife werden verhandelt; kleine Trinkgelder für guten Service werden geschätzt.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure und persönliche Pflege wird geschätzt."
+      },
+      "Hong Kong": {
+        "general": "10 % Servicegebühr ist normalerweise inbegriffen; ein zusätzliches Bargeld-Trinkgeld ist eine nette Geste.",
+        "restaurants": "10 % Servicegebühr ist normalerweise inbegriffen; 5–10 % extra in bar ist eine nette Geste.",
+        "taxis": "Auf den nächsten Dollar aufrunden; große Scheine für kleine Fahrten sind unerwünscht.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für persönliche Dienstleistungen ist Standard."
+      },
+      "Taiwan": {
+        "general": "Trinkgeld ist nicht üblich; exzellenter Service ist die erwartete Norm.",
+        "restaurants": "Trinkgeld ist nicht üblich; exzellenter Service ist die Norm.",
+        "taxis": "Kein Trinkgeld; Taxameter-Tarif verwenden.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "Servicegebühren sind gelegentlich in gehobenen Lokalen inbegriffen; sonst kein Trinkgeld erwartet."
+      },
+      "Australia": {
+        "general": "Trinkgeld ist nicht obligatorisch, aber 10 % für guten Service ist eine willkommene Geste.",
+        "restaurants": "Nicht obligatorisch, aber 10 % für guten Service wird geschätzt.",
+        "taxis": "Aufrunden oder 10 % für guten Service hinzufügen.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure und persönliche Pflege ist eine nette Geste."
+      },
+      "New Zealand": {
+        "general": "Trinkgeld ist keine starke Tradition; 10 % für guten Service wird geschätzt, aber nicht erwartet.",
+        "restaurants": "Nicht üblich, aber 10 % für guten Service wird geschätzt.",
+        "taxis": "Aufrunden; keine ausgeprägte Trinkgeldkultur.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure wird geschätzt, aber nicht stark erwartet."
+      },
+      "Fiji": {
+        "general": "Trinkgeld wird in Touristengegenden geschätzt; kleine Trinkgelder für guten Service sind willkommen.",
+        "restaurants": "5–10 % für guten Service wird geschätzt, besonders in Touristengegenden.",
+        "taxis": "Aufrunden oder ein kleines Trinkgeld für hilfreiche Fahrer.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "5–10 % für Spas und persönliche Dienstleistungen wird geschätzt."
+      },
+      "Sør-Afrika": {
+        "general": "Trinkgeld ist wichtig — Servicemitarbeiter verdienen oft sehr niedrige Grundlöhne und sind darauf angewiesen.",
+        "restaurants": "10–15 % wird erwartet und ist wichtig; Servicepersonal verdient oft sehr niedrige Grundlöhne.",
+        "taxis": "10–15 % für guten Service wird erwartet; für Minibus-Taxis aufrunden.",
+        "shops": "Kein Trinkgeld in Geschäften, aber Tankstellenmitarbeiter erwarten ein kleines Trinkgeld.",
+        "services": "10–15 % für Friseure und persönliche Dienstleistungen ist Standard."
+      },
+      "Egypt": {
+        "general": "Trinkgeld (Bakschisch) ist tief in der Kultur verwurzelt und wird in allen Servicebranchen erwartet.",
+        "restaurants": "10–15 % (Bakschisch) wird erwartet und ist in allen Servicebranchen üblich.",
+        "taxis": "Tarife im Voraus verhandeln; am Ende aufrunden.",
+        "shops": "Kleine Trinkgelder für Assistenten und Guides werden geschätzt.",
+        "services": "10–15 % für Spas und persönliche Dienstleistungen ist üblich."
+      },
+      "Marokko": {
+        "general": "Trinkgeld ist üblich und wird erwartet; Service ist selten in der Rechnung enthalten.",
+        "restaurants": "10 % ist üblich; Service ist selten inbegriffen.",
+        "taxis": "Preis zuerst verhandeln; am Ende aufrunden.",
+        "shops": "Kleine Trinkgelder für Guides werden geschätzt.",
+        "services": "10 % für Hammam, Spas und persönliche Pflege ist Standard."
+      },
+      "Tunisia": {
+        "general": "Trinkgeld wird geschätzt und ist üblich; Service ist nicht immer in der Rechnung enthalten.",
+        "restaurants": "10 % wird geschätzt; Service kann inbegriffen sein oder nicht.",
+        "taxis": "Zuerst verhandeln; am Ende aufrunden.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für persönliche Pflege und Hammam wird geschätzt."
+      },
+      "Kenya": {
+        "general": "Trinkgeld wird erwartet, besonders in Touristengegenden, und ist wichtig für den Lebensunterhalt der Mitarbeiter.",
+        "restaurants": "10 % wird in Touristengegenden erwartet; Trinkgelder unterstützen Geringverdiener.",
+        "taxis": "Im Voraus verhandeln; Trinkgelder werden geschätzt, sind aber nicht obligatorisch.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10–15 % für Safari-Guides und Lodges ist wichtig und wird erwartet."
+      },
+      "Tanzania": {
+        "general": "Trinkgeld wird geschätzt und ist wichtig, besonders für Safari-Guides und Trekking-Personal.",
+        "restaurants": "10 % wird geschätzt; Servicegebühr ist manchmal inbegriffen.",
+        "taxis": "Zuerst verhandeln; Trinkgelder werden geschätzt.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10–15 % für Safari-Guides und Trekking-Träger wird erwartet und ist wichtig."
+      },
+      "Ghana": {
+        "general": "Trinkgeld wird in Restaurants und für persönliche Dienstleistungen geschätzt; es wird nicht stark erwartet.",
+        "restaurants": "10 % wird in gehobenen und Touristenrestaurants geschätzt.",
+        "taxis": "Zuerst verhandeln; Trinkgelder sind nicht obligatorisch.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure und persönliche Dienstleistungen wird geschätzt."
+      },
+      "Nigeria": {
+        "general": "Trinkgeld ist in gehobenen Einrichtungen und für guten Service in den meisten Branchen üblich.",
+        "restaurants": "10 % wird in gehobenen Restaurants geschätzt; informelle Lokale erwarten es nicht.",
+        "taxis": "Vor dem Einsteigen verhandeln; kleine Trinkgelder werden geschätzt.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure und persönliche Dienstleistungen ist Standard."
+      },
+      "De forente arabiske emirater": {
+        "general": "Trinkgeld wird geschätzt, ist aber nicht obligatorisch; Servicegebühren sind oft bereits enthalten.",
+        "restaurants": "10 % Servicegebühr ist oft inbegriffen; 10 % extra in bar wird geschätzt.",
+        "taxis": "Kein Trinkgeld erwartet; Taxameter werden in Dubai und Abu Dhabi verwendet.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10–15 % für Spas, Hotels und persönliche Dienstleistungen wird geschätzt."
+      },
+      "Saudi-Arabia": {
+        "general": "Trinkgeld wird geschätzt und willkommen geheißen, besonders für Hotel- und Restaurantservice.",
+        "restaurants": "10 % wird geschätzt; Servicegebühr ist manchmal inbegriffen.",
+        "taxis": "Kein Trinkgeld erwartet; Apps wie Uber sind verbreitet.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "Kleine Trinkgelder für Gepäckträger und Hotelpersonal werden geschätzt."
+      },
+      "Qatar": {
+        "general": "Trinkgeld wird geschätzt; Servicegebühren sind üblich, aber zusätzliche Trinkgelder sind immer willkommen.",
+        "restaurants": "10 % Servicegebühr ist üblich; zusätzliche Trinkgelder werden willkommen geheißen.",
+        "taxis": "Kein Trinkgeld erwartet; Taxameter und Apps sind Standard.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Hoteldienstleistungen und persönliche Pflege wird geschätzt."
+      },
+      "Kuwait": {
+        "general": "Trinkgeld ist eine nette Geste und wird geschätzt, obwohl es nicht stark erwartet wird.",
+        "restaurants": "10 % wird geschätzt; Servicegebühr kann inbegriffen sein.",
+        "taxis": "Kein Trinkgeld erwartet; für Taxis ohne Meter Tarif verhandeln.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Hoteldienstleistungen und persönliche Pflege ist eine nette Geste."
+      },
+      "Oman": {
+        "general": "Trinkgeld ist willkommen und wird geschätzt; Omaner sind für ihre herzliche Gastfreundschaft bekannt.",
+        "restaurants": "10 % wird geschätzt; Omaner sind für ihre herzliche Gastfreundschaft bekannt.",
+        "taxis": "Tarife im Voraus verhandeln; kleine Trinkgelder werden geschätzt.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Hotelpersonal und persönliche Dienstleistungen ist willkommen."
+      },
+      "Bahrain": {
+        "general": "Trinkgeld wird geschätzt; Servicegebühren sind manchmal in Touristenrestaurants enthalten.",
+        "restaurants": "10 % wird geschätzt; Servicegebühr ist manchmal in Touristenrestaurants inbegriffen.",
+        "taxis": "Kein Trinkgeld erwartet; Ridesharing-Apps sind verbreitet.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Hotel- und persönliche Dienstleistungen wird geschätzt."
+      },
+      "Israel": {
+        "general": "Trinkgeld ist gängige Praxis; 10–12 % ist der Standard in Restaurants und für persönliche Dienstleistungen.",
+        "restaurants": "10–12 % ist Standard; Servicegebühr wird manchmal in Touristengegenden hinzugefügt.",
+        "taxis": "Auf den nächsten Schekel aufrunden; keine ausgeprägte Trinkgeldkultur bei Taxis.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Friseure und Schönheitsdienstleistungen ist üblich."
+      },
+      "Libanon": {
+        "general": "Trinkgeld ist üblich und wird geschätzt; Service ist selten in der Rechnung enthalten.",
+        "restaurants": "10–15 % wird geschätzt; Service ist selten in der Rechnung enthalten.",
+        "taxis": "Tarife im Voraus verhandeln; Trinkgeld wird nicht erwartet.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10–15 % für Friseure und persönliche Dienstleistungen ist Standard."
+      },
+      "Jordan": {
+        "general": "Trinkgeld wird geschätzt und ist für Hotel-, Restaurant- und persönliche Dienstleistungen üblich.",
+        "restaurants": "10 % wird geschätzt; Servicegebühr ist manchmal inbegriffen.",
+        "taxis": "Tarif vor der Fahrt verhandeln; Trinkgeld wird nicht erwartet.",
+        "shops": "Kein Trinkgeld in Geschäften.",
+        "services": "10 % für Hotelpersonal und persönliche Dienstleistungen wird geschätzt."
+      }
+    }
+  },
+  "scan": {
+    "title": "Bon scannen",
+    "capture": "Foto aufnehmen",
+    "retake": "Erneut aufnehmen",
+    "use": "Betrag verwenden",
+    "itemized": "Posten auswählen",
+    "itemizedHint": "Tippen zum Auswählen/Abwählen",
+    "useSelected": "Auswahl verwenden ({{sum}})",
+    "unavailable": "Das Scannen von Bons erfordert einen Entwicklungs-Build und ist in Expo Go nicht verfügbar.",
+    "noAmount": "Keine Beträge gefunden",
+    "error": "Bild konnte nicht gelesen werden – manuell eingeben",
+    "permission": "Kamerazugriff erforderlich",
+    "permissionBtn": "Zugriff erlauben"
+  },
+  "history": {
+    "title": "Verlauf",
+    "empty": "Noch keine Trinkgeld-Berechnungen",
+    "emptyHint": "Berechnen Sie ein Trinkgeld, um es hier zu sehen",
+    "people": "{{n}} Pers.",
+    "delete": "Löschen"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "profileSection": "Profil",
+    "userName": "Dein Name",
+    "userNamePlaceholder": "Name (optional)",
+    "homeCurrency": "Heimwährung",
+    "homeCurrencyHint": "Umrechnungen werden in dieser Währung angezeigt",
+    "defaultsSection": "Standardwerte",
+    "defaultPeople": "Standardanzahl Personen",
+    "defaultSatisfaction": "Standard-Zufriedenheitsstufe",
+    "defaultSatisfactionNone": "Keine (keine Vorauswahl)",
+    "appSection": "App",
+    "keepScreenAwake": "Bildschirm wach halten",
+    "keepScreenAwakeHint": "Verhindert, dass der Bildschirm gesperrt wird",
+    "darkMode": "Dunkler Modus",
+    "dangerSection": "Daten",
+    "clearHistory": "Verlauf löschen",
+    "clearHistoryConfirm": "Bist du sicher? Das kann nicht rückgängig gemacht werden.",
+    "language": "Sprache",
+    "rates": "Wechselkurse aktualisieren",
+    "ratesLoading": "Kurse werden abgerufen...",
+    "ratesDefault": "Lokale Kurse (Januar 2026)",
+    "ratesUpdated": "Aktualisiert: {{time}} ({{count}} Währungen)",
+    "ratesError": "Aktualisierung fehlgeschlagen – lokale Kurse werden verwendet",
+    "version": "Version"
+  },
+  "about": {
+    "title": "Über die App",
+    "description": "Adjust the tip ist ein Trinkgeldrechner für Reisende. Er bietet kulturell angepasste Trinkgeldempfehlungen für 60+ Länder — für Restaurants, Taxis, Geschäfte und Dienstleistungen.",
+    "feedbackTitle": "Feedback",
+    "feedbackBody": "Einen Vorschlag oder einen Fehler gefunden? Wir freuen uns über Ihre Rückmeldung.",
+    "feedbackBtn": "Feedback per E-Mail senden"
+  },
+  "help": {
+    "title": "So wird's benutzt",
+    "intro": "Eine kurze Übersicht aller Funktionen von Adjust the tip.",
+    "step1Title": "1. Standort wählen",
+    "step1Body": "Tippen Sie auf das Standortfeld und wählen Sie das Land, in dem Sie sich befinden. Die App kann Ihren Standort auch automatisch per GPS erkennen.",
+    "step2Title": "2. Rechnungstyp wählen",
+    "step2Body": "Wählen Sie, ob Sie im Restaurant, im Taxi, im Geschäft oder für eine Dienstleistung zahlen. Das passt das empfohlene Trinkgeld an lokale Gepflogenheiten an.",
+    "step3Title": "3. Trinkgeldgewohnheiten",
+    "step3Body": "Tippen Sie auf das 📖-Symbol neben der Länderauswahl, um lokale Trinkgeldgewohnheiten für das gewählte Land zu lesen.",
+    "step4Title": "4. Betrag eingeben",
+    "step4Body": "Geben Sie den Rechnungsbetrag ein. Sie können auch einen Bon mit der Kamerataste scannen.",
+    "step5Title": "5. Erlebnis bewerten",
+    "step5Body": "Wählen Sie 😕 Unzufrieden, 🙂 OK oder 😄 Ausgezeichnet — jede Option entspricht einem lokal angemessenen Prozentsatz. Nutzen Sie ✏️ Benutzerdefiniert für eigene Eingaben.",
+    "step6Title": "6. Ergebnis ansehen",
+    "step6Body": "Die Ergebniskarte zeigt den Trinkgeldbetrag und die Summe. Nutzen Sie die Aufrundungsschaltflächen für einen runden Betrag. Tippen Sie auf Speichern, um die Berechnung zu behalten.",
+    "step7Title": "7. Rechnung aufteilen",
+    "step7Body": "Nutzen Sie den Teiler unter dem Ergebnis, um die Summe auf mehrere Personen aufzuteilen. Der Betrag pro Person wird automatisch angezeigt.",
+    "step8Title": "8. Favoriten",
+    "step8Body": "Tippen Sie im Länder-Picker auf ★ neben einem Land, um es als Favorit zu speichern. Favoriten erscheinen oben in der Liste."
+  }
+}

@@ -1,59 +1,87 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { Stack, router } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { I18nextProvider } from 'react-i18next';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 
-import { useColorScheme } from '@/components/useColorScheme';
+import i18n, { initI18n } from '../i18n';
+import { useSettingsStore } from '../store/settingsStore';
+import { useExchangeRateStore } from '../store/exchangeRateStore';
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from 'expo-router';
+export { ErrorBoundary } from 'expo-router';
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: '(tabs)',
 };
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-    ...FontAwesome.font,
-  });
+  const [ready, setReady] = useState(false);
+  const { load: loadSettings, hasOnboarded, keepScreenAwake } = useSettingsStore();
+  const { load: loadRates, updateRates, lastUpdatedISO } = useExchangeRateStore();
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
+  // Initialise i18n + settings + persisted rates before showing any UI
   useEffect(() => {
-    if (error) throw error;
-  }, [error]);
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+    async function init() {
+      try {
+        await Promise.all([initI18n(), loadSettings(), loadRates()]);
+      } catch (e) {
+        console.error('[init] startup error:', e);
+      } finally {
+        setReady(true);
+        SplashScreen.hideAsync();
+      }
     }
-  }, [loaded]);
+    init();
+  }, []);
 
-  if (!loaded) {
-    return null;
-  }
+  // Auto-refresh rates in the background if missing or older than 24 hours
+  useEffect(() => {
+    if (!ready) return;
+    const stale =
+      !lastUpdatedISO ||
+      Date.now() - new Date(lastUpdatedISO).getTime() > 24 * 60 * 60 * 1000;
+    if (stale) updateRates();
+  }, [ready]);
 
-  return <RootLayoutNav />;
-}
+  // Redirect to onboarding on first launch
+  useEffect(() => {
+    if (ready && !hasOnboarded) {
+      router.replace('/onboarding');
+    }
+  }, [ready, hasOnboarded]);
 
-function RootLayoutNav() {
-  const colorScheme = useColorScheme();
+  // Keep screen awake when the setting is enabled
+  useEffect(() => {
+    if (keepScreenAwake) {
+      activateKeepAwakeAsync();
+    } else {
+      deactivateKeepAwake();
+    }
+  }, [keepScreenAwake]);
+
+  if (!ready) return null;
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <I18nextProvider i18n={i18n}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="onboarding" options={{ headerShown: false, animation: 'none' }} />
+          <Stack.Screen
+            name="currency-picker"
+            options={{ presentation: 'modal', headerShown: false }}
+          />
+          <Stack.Screen
+            name="scan"
+            options={{ presentation: 'fullScreenModal', headerShown: false }}
+          />
+          <Stack.Screen name="help"  options={{ headerShown: false }} />
+          <Stack.Screen name="about" options={{ headerShown: false }} />
+        </Stack>
+      </I18nextProvider>
+    </SafeAreaProvider>
   );
 }

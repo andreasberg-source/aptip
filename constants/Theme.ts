@@ -1,0 +1,49 @@
+// Color palette inspired by the app icon: dark navy background, vibrant green primary, gold accent.
+
+export const LightColors = {
+  cream: '#f2faf6',                          // Light mint background
+  darkSlate: '#0d1b2a',                      // Dark navy text
+  sage: '#4a7c64',                           // Forest green (secondary text, borders)
+  rust: '#1a9e5c',                           // Vibrant green – primary action
+  gold: '#e8a000',                           // Amber/gold accent
+  white: '#ffffff',                          // Card surfaces
+  lightBorder: 'rgba(74, 124, 100, 0.2)',
+  shadow: 'rgba(13, 27, 42, 0.12)',
+  shadowLight: 'rgba(13, 27, 42, 0.06)',
+  rustTransparent: 'rgba(26, 158, 92, 0.1)',
+  rustShadow: 'rgba(26, 158, 92, 0.25)',
+  sageGradientEnd: '#3d6b52',
+  resultText: 'rgba(255, 255, 255, 0.9)',
+  resultBorder: 'rgba(255, 255, 255, 0.2)',
+};
+
+export const DarkColors = {
+  cream: '#0d1b2a',                          // Dark navy background (matches icon)
+  darkSlate: '#ddeee7',                      // Off-white text
+  sage: '#6fa88c',                           // Muted green secondary
+  rust: '#2ecc71',                           // Bright green primary in dark mode
+  gold: '#f5a623',                           // Brighter gold in dark mode
+  white: '#152030',                          // Dark card surfaces
+  lightBorder: 'rgba(111, 168, 140, 0.2)',
+  shadow: 'rgba(0, 0, 0, 0.4)',
+  shadowLight: 'rgba(0, 0, 0, 0.2)',
+  rustTransparent: 'rgba(46, 204, 113, 0.15)',
+  rustShadow: 'rgba(46, 204, 113, 0.3)',
+  sageGradientEnd: '#5a9478',
+  resultText: 'rgba(255, 255, 255, 0.9)',
+  resultBorder: 'rgba(255, 255, 255, 0.15)',
+};
+
+/** Static light-theme colors — use only where a hook cannot be called (e.g. scan screen, onboarding). */
+export const Colors = LightColors;
+
+export const Typography = {
+  serif: 'Georgia',
+  mono: 'Courier New',
+};
+
+export const Radius = {
+  sm: 4,
+  md: 8,
+  lg: 12,
+};
