@@ -42,6 +42,14 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="split"
+        options={{
+          title: t('splitTab.title'),
+          tabBarLabel: t('splitTab.title'),
+          tabBarIcon: ({ focused }) => <TabIcon emoji="✂️" focused={focused} />,
+        }}
+      />
+      <Tabs.Screen
         name="two"
         options={{
           title: t('history.title'),

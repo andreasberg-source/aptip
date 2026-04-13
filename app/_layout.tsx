@@ -8,6 +8,7 @@ import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import i18n, { initI18n } from '../i18n';
 import { useSettingsStore } from '../store/settingsStore';
 import { useExchangeRateStore } from '../store/exchangeRateStore';
+import { useTripStore } from '../store/tripStore';
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -21,12 +22,13 @@ export default function RootLayout() {
   const [ready, setReady] = useState(false);
   const { load: loadSettings, hasOnboarded, keepScreenAwake } = useSettingsStore();
   const { load: loadRates, updateRates, lastUpdatedISO } = useExchangeRateStore();
+  const { loadTrips } = useTripStore();
 
   // Initialise i18n + settings + persisted rates before showing any UI
   useEffect(() => {
     async function init() {
       try {
-        await Promise.all([initI18n(), loadSettings(), loadRates()]);
+        await Promise.all([initI18n(), loadSettings(), loadRates(), loadTrips()]);
       } catch (e) {
         console.error('[init] startup error:', e);
       } finally {
@@ -80,6 +82,10 @@ export default function RootLayout() {
           />
           <Stack.Screen name="help"  options={{ headerShown: false }} />
           <Stack.Screen name="about" options={{ headerShown: false }} />
+          <Stack.Screen name="new-trip"          options={{ presentation: 'fullScreenModal', headerShown: false }} />
+          <Stack.Screen name="add-bill"          options={{ presentation: 'fullScreenModal', headerShown: false }} />
+          <Stack.Screen name="trip/[id]"         options={{ headerShown: false }} />
+          <Stack.Screen name="trip/[id]/settle"  options={{ headerShown: false }} />
         </Stack>
       </I18nextProvider>
     </SafeAreaProvider>

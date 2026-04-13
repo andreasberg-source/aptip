@@ -7,34 +7,35 @@ import { useColors } from '../hooks/useColors';
 import { Typography, Radius } from '../constants/Theme';
 
 interface Props {
-  options: number[];
+  option: number | null;
+  billAmount: number;
   currency: string;
   onSelect: (value: number) => void;
 }
 
-export default function RoundUpSuggestions({ options, currency, onSelect }: Props) {
+export default function RoundUpSuggestions({ option, billAmount, currency, onSelect }: Props) {
   const { t } = useTranslation();
   const C = useColors();
 
-  if (options.length === 0) return null;
+  if (!option || billAmount <= 0) return null;
+
+  const impliedPct = ((option - billAmount) / billAmount) * 100;
 
   return (
     <View style={styles.wrap}>
       <Text style={[styles.label, { color: C.darkSlate }]}>{t('roundup.label')}</Text>
-      <View style={styles.row}>
-        {options.map((opt) => (
-          <TouchableOpacity
-            key={opt}
-            style={[styles.chip, { backgroundColor: C.cream, borderColor: C.gold }]}
-            onPress={() => onSelect(opt)}
-            activeOpacity={0.7}
-          >
-            <Text style={[styles.chipText, { color: C.darkSlate }]}>
-              {formatAmount(opt, opt % 1 === 0 ? 0 : 2)} {currency}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <TouchableOpacity
+        style={[styles.chip, { backgroundColor: C.cream, borderColor: C.gold }]}
+        onPress={() => onSelect(option)}
+        activeOpacity={0.7}
+      >
+        <Text style={[styles.amount, { color: C.darkSlate }]}>
+          {formatAmount(option, option % 1 === 0 ? 0 : 2)} {currency}
+        </Text>
+        <Text style={[styles.pct, { color: C.sage }]}>
+          {impliedPct.toFixed(1)}%
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -47,18 +48,23 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 8,
   },
-  row: { flexDirection: 'row', gap: 8 },
   chip: {
-    flex: 1,
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
     paddingVertical: 10,
-    paddingHorizontal: 6,
+    paddingHorizontal: 18,
     borderWidth: 2,
     borderRadius: Radius.sm,
-    alignItems: 'center',
   },
-  chipText: {
+  amount: {
+    fontFamily: Typography.mono,
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  pct: {
     fontFamily: Typography.mono,
     fontSize: 13,
-    fontWeight: '500',
   },
 });

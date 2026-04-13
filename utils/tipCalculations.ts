@@ -6,7 +6,7 @@ export interface TipResult {
   tipAmount: number;
   total: number;
   perPerson: number;
-  roundUpOptions: number[];
+  roundUpOption: number | null;
   currency: string;
 }
 
@@ -26,22 +26,21 @@ export function calculateTip(
     tipAmount,
     total,
     perPerson,
-    roundUpOptions: getRoundUpOptions(total),
+    roundUpOption: getRoundUpOption(total),
     currency,
   };
 }
 
-/** Generate 3 round-number targets above the given total.
- *  Step size is derived from the total's magnitude so suggestions always end in 0.
- *  e.g. total=1050 → [1100, 1200, 1300], total=105 → [110, 120, 130], total=55 → [60, 70, 80]
+/** Return the nearest round-number total above the current total.
+ *  Step size is derived from the total's magnitude so the suggestion always ends in 0.
+ *  e.g. total=1050 → 1100, total=105 → 110, total=55 → 60
  */
-export function getRoundUpOptions(total: number): number[] {
+export function getRoundUpOption(total: number): number | null {
+  if (!total || total <= 0) return null;
   const magnitude = Math.pow(10, Math.floor(Math.log10(total)));
-  // Step = one order of magnitude below total's magnitude, minimum 10
-  // e.g. total in 1000s → step=100, total in 100s → step=10, total in 10s → step=10
   const step = Math.max(10, magnitude / 10);
-  const first = Math.ceil((total + Number.EPSILON) / step) * step;
-  return [first, first + step, first + step * 2];
+  const next = Math.ceil((total + Number.EPSILON) / step) * step;
+  return next > total ? next : null;
 }
 
 /** Round a number to a specified precision */

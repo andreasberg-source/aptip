@@ -89,23 +89,23 @@ export default function OnboardingScreen() {
         {/* Language */}
         <View style={styles.section}>
           <Text style={styles.label}>{t('settings.language')}</Text>
-          <View style={styles.langGrid}>
+          <View style={styles.langRow}>
             {supportedLanguages.map((lang) => (
               <TouchableOpacity
                 key={lang.code}
                 style={[
-                  styles.langBtn,
-                  currentLang === lang.code && styles.langBtnActive,
+                  styles.flagBtn,
+                  currentLang === lang.code && styles.flagBtnActive,
                 ]}
                 onPress={() => handleLanguageChange(lang.code)}
                 activeOpacity={0.7}
               >
-                <Text style={styles.langFlag}>{lang.flag}</Text>
-                <Text style={[styles.langLabel, currentLang === lang.code && styles.langLabelActive]}>
-                  {lang.label}
-                </Text>
+                <Text style={styles.flagEmoji}>{lang.flag}</Text>
               </TouchableOpacity>
             ))}
+            <Text style={styles.selectedLang}>
+              {supportedLanguages.find((l) => l.code === currentLang)?.label ?? ''}
+            </Text>
           </View>
         </View>
 
@@ -178,6 +178,7 @@ const styles = StyleSheet.create({
     width: 220,
     height: 65,
     marginBottom: 8,
+    alignSelf: 'center',
   },
   subtitle: {
     fontFamily: Typography.mono,
@@ -185,6 +186,7 @@ const styles = StyleSheet.create({
     color: Colors.sage,
     textTransform: 'uppercase',
     letterSpacing: 1.5,
+    textAlign: 'center',
   },
   section: {
     paddingHorizontal: 24,
@@ -281,35 +283,33 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 1.5,
   },
-  langGrid: {
+  langRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    alignItems: 'center',
     gap: 8,
     marginTop: 4,
   },
-  langBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
+  flagBtn: {
+    width: 40,
+    height: 36,
     borderWidth: 2,
     borderColor: Colors.lightBorder,
     borderRadius: Radius.sm,
     backgroundColor: Colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  langBtnActive: {
+  flagBtnActive: {
     borderColor: Colors.rust,
     backgroundColor: Colors.rustTransparent,
   },
-  langFlag: { fontSize: 18 },
-  langLabel: {
-    fontFamily: Typography.mono,
-    fontSize: 13,
+  flagEmoji: { fontSize: 20 },
+  selectedLang: {
+    fontFamily: Typography.serif,
+    fontSize: 14,
+    fontWeight: '600',
     color: Colors.darkSlate,
-  },
-  langLabelActive: {
-    fontWeight: '700',
-    color: Colors.rust,
+    marginLeft: 4,
+    flex: 1,
   },
 });

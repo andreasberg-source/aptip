@@ -50,6 +50,7 @@ export default function CalculatorScreen() {
   const [rawAmount, setRawAmount] = useState('');
   const [satisfaction, setSatisfaction] = useState<Satisfaction | null>(defaultSatisfaction);
   const [customPercent, setCustomPercent] = useState('');
+  const [roundUpPercent, setRoundUpPercent] = useState<number | null>(null);
   const [people, setPeople] = useState(defaultPeople);
   const [cultureVisible, setCultureVisible] = useState(false);
   const [serviceType, setServiceType] = useState<ServiceType>('restaurants');
@@ -96,6 +97,7 @@ export default function CalculatorScreen() {
   const tipRates = countryData ? getTipRates(countryData, serviceType) : null;
 
   const effectiveTipPercent = (() => {
+    if (roundUpPercent !== null) return roundUpPercent;
     if (!satisfaction) return null;
     if (satisfaction === 'custom') {
       const p = parseFloat(customPercent);
@@ -117,17 +119,20 @@ export default function CalculatorScreen() {
 
   const handleSatisfaction = useCallback((s: Satisfaction) => {
     setSatisfaction(s);
+    setRoundUpPercent(null);
+  }, []);
+
+  const handleCustomChange = useCallback((v: string) => {
+    setCustomPercent(v);
+    setRoundUpPercent(null);
   }, []);
 
   const handleRoundUp = useCallback(
     (value: number) => {
-      if (!countryData || !result) return;
-      const newTip = value - amount;
-      const pct = (newTip / amount) * 100;
-      setCustomPercent(pct.toFixed(1));
-      setSatisfaction('custom');
+      if (!amount || isNaN(amount) || amount <= 0) return;
+      setRoundUpPercent(((value - amount) / amount) * 100);
     },
-    [countryData, result, amount],
+    [amount],
   );
 
   const handleSave = useCallback(async () => {
@@ -229,7 +234,7 @@ export default function CalculatorScreen() {
                 { backgroundColor: C.cream, borderColor: C.lightBorder, color: C.darkSlate },
               ]}
               value={rawAmount}
-              onChangeText={setRawAmount}
+              onChangeText={(v) => { setRawAmount(v); setRoundUpPercent(null); }}
               placeholder={t('amount.placeholder')}
               placeholderTextColor={C.sage}
               keyboardType="decimal-pad"
@@ -253,8 +258,9 @@ export default function CalculatorScreen() {
         <SatisfactionSelector
           selected={satisfaction}
           customPercent={customPercent}
+          tipRates={tipRates}
           onSelect={handleSatisfaction}
-          onCustomChange={setCustomPercent}
+          onCustomChange={handleCustomChange}
         />
 
         {/* Result */}
@@ -267,7 +273,8 @@ export default function CalculatorScreen() {
               onSave={handleSave}
             />
             <RoundUpSuggestions
-              options={result.roundUpOptions}
+              option={result.roundUpOption}
+              billAmount={result.amount}
               currency={result.currency}
               onSelect={handleRoundUp}
             />

@@ -6,23 +6,31 @@ import { Satisfaction } from '../utils/tipCalculations';
 import { useColors } from '../hooks/useColors';
 import { Typography, Radius } from '../constants/Theme';
 
+interface TipRates {
+  poor: number;
+  ok: number;
+  excellent: number;
+}
+
 interface Props {
   selected: Satisfaction | null;
   customPercent: string;
+  tipRates?: TipRates | null;
   onSelect: (s: Satisfaction) => void;
   onCustomChange: (v: string) => void;
 }
 
 const OPTIONS: { key: Satisfaction; emoji: string }[] = [
-  { key: 'poor', emoji: '😕' },
-  { key: 'ok', emoji: '🙂' },
+  { key: 'poor',      emoji: '😕' },
+  { key: 'ok',        emoji: '🙂' },
   { key: 'excellent', emoji: '😄' },
-  { key: 'custom', emoji: '✏️' },
+  { key: 'custom',    emoji: '✏️' },
 ];
 
 export default function SatisfactionSelector({
   selected,
   customPercent,
+  tipRates,
   onSelect,
   onCustomChange,
 }: Props) {
@@ -35,6 +43,9 @@ export default function SatisfactionSelector({
       <View style={styles.grid}>
         {OPTIONS.map(({ key, emoji }) => {
           const active = selected === key;
+          const pct =
+            key !== 'custom' ? tipRates?.[key as keyof TipRates] : undefined;
+
           return (
             <TouchableOpacity
               key={key}
@@ -50,6 +61,11 @@ export default function SatisfactionSelector({
               <Text style={[styles.btnText, { color: C.darkSlate }, active && { color: '#fff' }]}>
                 {t(`satisfaction.${key}`)}
               </Text>
+              {pct !== undefined && (
+                <Text style={[styles.pctText, { color: active ? 'rgba(255,255,255,0.75)' : C.sage }]}>
+                  {pct}%
+                </Text>
+              )}
             </TouchableOpacity>
           );
         })}
@@ -89,13 +105,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     borderRadius: Radius.sm,
     alignItems: 'center',
-    gap: 3,
+    gap: 2,
   },
   emoji: { fontSize: 18 },
   btnText: {
     fontFamily: Typography.serif,
     fontSize: 11,
     fontWeight: '600',
+    textAlign: 'center',
+  },
+  pctText: {
+    fontFamily: Typography.mono,
+    fontSize: 11,
     textAlign: 'center',
   },
   customInput: {
