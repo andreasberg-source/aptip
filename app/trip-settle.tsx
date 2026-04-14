@@ -12,13 +12,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
-import { useTripStore } from '../../../store/tripStore';
-import { useSettingsStore } from '../../../store/settingsStore';
-import { useExchangeRateStore } from '../../../store/exchangeRateStore';
-import { useColors } from '../../../hooks/useColors';
-import { Typography, Radius } from '../../../constants/Theme';
-import { computeSettlement, Transfer } from '../../../utils/settlement';
-import { SORTED_CURRENCIES } from '../../../data/currencies';
+import { useTripStore } from '../store/tripStore';
+import { useSettingsStore } from '../store/settingsStore';
+import { useExchangeRateStore } from '../store/exchangeRateStore';
+import { useColors } from '../hooks/useColors';
+import { Typography, Radius } from '../constants/Theme';
+import { computeSettlement, Transfer } from '../utils/settlement';
+import { SORTED_CURRENCIES } from '../data/currencies';
 
 export default function SettleScreen() {
   const { t } = useTranslation();
@@ -59,8 +59,6 @@ export default function SettleScreen() {
   }, [trip]);
 
   const getDisplayAmount = (transfer: Transfer): { primary: string; secondary: string | null } => {
-    // For now we use the trip's bill currency (first bill or lastCurrency) as the native currency
-    // The transfers are computed in the bill's currency units; if all bills share the same currency, it's straightforward
     const primaryCurrency = settleCurrency;
     const primaryAmount = transfer.amount;
 
@@ -343,7 +341,6 @@ const styles = StyleSheet.create({
   balanceAmount: { fontFamily: Typography.mono, fontSize: 14, fontWeight: '600' },
   emptyText: { fontFamily: Typography.serif, fontSize: 15 },
   backLink: { fontFamily: Typography.mono, fontSize: 14, marginTop: 8 },
-  // Modal
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',

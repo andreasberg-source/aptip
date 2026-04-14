@@ -119,7 +119,7 @@ export default function TripDetailScreen() {
         </Text>
         <TouchableOpacity
           style={[styles.settleBtn, { backgroundColor: C.rust }]}
-          onPress={() => router.push({ pathname: '/trip/[id]/settle', params: { id: trip.id } })}
+          onPress={() => router.push({ pathname: '/trip-settle', params: { id: trip.id } })}
           activeOpacity={0.8}
         >
           <Text style={styles.settleBtnText}>{t('splitTab.settleUp')}</Text>
