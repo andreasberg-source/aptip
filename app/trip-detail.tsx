@@ -13,9 +13,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
-import { useTripStore, Bill, Participant } from '../../store/tripStore';
-import { useColors } from '../../hooks/useColors';
-import { Typography, Radius } from '../../constants/Theme';
+import { useTripStore, Bill, Participant } from '../store/tripStore';
+import { useColors } from '../hooks/useColors';
+import { Typography, Radius } from '../constants/Theme';
 
 function formatDate(iso: string): string {
   const d = new Date(iso);

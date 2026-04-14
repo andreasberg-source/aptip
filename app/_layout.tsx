@@ -84,7 +84,7 @@ export default function RootLayout() {
           <Stack.Screen name="about" options={{ headerShown: false }} />
           <Stack.Screen name="new-trip"          options={{ presentation: 'fullScreenModal', headerShown: false }} />
           <Stack.Screen name="add-bill"          options={{ presentation: 'fullScreenModal', headerShown: false }} />
-          <Stack.Screen name="trip/[id]"         options={{ headerShown: false }} />
+          <Stack.Screen name="trip-detail"         options={{ headerShown: false }} />
           <Stack.Screen name="trip-settle"  options={{ headerShown: false }} />
         </Stack>
       </I18nextProvider>

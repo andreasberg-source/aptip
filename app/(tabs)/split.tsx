@@ -46,7 +46,7 @@ export default function SplitScreen() {
     return (
       <TouchableOpacity
         style={[styles.tripCard, { backgroundColor: C.white, borderColor: C.lightBorder }]}
-        onPress={() => router.push({ pathname: '/trip/[id]', params: { id: item.id } })}
+        onPress={() => router.push({ pathname: '/trip-detail', params: { id: item.id } })}
         activeOpacity={0.75}
       >
         <View style={styles.tripCardInner}>
