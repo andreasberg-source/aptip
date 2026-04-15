@@ -14,12 +14,15 @@ export interface PersistedSettings {
   darkMode: boolean;
   hasOnboarded: boolean;
   favouriteCountries: string[];
+  savedParticipantNames: string[];
 }
 
 interface SettingsState extends PersistedSettings {
   loaded: boolean;
   load: () => Promise<void>;
   patch: (updates: Partial<PersistedSettings>) => Promise<void>;
+  addSavedParticipantName: (name: string) => Promise<void>;
+  removeSavedParticipantName: (name: string) => Promise<void>;
 }
 
 const DEFAULTS: PersistedSettings = {
@@ -31,6 +34,7 @@ const DEFAULTS: PersistedSettings = {
   darkMode: false,
   hasOnboarded: false,
   favouriteCountries: [],
+  savedParticipantNames: [],
 };
 
 export const useSettingsStore = create<SettingsState>((set, get) => ({
@@ -53,7 +57,25 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
 
   patch: async (updates) => {
     set(updates as Partial<SettingsState>);
-    const { loaded, load, patch, ...current } = get();
+    const { loaded, load, patch, addSavedParticipantName, removeSavedParticipantName, ...current } = get();
     await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...current, ...updates }));
+  },
+
+  addSavedParticipantName: async (name) => {
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    const existing = get().savedParticipantNames;
+    if (existing.includes(trimmed)) return;
+    const updated = [...existing, trimmed];
+    set({ savedParticipantNames: updated });
+    const { loaded, load, patch, addSavedParticipantName, removeSavedParticipantName, ...current } = get();
+    await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify(current));
+  },
+
+  removeSavedParticipantName: async (name) => {
+    const updated = get().savedParticipantNames.filter((n) => n !== name);
+    set({ savedParticipantNames: updated });
+    const { loaded, load, patch, addSavedParticipantName, removeSavedParticipantName, ...current } = get();
+    await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify(current));
   },
 }));

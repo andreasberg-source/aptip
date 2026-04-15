@@ -81,6 +81,7 @@ export default function RootLayout() {
             options={{ presentation: 'fullScreenModal', headerShown: false }}
           />
           <Stack.Screen name="help"  options={{ headerShown: false }} />
+          <Stack.Screen name="help-split" options={{ headerShown: false }} />
           <Stack.Screen name="about" options={{ headerShown: false }} />
           <Stack.Screen name="new-trip"          options={{ presentation: 'fullScreenModal', headerShown: false }} />
           <Stack.Screen name="add-bill"          options={{ presentation: 'fullScreenModal', headerShown: false }} />

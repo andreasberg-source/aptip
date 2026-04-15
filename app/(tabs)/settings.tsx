@@ -35,7 +35,7 @@ export default function SettingsScreen() {
   const { updateRates, isLoading, lastUpdated, error } = useExchangeRates();
   const {
     userName, homeCurrency, defaultPeople, defaultSatisfaction,
-    keepScreenAwake, darkMode, patch,
+    keepScreenAwake, darkMode, patch, savedParticipantNames, removeSavedParticipantName,
   } = useSettingsStore();
   const clearAll = useHistoryStore((s) => s.clearAll);
 
@@ -222,6 +222,32 @@ export default function SettingsScreen() {
           autoCapitalize="words"
           returnKeyType="done"
         />
+      </View>
+
+      {/* ── Saved participant names ───────────────────────── */}
+      <SectionHeader label={t('settings.savedNames')} C={C} />
+
+      <View style={[s.section, { borderBottomColor: C.lightBorder }]}>
+        {savedParticipantNames.length === 0 ? (
+          <Text style={[s.emptyHint, { color: C.sage }]}>{t('settings.savedNamesEmpty')}</Text>
+        ) : (
+          savedParticipantNames.map((name) => (
+            <View key={name} style={[s.savedNameRow, { borderBottomColor: C.lightBorder }]}>
+              <Text style={[s.savedNameText, { color: C.darkSlate }]}>{name}</Text>
+              <TouchableOpacity
+                onPress={() =>
+                  Alert.alert(name, t('splitTab.removeSavedName'), [
+                    { text: t('settings.clearSavedName'), style: 'destructive', onPress: () => removeSavedParticipantName(name) },
+                    { text: 'Cancel', style: 'cancel' },
+                  ])
+                }
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <Text style={[s.savedNameDelete, { color: C.rust }]}>✕</Text>
+              </TouchableOpacity>
+            </View>
+          ))
+        )}
       </View>
 
       {/* ── Data ─────────────────────────────────────────── */}
@@ -466,4 +492,13 @@ const makeStyles = (C: any) => StyleSheet.create({
     flex: 1,
   },
   bottomPad: { height: 20 },
+  emptyHint: { fontFamily: Typography.mono, fontSize: 13, paddingVertical: 4 },
+  savedNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  savedNameText: { fontFamily: Typography.serif, fontSize: 15, flex: 1 },
+  savedNameDelete: { fontFamily: Typography.mono, fontSize: 16, paddingLeft: 8 },
 });

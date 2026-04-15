@@ -620,6 +620,7 @@
     "splitItemized": "Nach Posten",
     "addItem": "Artikel hinzufügen",
     "scanItems": "Quittung scannen",
+    "viewReceipt": "Tippen zum Anzeigen der vollständigen Quittung",
     "itemLabel": "Artikelname",
     "save": "Speichern",
     "deleteTrip": "Reise löschen",
@@ -630,14 +631,29 @@
     "doneEditing": "Fertig",
     "remaining": "verbleibend",
     "percentageSum": "Muss 100% ergeben",
-    "included": "Wer ist dabei"
+    "included": "Wer ist dabei",
+    "turnavn": "Reisename",
+    "noBillsYet": "Noch keine Rechnungen",
+    "detachBill": "Von Reise entfernen",
+    "detachBillConfirm": "Diese Rechnung von der Reise entfernen? Sie bleibt im Verlauf erhalten.",
+    "deleteBill": "Rechnung löschen",
+    "deleteBillConfirm": "Diese Rechnung dauerhaft löschen?",
+    "settled": "Abgerechnet",
+    "allSettled": "Alle Überweisungen erledigt! 🎉",
+    "shareSettlement": "Abrechnung teilen",
+    "shareText": "Abrechnung: {{trip}}\n\n{{transfers}}",
+    "fromHistory": "Aus Verlauf",
+    "removedBillsSection": "Entfernte Rechnungen",
+    "scanAmount": "Bon scannen",
+    "removeSavedName": "Gespeicherten Namen entfernen?"
   },
   "history": {
     "title": "Verlauf",
     "empty": "Noch keine Trinkgeld-Berechnungen",
     "emptyHint": "Berechnen Sie ein Trinkgeld, um es hier zu sehen",
     "people": "{{n}} Pers.",
-    "delete": "Löschen"
+    "delete": "Löschen",
+    "removedBills": "Rechnungen aus Reisen"
   },
   "settings": {
     "title": "Einstellungen",
@@ -663,7 +679,10 @@
     "ratesDefault": "Lokale Kurse (Januar 2026)",
     "ratesUpdated": "Aktualisiert: {{time}} ({{count}} Währungen)",
     "ratesError": "Aktualisierung fehlgeschlagen – lokale Kurse werden verwendet",
-    "version": "Version"
+    "version": "Version",
+    "savedNames": "Gespeicherte Teilnehmernamen",
+    "savedNamesEmpty": "Keine gespeicherten Namen",
+    "clearSavedName": "Entfernen"
   },
   "about": {
     "title": "Über die App",
@@ -691,5 +710,19 @@
     "step7Body": "Nutzen Sie den Teiler unter dem Ergebnis, um die Summe auf mehrere Personen aufzuteilen. Der Betrag pro Person wird automatisch angezeigt.",
     "step8Title": "8. Favoriten",
     "step8Body": "Tippen Sie im Länder-Picker auf ★ neben einem Land, um es als Favorit zu speichern. Favoriten erscheinen oben in der Liste."
+  },
+  "helpSplit": {
+    "title": "Anleitung: Teilen",
+    "intro": "Eine kurze Übersicht zur Rechnungsaufteilung unter Personen.",
+    "step1Title": "1. Schnell teilen",
+    "step1Body": "Nutzen Sie Schnell teilen, um einen Betrag sofort aufzuteilen, ohne eine Reise zu erstellen. Betrag eingeben, Personenzahl wählen und den Anteil pro Person ablesen.",
+    "step2Title": "2. Reise erstellen",
+    "step2Body": "Tippen Sie auf +, um eine neue Reise zu erstellen. Geben Sie einen Namen an, fügen Sie Teilnehmer hinzu und wählen Sie eine Basiswährung.",
+    "step3Title": "3. Rechnungen hinzufügen",
+    "step3Body": "Innerhalb einer Reise tippen Sie auf +, um eine Rechnung hinzuzufügen. Wählen Sie, wer bezahlt hat, geben Sie den Betrag ein und wählen Sie die Aufteilungsmethode: gleichmäßig, individuell oder prozentual.",
+    "step4Title": "4. Aufteilungsmethoden",
+    "step4Body": "Gleichmäßig teilt die Rechnung in gleiche Teile. Individuell ermöglicht eigene Beträge pro Person. Prozentual gibt Ihnen volle Kontrolle über die Aufteilung.",
+    "step5Title": "5. Abrechnen",
+    "step5Body": "Tippen Sie in einer Reise auf Abrechnen, um zu sehen, wer wem wie viel schuldet. Überweisungen können als erledigt markiert und die Zusammenfassung mit den Teilnehmern geteilt werden."
   }
 }

@@ -620,6 +620,7 @@
     "splitItemized": "Par articles",
     "addItem": "Ajouter un article",
     "scanItems": "Scanner le reçu",
+    "viewReceipt": "Appuyer pour voir le reçu complet",
     "itemLabel": "Nom de l'article",
     "save": "Enregistrer",
     "deleteTrip": "Supprimer le voyage",
@@ -630,14 +631,30 @@
     "doneEditing": "Terminé",
     "remaining": "restant",
     "percentageSum": "Doit totaliser 100%",
-    "included": "Qui est inclus"
+    "included": "Qui est inclus",
+    "turnavn": "Nom du voyage",
+    "noBillsYet": "Aucune facture",
+    "detachBill": "Retirer du voyage",
+    "detachBillConfirm": "La facture sera conservée dans l'historique mais retirée du voyage.",
+    "deleteBill": "Supprimer la facture",
+    "deleteBillConfirm": "Supprimer définitivement? Cela est irréversible.",
+    "settled": "Réglé",
+    "allSettled": "Tout est réglé! 🎉",
+    "shareSettlement": "Règlement",
+    "shownInParentheses": "affiché entre parenthèses",
+    "fromHistory": "Depuis l'historique",
+    "removedBillsSection": "Factures des voyages",
+    "scanAmount": "Scanner le reçu",
+    "removeSavedName": "Supprimer ce nom des suggestions?",
+    "currency": "Devise"
   },
   "history": {
     "title": "Historique",
     "empty": "Aucun calcul de pourboire",
     "emptyHint": "Calculez un pourboire pour le voir ici",
     "people": "{{n}} pers.",
-    "delete": "Supprimer"
+    "delete": "Supprimer",
+    "removedBills": "Factures des voyages"
   },
   "settings": {
     "title": "Paramètres",
@@ -663,7 +680,10 @@
     "ratesDefault": "Taux locaux (janvier 2026)",
     "ratesUpdated": "Mis à jour : {{time}} ({{count}} devises)",
     "ratesError": "Mise à jour échouée – taux locaux utilisés",
-    "version": "Version"
+    "version": "Version",
+    "savedNames": "Noms des participants sauvegardés",
+    "savedNamesEmpty": "Aucun nom sauvegardé",
+    "clearSavedName": "Supprimer"
   },
   "about": {
     "title": "À propos",
@@ -691,5 +711,19 @@
     "step7Body": "Utilisez le répartiteur sous le résultat pour diviser le total entre plusieurs personnes. Le montant par personne s'affiche automatiquement.",
     "step8Title": "8. Favoris",
     "step8Body": "Dans le sélecteur de pays, appuyez sur ★ pour sauvegarder un pays en favori. Les favoris apparaissent en haut de la liste."
+  },
+  "helpSplit": {
+    "title": "Comment fonctionne Partager",
+    "intro": "Un guide pour l'onglet Partager pour suivre et régler les dépenses communes.",
+    "step1Title": "1. Partage rapide",
+    "step1Body": "Entrez un montant et le nombre de personnes pour voir immédiatement la part de chacun.",
+    "step2Title": "2. Créer un voyage",
+    "step2Body": "Appuyez sur '+ Nouveau voyage', donnez-lui un nom et ajoutez au moins 2 participants.",
+    "step3Title": "3. Ajouter des factures",
+    "step3Body": "Dans un voyage, appuyez sur '+ Ajouter une facture'. Entrez la description, le montant et qui a payé.",
+    "step4Title": "4. Régler",
+    "step4Body": "Appuyez sur 'Régler' pour voir le nombre minimum de transferts nécessaires. Les montants sont convertis automatiquement.",
+    "step5Title": "5. Partager le règlement",
+    "step5Body": "Appuyez sur le bouton de partage (↑) pour envoyer un résumé de qui doit quoi."
   }
 }

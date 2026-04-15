@@ -620,6 +620,7 @@
     "splitItemized": "Por artículos",
     "addItem": "Añadir artículo",
     "scanItems": "Escanear recibo",
+    "viewReceipt": "Toca para ver el recibo completo",
     "itemLabel": "Nombre del artículo",
     "save": "Guardar",
     "deleteTrip": "Eliminar viaje",
@@ -630,14 +631,30 @@
     "doneEditing": "Listo",
     "remaining": "restante",
     "percentageSum": "Debe sumar 100%",
-    "included": "Quién está incluido"
+    "included": "Quién está incluido",
+    "turnavn": "Nombre del viaje",
+    "noBillsYet": "Sin facturas aún",
+    "detachBill": "Quitar del viaje",
+    "detachBillConfirm": "La factura se conservará en el historial pero se quitará del viaje.",
+    "deleteBill": "Eliminar factura",
+    "deleteBillConfirm": "¿Eliminar permanentemente? Esto no se puede deshacer.",
+    "settled": "Liquidado",
+    "allSettled": "¡Todo liquidado! 🎉",
+    "shareSettlement": "Liquidación",
+    "shownInParentheses": "se muestra entre paréntesis",
+    "fromHistory": "Del historial",
+    "removedBillsSection": "Facturas de viajes",
+    "scanAmount": "Escanear recibo",
+    "removeSavedName": "¿Eliminar este nombre de las sugerencias?",
+    "currency": "Moneda"
   },
   "history": {
     "title": "Historial",
     "empty": "Sin cálculos de propina aún",
     "emptyHint": "Calcula una propina para verla aquí",
     "people": "{{n}} pers.",
-    "delete": "Eliminar"
+    "delete": "Eliminar",
+    "removedBills": "Facturas de viajes"
   },
   "settings": {
     "title": "Configuración",
@@ -663,7 +680,10 @@
     "ratesDefault": "Tipos locales (enero 2026)",
     "ratesUpdated": "Actualizado: {{time}} ({{count}} divisas)",
     "ratesError": "No se pudo actualizar – usando tipos locales",
-    "version": "Versión"
+    "version": "Versión",
+    "savedNames": "Nombres de participantes guardados",
+    "savedNamesEmpty": "No hay nombres guardados",
+    "clearSavedName": "Eliminar"
   },
   "about": {
     "title": "Acerca de",
@@ -691,5 +711,19 @@
     "step7Body": "Usa el divisor bajo el resultado para repartir el total entre varias personas. El importe por persona aparece automáticamente.",
     "step8Title": "8. Favoritos",
     "step8Body": "En el selector de países, toca ★ junto a cualquier país para guardarlo como favorito. Los favoritos aparecen al principio de la lista."
+  },
+  "helpSplit": {
+    "title": "Cómo usar: División",
+    "intro": "Una guía rápida para dividir cuentas entre personas.",
+    "step1Title": "1. División rápida",
+    "step1Body": "Usa División rápida para repartir cualquier importe al instante sin crear un viaje. Ingresa el total, elige el número de personas y ve la parte de cada uno.",
+    "step2Title": "2. Crear un viaje",
+    "step2Body": "Toca + para crear un viaje nuevo. Dale un nombre, agrega participantes y elige una moneda base.",
+    "step3Title": "3. Agregar cuentas",
+    "step3Body": "Dentro de un viaje, toca + para agregar una cuenta. Selecciona quién pagó, ingresa el importe y elige cómo dividirlo: igualmente, por importe personalizado o por porcentaje.",
+    "step4Title": "4. Modos de división",
+    "step4Body": "Igual divide la cuenta en partes iguales. Personalizado permite ingresar importes específicos por persona. Porcentaje te da control total sobre el reparto.",
+    "step5Title": "5. Liquidar",
+    "step5Body": "Toca Liquidar en un viaje para ver quién le debe a quién. Puedes marcar las transferencias como completadas y compartir el resumen con los participantes."
   }
 }

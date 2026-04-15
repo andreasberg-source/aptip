@@ -620,6 +620,7 @@
     "splitItemized": "Per vare",
     "addItem": "Legg til vare",
     "scanItems": "Skann kvittering",
+    "viewReceipt": "Trykk for å se full kvittering",
     "itemLabel": "Varenavn",
     "save": "Lagre",
     "deleteTrip": "Slett tur",
@@ -630,14 +631,30 @@
     "doneEditing": "Ferdig",
     "remaining": "gjenstår",
     "percentageSum": "Må bli 100%",
-    "included": "Hvem er med"
+    "included": "Hvem er med",
+    "turnavn": "Turnavn",
+    "noBillsYet": "Ingen regninger ennå",
+    "detachBill": "Fjern fra tur",
+    "detachBillConfirm": "Regningen lagres i Historikk, men fjernes fra turen.",
+    "deleteBill": "Slett regning",
+    "deleteBillConfirm": "Slett denne regningen permanent? Dette kan ikke angres.",
+    "settled": "Oppgjort",
+    "allSettled": "Alt er oppgjort! 🎉",
+    "shareSettlement": "Oppgjør",
+    "shownInParentheses": "vises i parentes",
+    "fromHistory": "Fra historikk",
+    "removedBillsSection": "Regninger fra turer",
+    "scanAmount": "Skann kvittering",
+    "removeSavedName": "Fjerne dette navnet fra forslag?",
+    "currency": "Valuta"
   },
   "history": {
     "title": "Historikk",
     "empty": "Ingen beregnede tips ennå",
     "emptyHint": "Beregn et tips for å se det her",
     "people": "{{n}} pers.",
-    "delete": "Slett"
+    "delete": "Slett",
+    "removedBills": "Regninger fra turer"
   },
   "settings": {
     "title": "Innstillinger",
@@ -663,7 +680,10 @@
     "ratesDefault": "Lokale kurser (januar 2026)",
     "ratesUpdated": "Oppdatert: {{time}} ({{count}} valutaer)",
     "ratesError": "Kunne ikke oppdatere – bruker lokale kurser",
-    "version": "Versjon"
+    "version": "Versjon",
+    "savedNames": "Lagrede deltakernavn",
+    "savedNamesEmpty": "Ingen lagrede navn ennå",
+    "clearSavedName": "Fjern"
   },
   "about": {
     "title": "Om appen",
@@ -691,5 +711,19 @@
     "step7Body": "Bruk splitter-funksjonen under resultatet for å dele totalen på flere personer. Beløpet per person vises automatisk.",
     "step8Title": "8. Favoritter",
     "step8Body": "I landvelgeren, trykk ★ ved siden av et land for å lagre det som favoritt. Favoritter vises øverst. Uten favoritter vises de 3 sist brukte landene der."
+  },
+  "helpSplit": {
+    "title": "Slik fungerer Del",
+    "intro": "En guide til Del-fanen for å holde styr på og gjøre opp felles utgifter.",
+    "step1Title": "1. Rask deling",
+    "step1Body": "Skriv inn et beløp og antall personer for å se hva hver person skylder på stedet. Bruk Egendefinert-modus for å legge inn navn og ulike beløp per person. Trykk skanneknappen for å lese av kvitteringstotalen med kameraet.",
+    "step2Title": "2. Opprett en tur",
+    "step2Body": "Trykk '+ Ny tur', gi den et navn og legg til minst 2 deltakere. Hver person får en unik fargeprikk. Ditt eget navn (fra Innstillinger) foreslås automatisk. Navn fra tidligere turer vises som hurtigvalg.",
+    "step3Title": "3. Legg til regninger",
+    "step3Body": "Inne på en tur, trykk '+ Legg til regning'. Skriv inn beskrivelse, beløp og hvem som betalte. Velg delemetode: likt, prosentvis, egendefinert eller skann kvitteringen for å dele per vare. Du kan også hente inn fra et lagret Historikk-oppslag.",
+    "step4Title": "4. Gjør opp",
+    "step4Body": "Trykk 'Gjør opp' for å se minste antall overføringer som trengs for å nullstille alle gjeld. Beløp konverteres automatisk til oppgjørsvalutaen via valutakurser. Trykk sirkelen ○ ved siden av en overføring for å merke den som gjennomført ✓.",
+    "step5Title": "5. Del oppgjøret",
+    "step5Body": "Trykk del-knappen (↑) i oppgjørsskjermen for å sende en tekstoppsummering av hvem som skylder hva — praktisk å dele i en gruppechat."
   }
 }

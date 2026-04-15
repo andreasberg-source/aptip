@@ -620,6 +620,7 @@
     "splitItemized": "By items",
     "addItem": "Add item",
     "scanItems": "Scan receipt",
+    "viewReceipt": "Tap to view full receipt",
     "itemLabel": "Item name",
     "save": "Save",
     "deleteTrip": "Delete trip",
@@ -630,14 +631,30 @@
     "doneEditing": "Done",
     "remaining": "remaining",
     "percentageSum": "Must add up to 100%",
-    "included": "Who's included"
+    "included": "Who's included",
+    "turnavn": "Trip name",
+    "noBillsYet": "No bills yet",
+    "detachBill": "Remove from trip",
+    "detachBillConfirm": "The bill will be kept in History but removed from this trip.",
+    "deleteBill": "Delete bill",
+    "deleteBillConfirm": "Delete this bill permanently? This cannot be undone.",
+    "settled": "Settled",
+    "allSettled": "All transfers settled! 🎉",
+    "shareSettlement": "Settlement",
+    "shownInParentheses": "shown in parentheses",
+    "fromHistory": "From history",
+    "removedBillsSection": "Bills from trips",
+    "scanAmount": "Scan receipt",
+    "removeSavedName": "Remove this name from suggestions?",
+    "currency": "Currency"
   },
   "history": {
     "title": "History",
     "empty": "No tip calculations yet",
     "emptyHint": "Calculate a tip to see it here",
     "people": "{{n}} ppl.",
-    "delete": "Delete"
+    "delete": "Delete",
+    "removedBills": "Bills from trips"
   },
   "settings": {
     "title": "Settings",
@@ -663,7 +680,10 @@
     "ratesDefault": "Local rates (January 2026)",
     "ratesUpdated": "Updated: {{time}} ({{count}} currencies)",
     "ratesError": "Could not update – using local rates",
-    "version": "Version"
+    "version": "Version",
+    "savedNames": "Saved participant names",
+    "savedNamesEmpty": "No saved names yet",
+    "clearSavedName": "Remove"
   },
   "about": {
     "title": "About the app",
@@ -691,5 +711,19 @@
     "step7Body": "Use the splitter below the result to divide the total among several people. The per-person amount appears automatically.",
     "step8Title": "8. Favourites",
     "step8Body": "In the country picker, tap ★ next to any country to save it as a favourite. Favourites appear at the top of the list. Without favourites, your 3 most recently used countries appear there instead."
+  },
+  "helpSplit": {
+    "title": "How Split works",
+    "intro": "A guide to the Split tab for tracking and settling shared expenses.",
+    "step1Title": "1. Quick Split",
+    "step1Body": "Enter an amount and number of people to instantly see how much each person owes. Use Custom mode to enter names and different amounts per person. Tap the scan button to read a receipt total with the camera.",
+    "step2Title": "2. Create a Trip",
+    "step2Body": "Tap '+ New Trip', give it a name and add at least 2 participants. Each person gets a unique colour dot. Your own name (from Settings) is suggested automatically. Names from previous trips are shown as quick-add chips.",
+    "step3Title": "3. Add Bills",
+    "step3Body": "Inside a trip, tap '+ Add Bill'. Enter a description, amount and who paid. Choose how to split: equally, by percentage, by custom amounts, or scan the receipt to split by individual items. You can also pre-fill from a saved History entry.",
+    "step4Title": "4. Settle Up",
+    "step4Body": "Tap 'Settle Up' to see the minimum number of transfers needed to clear all debts. Amounts are automatically converted to the settlement currency using live exchange rates. Tap the circle ○ next to each transfer to mark it as done ✓.",
+    "step5Title": "5. Share Settlement",
+    "step5Body": "Tap the share button (↑) in the settlement screen to send a text summary of who owes what — great for sharing in a group chat."
   }
 }

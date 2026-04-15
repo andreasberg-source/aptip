@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import {
   View,
   Text,
@@ -15,8 +15,9 @@ import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 import { useTripStore } from '../store/tripStore';
+import { useSettingsStore } from '../store/settingsStore';
 import { useColors } from '../hooks/useColors';
-import { Typography, Radius } from '../constants/Theme';
+import { Typography, Radius, PARTICIPANT_COLORS } from '../constants/Theme';
 
 interface ParticipantRow {
   key: string;
@@ -27,18 +28,20 @@ export default function NewTripScreen() {
   const { t } = useTranslation();
   const C = useColors();
   const { createTrip } = useTripStore();
+  const { userName, savedParticipantNames, patch: patchSettings } = useSettingsStore();
 
   const [tripName, setTripName] = useState('');
-  const [participants, setParticipants] = useState<ParticipantRow[]>([
-    { key: '1', name: '' },
-    { key: '2', name: '' },
-  ]);
+  const [participants, setParticipants] = useState<ParticipantRow[]>(() => {
+    const rows: ParticipantRow[] = [{ key: '1', name: '' }, { key: '2', name: '' }];
+    if (userName.trim()) rows[0] = { key: '1', name: userName.trim() };
+    return rows;
+  });
   const [saving, setSaving] = useState(false);
 
   const nextKey = useRef(3);
 
-  const addParticipant = useCallback(() => {
-    setParticipants(prev => [...prev, { key: String(nextKey.current++), name: '' }]);
+  const addParticipant = useCallback((name = '') => {
+    setParticipants(prev => [...prev, { key: String(nextKey.current++), name }]);
   }, []);
 
   const removeParticipant = useCallback((key: string) => {
@@ -49,6 +52,11 @@ export default function NewTripScreen() {
     setParticipants(prev => prev.map(p => p.key === key ? { ...p, name } : p));
   }, []);
 
+  const currentNames = participants.map(p => p.name.trim()).filter(Boolean);
+  const suggestions = (savedParticipantNames ?? []).filter(
+    n => !currentNames.includes(n),
+  );
+
   const canCreate = tripName.trim().length > 0 &&
     participants.filter(p => p.name.trim().length > 0).length >= 2;
 
@@ -58,9 +66,17 @@ export default function NewTripScreen() {
     const validParticipants = participants
       .filter(p => p.name.trim().length > 0)
       .map(p => ({ name: p.name.trim() }));
+
     await createTrip(tripName.trim(), validParticipants);
+
+    // Save participant names for future suggestions (deduplicated)
+    const existing = savedParticipantNames ?? [];
+    const newNames = validParticipants.map(p => p.name);
+    const merged = [...new Set([...existing, ...newNames])];
+    await patchSettings({ savedParticipantNames: merged });
+
     router.back();
-  }, [canCreate, saving, participants, tripName, createTrip]);
+  }, [canCreate, saving, participants, tripName, createTrip, savedParticipantNames, patchSettings]);
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: C.cream }]}>
@@ -79,7 +95,7 @@ export default function NewTripScreen() {
 
         <ScrollView style={styles.flex} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
           {/* Trip name */}
-          <Text style={[styles.label, { color: C.darkSlate }]}>{t('splitTab.tripName')}</Text>
+          <Text style={[styles.label, { color: C.darkSlate }]}>{t('splitTab.turnavn')}</Text>
           <TextInput
             style={[styles.input, { backgroundColor: C.white, borderColor: C.lightBorder, color: C.darkSlate }]}
             value={tripName}
@@ -94,32 +110,72 @@ export default function NewTripScreen() {
           <Text style={[styles.label, { color: C.darkSlate }]}>{t('splitTab.participants')}</Text>
           <Text style={[styles.hint, { color: C.sage }]}>Min. 2</Text>
 
-          {participants.map((p, idx) => (
-            <View key={p.key} style={styles.participantRow}>
-              <TextInput
-                style={[styles.participantInput, { backgroundColor: C.white, borderColor: C.lightBorder, color: C.darkSlate }]}
-                value={p.name}
-                onChangeText={v => updateParticipant(p.key, v)}
-                placeholder={`${t('splitTab.participantName')} ${idx + 1}`}
-                placeholderTextColor={C.sage}
-                autoCapitalize="words"
-                returnKeyType="done"
-              />
-              {participants.length > 2 && (
-                <TouchableOpacity
-                  style={[styles.removeBtn, { backgroundColor: C.cream, borderColor: C.lightBorder }]}
-                  onPress={() => removeParticipant(p.key)}
-                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                >
-                  <Text style={[styles.removeBtnText, { color: C.sage }]}>✕</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          ))}
+          {participants.map((p, idx) => {
+            const color = PARTICIPANT_COLORS[idx % PARTICIPANT_COLORS.length];
+            return (
+              <View key={p.key} style={styles.participantRow}>
+                <View style={[styles.colorDot, { backgroundColor: color }]} />
+                <TextInput
+                  style={[styles.participantInput, { backgroundColor: C.white, borderColor: C.lightBorder, color: C.darkSlate }]}
+                  value={p.name}
+                  onChangeText={v => updateParticipant(p.key, v)}
+                  placeholder={`${t('splitTab.participantName')} ${idx + 1}`}
+                  placeholderTextColor={C.sage}
+                  autoCapitalize="words"
+                  returnKeyType="done"
+                />
+                {participants.length > 2 && (
+                  <TouchableOpacity
+                    style={[styles.removeBtn, { backgroundColor: C.cream, borderColor: C.lightBorder }]}
+                    onPress={() => removeParticipant(p.key)}
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                  >
+                    <Text style={[styles.removeBtnText, { color: C.sage }]}>✕</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            );
+          })}
+
+          {/* Saved name suggestions */}
+          {suggestions.length > 0 && (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.suggestionsScroll}
+              keyboardShouldPersistTaps="handled"
+            >
+              <View style={styles.suggestionsRow}>
+                {suggestions.map(name => (
+                  <TouchableOpacity
+                    key={name}
+                    style={[styles.suggestionChip, { borderColor: C.lightBorder, backgroundColor: C.white }]}
+                    onPress={() => addParticipant(name)}
+                    onLongPress={() => {
+                      Alert.alert(name, t('splitTab.removeSavedName'), [
+                        { text: 'Cancel', style: 'cancel' },
+                        {
+                          text: t('settings.clearSavedName'),
+                          style: 'destructive',
+                          onPress: async () => {
+                            const updated = (savedParticipantNames ?? []).filter(n => n !== name);
+                            await patchSettings({ savedParticipantNames: updated });
+                          },
+                        },
+                      ]);
+                    }}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={[styles.suggestionChipText, { color: C.darkSlate }]}>+ {name}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
+          )}
 
           <TouchableOpacity
             style={[styles.addPersonBtn, { borderColor: C.lightBorder }]}
-            onPress={addParticipant}
+            onPress={() => addParticipant()}
             activeOpacity={0.7}
           >
             <Text style={[styles.addPersonBtnText, { color: C.sage }]}>+ {t('splitTab.addParticipant')}</Text>
@@ -189,6 +245,12 @@ const styles = StyleSheet.create({
     gap: 8,
     marginBottom: 8,
   },
+  colorDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    flexShrink: 0,
+  },
   participantInput: {
     flex: 1,
     borderWidth: 2,
@@ -207,6 +269,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   removeBtnText: { fontSize: 14 },
+  suggestionsScroll: { marginBottom: 12 },
+  suggestionsRow: { flexDirection: 'row', gap: 8, paddingHorizontal: 2 },
+  suggestionChip: {
+    borderWidth: 1.5,
+    borderRadius: Radius.sm,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+  },
+  suggestionChipText: { fontFamily: Typography.mono, fontSize: 13 },
   addPersonBtn: {
     borderWidth: 1.5,
     borderStyle: 'dashed',

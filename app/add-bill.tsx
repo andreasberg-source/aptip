@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,9 @@ import {
   Platform,
   Alert,
   ActivityIndicator,
+  Modal,
+  FlatList,
+  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -17,8 +20,9 @@ import { useTranslation } from 'react-i18next';
 import * as ImagePicker from 'expo-image-picker';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 
-import { useTripStore, Bill, BillItem, Participant, SplitMode } from '../store/tripStore';
+import { useTripStore, Bill, BillItem, SplitMode } from '../store/tripStore';
 import { useSettingsStore } from '../store/settingsStore';
+import { useHistoryStore } from '../store/historyStore';
 import { useColors } from '../hooks/useColors';
 import { Typography, Radius } from '../constants/Theme';
 import {
@@ -27,6 +31,7 @@ import {
   computeItemizedSplits,
 } from '../utils/settlement';
 import { parseItemsFromText } from '../utils/parseAmounts';
+import CurrencyDropdown from '../components/CurrencyDropdown';
 
 // Lazy-load ML Kit
 let TextRecognition: typeof import('@react-native-ml-kit/text-recognition').default | null = null;
@@ -49,12 +54,17 @@ function generateId() {
   return `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: '2-digit' });
+}
+
 export default function AddBillScreen() {
   const { t } = useTranslation();
   const C = useColors();
-  const { tripId, billId } = useLocalSearchParams<{ tripId: string; billId?: string }>();
+  const { tripId, billId, autoScan } = useLocalSearchParams<{ tripId: string; billId?: string; autoScan?: string }>();
   const { trips, addBill, updateBill } = useTripStore();
   const { homeCurrency } = useSettingsStore();
+  const { entries: historyEntries } = useHistoryStore();
 
   const trip = trips.find(tr => tr.id === tripId);
   const existingBill = billId ? trip?.bills.find(b => b.id === billId) : undefined;
@@ -69,8 +79,12 @@ export default function AddBillScreen() {
   const [includedIds, setIncludedIds] = useState<string[]>(
     existingBill?.participants ?? trip?.participants.map(p => p.id) ?? [],
   );
+  const [capturedImageUri, setCapturedImageUri] = useState<string | undefined>(existingBill?.imageUri);
 
-  // Percentage splits state (participantId → string percentage)
+  // From-history picker
+  const [showHistoryPicker, setShowHistoryPicker] = useState(false);
+
+  // Percentage splits state
   const [percentages, setPercentages] = useState<Record<string, string>>(() => {
     if (existingBill?.splitMode === 'percentage') {
       const total = existingBill.totalAmount;
@@ -83,7 +97,7 @@ export default function AddBillScreen() {
     return {};
   });
 
-  // Custom splits state (participantId → string amount)
+  // Custom splits state
   const [customAmounts, setCustomAmounts] = useState<Record<string, string>>(() => {
     if (existingBill?.splitMode === 'custom') {
       const result: Record<string, string> = {};
@@ -101,6 +115,7 @@ export default function AddBillScreen() {
   // OCR state
   const [scanning, setScanning] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
+  const [showImagePreview, setShowImagePreview] = useState(false);
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
   const [cameraLayout, setCameraLayout] = useState({ width: 0, height: 0 });
@@ -108,36 +123,42 @@ export default function AddBillScreen() {
   const participants = trip?.participants ?? [];
   const includedParticipants = participants.filter(p => includedIds.includes(p.id));
 
-  // Keep includedIds in sync when participants change
+  const tripCurrencies = trip
+    ? [...new Set([trip.lastCurrency, ...trip.bills.map(b => b.currency)].filter(Boolean))]
+    : [];
+
   useEffect(() => {
     if (!existingBill) {
       setIncludedIds(participants.map(p => p.id));
     }
   }, [participants.length]);
 
-  const totalAmount = parseFloat(rawAmount.replace(',', '.')) || 0;
 
-  // Equal split preview
+  const totalAmount = parseFloat(rawAmount.replace(',', '.')) || 0;
   const equalSplitAmount = includedParticipants.length > 0 && totalAmount > 0
     ? totalAmount / includedParticipants.length
     : null;
-
-  // Percentage validation
   const percentageTotal = includedParticipants.reduce((sum, p) => {
     const v = parseFloat(percentages[p.id] ?? '0');
     return sum + (isNaN(v) ? 0 : v);
   }, 0);
   const percentageValid = Math.abs(percentageTotal - 100) < 0.5;
-
-  // Custom amount remaining
   const customAllocated = includedParticipants.reduce((sum, p) => {
     const v = parseFloat(customAmounts[p.id] ?? '0');
     return sum + (isNaN(v) ? 0 : v);
   }, 0);
   const customRemaining = totalAmount - customAllocated;
-
-  // Itemized total
   const itemsTotal = items.reduce((sum, item) => sum + item.amount, 0);
+
+  const perPersonTotals = useMemo(() => {
+    const totals: Record<string, number> = {};
+    for (const item of items) {
+      const assignees = item.assignedTo.length > 0 ? item.assignedTo : participants.map(p => p.id);
+      const share = assignees.length > 0 ? item.amount / assignees.length : 0;
+      for (const pid of assignees) totals[pid] = (totals[pid] ?? 0) + share;
+    }
+    return totals;
+  }, [items, participants]);
 
   const canSave = (() => {
     if (!tripId || totalAmount <= 0 || !paidBy || includedParticipants.length === 0) return false;
@@ -183,6 +204,7 @@ export default function AddBillScreen() {
       participants: includedIds,
       items,
       splits,
+      imageUri: capturedImageUri,
     };
     if (isEdit && billId) {
       await updateBill(tripId, billId, billData);
@@ -190,11 +212,12 @@ export default function AddBillScreen() {
       await addBill(billData);
     }
     router.back();
-  }, [canSave, tripId, billId, isEdit, description, currency, totalAmount, paidBy, splitMode, includedIds, items, addBill, updateBill]);
+  }, [canSave, tripId, billId, isEdit, description, currency, totalAmount, paidBy, splitMode, includedIds, items, capturedImageUri, addBill, updateBill]);
 
   // ── OCR ───────────────────────────────────────────────────────────────────
   const processOcrUri = useCallback(async (uri: string) => {
     setScanning(true);
+    setCapturedImageUri(uri);
     try {
       if (!TextRecognition) throw new Error('OCR not available');
       const result = await TextRecognition.recognize(uri);
@@ -207,6 +230,7 @@ export default function AddBillScreen() {
           assignedTo: [],
         }));
         setItems(prev => [...prev, ...newItems]);
+        setSplitMode('itemized');
       } else {
         Alert.alert('No items found', 'Could not detect line items. Add them manually.');
       }
@@ -225,14 +249,27 @@ export default function AddBillScreen() {
     }
   }, [processOcrUri]);
 
+  // Auto-trigger camera/scan when opened via the "Scan & Split" shortcut button
+  useEffect(() => {
+    if (autoScan !== '1' || isEdit) return;
+    setSplitMode('itemized');
+    const trigger = async () => {
+      if (TextRecognition) {
+        const { granted } = permission?.granted ? { granted: true } : await requestPermission();
+        if (granted) { setShowCamera(true); return; }
+      }
+      await handlePickImage();
+    };
+    const timer = setTimeout(trigger, 350);
+    return () => clearTimeout(timer);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const handleCapture = useCallback(async () => {
     if (!cameraRef.current) return;
     const photo = await cameraRef.current.takePictureAsync({ quality: 0.9 });
     if (!photo?.uri) return;
     let uri = photo.uri;
     if (manipulateAsync && cameraLayout.width > 0) {
-      const scaleX = photo.width / cameraLayout.width;
-      const scaleY = photo.height / cameraLayout.height;
       try {
         const cropped = await manipulateAsync(
           photo.uri,
@@ -361,6 +398,19 @@ export default function AddBillScreen() {
 
         <ScrollView style={styles.flex} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
 
+          {/* From History (new bill only) */}
+          {!isEdit && historyEntries.length > 0 && (
+            <TouchableOpacity
+              style={[styles.fromHistoryBtn, { borderColor: C.gold, backgroundColor: C.white }]}
+              onPress={() => setShowHistoryPicker(true)}
+              activeOpacity={0.7}
+            >
+              <Text style={[styles.fromHistoryBtnText, { color: C.darkSlate }]}>
+                🧾 {t('splitTab.fromHistory')}
+              </Text>
+            </TouchableOpacity>
+          )}
+
           {/* Description */}
           <Text style={[styles.label, { color: C.darkSlate }]}>{t('splitTab.billDescription')}</Text>
           <TextInput
@@ -389,15 +439,10 @@ export default function AddBillScreen() {
             </View>
             <View style={styles.currencyCol}>
               <Text style={[styles.label, { color: C.darkSlate }]}>{t('splitTab.currency')}</Text>
-              <TextInput
-                style={[styles.input, styles.currencyInput, { backgroundColor: C.white, borderColor: C.lightBorder, color: C.darkSlate }]}
+              <CurrencyDropdown
                 value={currency}
-                onChangeText={v => setCurrency(v.toUpperCase().slice(0, 3))}
-                placeholder="USD"
-                placeholderTextColor={C.sage}
-                autoCapitalize="characters"
-                returnKeyType="done"
-                maxLength={3}
+                onChange={setCurrency}
+                priorityCurrencies={tripCurrencies}
               />
             </View>
           </View>
@@ -411,8 +456,8 @@ export default function AddBillScreen() {
                   key={p.id}
                   style={[
                     styles.chip,
-                    { borderColor: C.lightBorder, backgroundColor: C.white },
-                    paidBy === p.id && { backgroundColor: C.rust, borderColor: C.rust },
+                    { borderColor: p.color ?? C.lightBorder, backgroundColor: C.white },
+                    paidBy === p.id && { backgroundColor: p.color ?? C.rust, borderColor: p.color ?? C.rust },
                   ]}
                   onPress={() => setPaidBy(p.id)}
                   activeOpacity={0.7}
@@ -467,7 +512,7 @@ export default function AddBillScreen() {
             ))}
           </View>
 
-          {/* ── Equal split preview ── */}
+          {/* Equal split preview */}
           {splitMode === 'equal' && equalSplitAmount !== null && (
             <View style={[styles.previewRow, { backgroundColor: C.white, borderColor: C.lightBorder }]}>
               <Text style={[styles.previewLabel, { color: C.sage }]}>{t('splitTab.perPerson')}</Text>
@@ -477,7 +522,7 @@ export default function AddBillScreen() {
             </View>
           )}
 
-          {/* ── Percentage split ── */}
+          {/* Percentage split */}
           {splitMode === 'percentage' && (
             <View style={[styles.splitSection, { backgroundColor: C.white, borderColor: C.lightBorder }]}>
               {includedParticipants.map(p => (
@@ -505,7 +550,7 @@ export default function AddBillScreen() {
             </View>
           )}
 
-          {/* ── Custom amount split ── */}
+          {/* Custom amount split */}
           {splitMode === 'custom' && (
             <View style={[styles.splitSection, { backgroundColor: C.white, borderColor: C.lightBorder }]}>
               {includedParticipants.map(p => (
@@ -533,9 +578,21 @@ export default function AddBillScreen() {
             </View>
           )}
 
-          {/* ── Itemized split ── */}
+          {/* Itemized split */}
           {splitMode === 'itemized' && (
             <View>
+              {/* Receipt image thumbnail */}
+              {capturedImageUri && (
+                <TouchableOpacity
+                  onPress={() => setShowImagePreview(true)}
+                  activeOpacity={0.85}
+                  style={[styles.receiptThumbContainer, { borderColor: C.lightBorder }]}
+                >
+                  <Image source={{ uri: capturedImageUri }} style={styles.receiptThumb} resizeMode="cover" />
+                  <Text style={[styles.receiptThumbHint, { color: C.sage }]}>{t('splitTab.viewReceipt')}</Text>
+                </TouchableOpacity>
+              )}
+
               <View style={styles.itemizedToolbar}>
                 <TouchableOpacity
                   style={[styles.scanItemsBtn, { borderColor: C.gold, backgroundColor: C.white }]}
@@ -543,10 +600,7 @@ export default function AddBillScreen() {
                     if (TextRecognition) {
                       if (!permission?.granted) {
                         const { granted } = await requestPermission();
-                        if (!granted) {
-                          await handlePickImage();
-                          return;
-                        }
+                        if (!granted) { await handlePickImage(); return; }
                       }
                       setShowCamera(true);
                     } else {
@@ -593,25 +647,27 @@ export default function AddBillScreen() {
                       <Text style={[styles.removeItemText, { color: C.sage }]}>✕</Text>
                     </TouchableOpacity>
                   </View>
-                  {/* Assignee chips */}
                   <View style={styles.itemAssignees}>
-                    <Text style={[styles.itemAssignLabel, { color: C.sage }]}>
-                      {item.assignedTo.length === 0 ? 'All' : ''}
-                    </Text>
+                    {item.assignedTo.length === 0 && (
+                      <Text style={[styles.itemAssignLabel, { color: C.sage }]}>All</Text>
+                    )}
                     {participants.map(p => {
                       const assigned = item.assignedTo.includes(p.id);
+                      const chipColor = p.color ?? C.rust;
                       return (
                         <TouchableOpacity
                           key={p.id}
                           style={[
                             styles.assigneeChip,
-                            { borderColor: C.lightBorder, backgroundColor: C.cream },
-                            assigned && { backgroundColor: C.rust, borderColor: C.rust },
+                            { borderColor: assigned ? chipColor : C.lightBorder, backgroundColor: assigned ? chipColor : C.cream },
                           ]}
                           onPress={() => toggleItemAssignee(item.id, p.id)}
                           activeOpacity={0.7}
                         >
-                          <Text style={[styles.assigneeChipText, { color: assigned ? '#fff' : C.sage }]}>
+                          {!assigned && (
+                            <View style={[styles.assigneeDot, { backgroundColor: chipColor }]} />
+                          )}
+                          <Text style={[styles.assigneeChipText, { color: assigned ? '#fff' : C.darkSlate }]}>
                             {p.name.split(' ')[0]}
                           </Text>
                         </TouchableOpacity>
@@ -622,12 +678,26 @@ export default function AddBillScreen() {
               ))}
 
               {items.length > 0 && (
-                <View style={[styles.previewRow, { backgroundColor: C.white, borderColor: C.lightBorder }]}>
-                  <Text style={[styles.previewLabel, { color: C.sage }]}>Items total</Text>
-                  <Text style={[styles.previewValue, { color: Math.abs(itemsTotal - totalAmount) < 0.01 ? C.rust : C.darkSlate }]}>
-                    {itemsTotal.toFixed(2)} {currency}
-                  </Text>
-                </View>
+                <>
+                  <View style={[styles.previewRow, { backgroundColor: C.white, borderColor: C.lightBorder }]}>
+                    <Text style={[styles.previewLabel, { color: C.sage }]}>Items total</Text>
+                    <Text style={[styles.previewValue, { color: Math.abs(itemsTotal - totalAmount) < 0.01 ? C.rust : C.darkSlate }]}>
+                      {itemsTotal.toFixed(2)} {currency}
+                    </Text>
+                  </View>
+                  {/* Live per-person totals */}
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.perPersonRow} contentContainerStyle={styles.perPersonContent}>
+                    {participants.map(p => {
+                      const amt = perPersonTotals[p.id] ?? 0;
+                      if (amt === 0) return null;
+                      return (
+                        <View key={p.id} style={[styles.perPersonChip, { backgroundColor: p.color ?? C.sage }]}>
+                          <Text style={styles.perPersonChipText}>{p.name.split(' ')[0]}  {amt.toFixed(2)}</Text>
+                        </View>
+                      );
+                    })}
+                  </ScrollView>
+                </>
               )}
             </View>
           )}
@@ -635,6 +705,62 @@ export default function AddBillScreen() {
           <View style={{ height: 40 }} />
         </ScrollView>
       </KeyboardAvoidingView>
+
+      {/* Full-screen receipt image preview */}
+      <Modal visible={showImagePreview} animationType="fade" transparent onRequestClose={() => setShowImagePreview(false)}>
+        <View style={styles.imagePreviewOverlay}>
+          {capturedImageUri && (
+            <Image source={{ uri: capturedImageUri }} style={styles.imagePreviewFull} resizeMode="contain" />
+          )}
+          <TouchableOpacity style={styles.imagePreviewClose} onPress={() => setShowImagePreview(false)}>
+            <Text style={styles.imagePreviewCloseText}>✕</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+
+      {/* From History Modal */}
+      <Modal
+        visible={showHistoryPicker}
+        animationType="slide"
+        transparent
+        onRequestClose={() => setShowHistoryPicker(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalSheet, { backgroundColor: C.white }]}>
+            <View style={[styles.modalHeader, { borderBottomColor: C.lightBorder }]}>
+              <Text style={[styles.modalTitle, { color: C.darkSlate }]}>{t('splitTab.fromHistory')}</Text>
+              <TouchableOpacity onPress={() => setShowHistoryPicker(false)}>
+                <Text style={[styles.modalClose, { color: C.rust }]}>✕</Text>
+              </TouchableOpacity>
+            </View>
+            <FlatList
+              data={historyEntries}
+              keyExtractor={item => item.id}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={[styles.historyRow, { borderBottomColor: C.lightBorder }]}
+                  onPress={() => {
+                    setRawAmount(String(item.total));
+                    setCurrency(item.currency);
+                    if (!description) setDescription(item.country);
+                    setShowHistoryPicker(false);
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.historyRowInfo}>
+                    <Text style={[styles.historyRowCountry, { color: C.darkSlate }]}>{item.country}</Text>
+                    <Text style={[styles.historyRowDate, { color: C.sage }]}>{formatDate(item.date)}</Text>
+                  </View>
+                  <Text style={[styles.historyRowAmount, { color: C.rust }]}>
+                    {item.total.toFixed(2)} {item.currency}
+                  </Text>
+                </TouchableOpacity>
+              )}
+              style={{ maxHeight: 400 }}
+            />
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -670,6 +796,15 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#fff',
   },
+  fromHistoryBtn: {
+    borderWidth: 1.5,
+    borderRadius: Radius.sm,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    marginBottom: 14,
+    alignItems: 'center',
+  },
+  fromHistoryBtnText: { fontFamily: Typography.mono, fontSize: 13 },
   content: { padding: 16, paddingBottom: 16 },
   label: {
     fontFamily: Typography.serif,
@@ -688,8 +823,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   row: { flexDirection: 'row', gap: 10, alignItems: 'flex-start' },
-  currencyCol: { width: 80 },
-  currencyInput: { textAlign: 'center', letterSpacing: 2 },
+  currencyCol: { width: 90 },
   chipsScroll: { marginBottom: 4 },
   chipsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 4 },
   chip: {
@@ -815,8 +949,57 @@ const styles = StyleSheet.create({
     borderRadius: Radius.sm,
     paddingVertical: 3,
     paddingHorizontal: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   },
+  assigneeDot: { width: 7, height: 7, borderRadius: 4 },
   assigneeChipText: { fontFamily: Typography.mono, fontSize: 11 },
+  // Receipt thumbnail
+  receiptThumbContainer: {
+    borderWidth: 1,
+    borderRadius: Radius.sm,
+    overflow: 'hidden',
+    marginBottom: 10,
+  },
+  receiptThumb: { width: '100%', height: 110 },
+  receiptThumbHint: {
+    fontFamily: Typography.mono,
+    fontSize: 10,
+    textAlign: 'center',
+    paddingVertical: 4,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  // Full-screen image preview modal
+  imagePreviewOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.93)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imagePreviewFull: { width: '100%', height: '85%' },
+  imagePreviewClose: {
+    position: 'absolute',
+    top: 50,
+    right: 20,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imagePreviewCloseText: { color: '#fff', fontSize: 18 },
+  // Per-person totals row
+  perPersonRow: { marginTop: 8 },
+  perPersonContent: { gap: 6, paddingVertical: 4 },
+  perPersonChip: {
+    borderRadius: Radius.sm,
+    paddingVertical: 5,
+    paddingHorizontal: 12,
+  },
+  perPersonChipText: { fontFamily: Typography.mono, fontSize: 12, color: '#fff', fontWeight: '600' },
   // Camera
   cameraContainer: { flex: 1, backgroundColor: '#000' },
   camera: { flex: 1 },
@@ -849,4 +1032,36 @@ const styles = StyleSheet.create({
   primaryBtnText: { fontFamily: Typography.mono, fontSize: 14, color: '#fff', fontWeight: '600' },
   cancelText: { fontFamily: Typography.mono, fontSize: 13 },
   emptyText: { fontFamily: Typography.serif, fontSize: 15 },
+  // From History Modal
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'flex-end',
+  },
+  modalSheet: {
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    maxHeight: '70%',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 16,
+    borderBottomWidth: 1,
+  },
+  modalTitle: { fontFamily: Typography.serif, fontWeight: '700', fontSize: 16 },
+  modalClose: { fontSize: 18, fontWeight: '600', paddingHorizontal: 4 },
+  historyRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 13,
+    paddingHorizontal: 16,
+    borderBottomWidth: 0.5,
+  },
+  historyRowInfo: { flex: 1 },
+  historyRowCountry: { fontFamily: Typography.serif, fontWeight: '600', fontSize: 14 },
+  historyRowDate: { fontFamily: Typography.mono, fontSize: 11 },
+  historyRowAmount: { fontFamily: Typography.mono, fontSize: 15, fontWeight: '700' },
 });

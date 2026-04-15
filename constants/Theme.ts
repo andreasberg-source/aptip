@@ -47,3 +47,17 @@ export const Radius = {
   md: 8,
   lg: 12,
 };
+
+/** Distinct colors for trip participants, assigned round-robin. */
+export const PARTICIPANT_COLORS = [
+  '#e74c3c', // red
+  '#3498db', // blue
+  '#f39c12', // orange
+  '#9b59b6', // purple
+  '#1abc9c', // teal
+  '#e91e63', // pink
+  '#ff5722', // deep orange
+  '#00bcd4', // cyan
+  '#8bc34a', // light green
+  '#e67e22', // dark orange
+];

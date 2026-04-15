@@ -4,7 +4,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  FlatList,
   StyleSheet,
   Alert,
   ScrollView,
@@ -27,12 +26,78 @@ export default function TripDetailScreen() {
   const C = useColors();
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const { trips, updateTrip, deleteBill } = useTripStore();
+  const { trips, updateTrip, deleteBill, detachBill } = useTripStore();
   const trip = trips.find(t => t.id === id);
 
   const [editingParticipants, setEditingParticipants] = useState(false);
   const [participantEdits, setParticipantEdits] = useState<Participant[]>([]);
   const [newParticipantName, setNewParticipantName] = useState('');
+
+  // Hooks must all be called before any conditional return
+  const handleBillLongPress = useCallback((bill: Bill) => {
+    if (!trip) return;
+    Alert.alert(
+      bill.description || t('splitTab.billDescription'),
+      '',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: t('splitTab.detachBill'),
+          onPress: () => {
+            Alert.alert(
+              t('splitTab.detachBill'),
+              t('splitTab.detachBillConfirm'),
+              [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                  text: t('splitTab.detachBill'),
+                  onPress: () => detachBill(trip.id, bill.id),
+                },
+              ],
+            );
+          },
+        },
+        {
+          text: t('splitTab.deleteBill'),
+          style: 'destructive',
+          onPress: () => {
+            Alert.alert(
+              t('splitTab.deleteBill'),
+              t('splitTab.deleteBillConfirm'),
+              [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                  text: t('splitTab.deleteBill'),
+                  style: 'destructive',
+                  onPress: () => deleteBill(trip.id, bill.id),
+                },
+              ],
+            );
+          },
+        },
+      ],
+    );
+  }, [trip, deleteBill, detachBill, t]);
+
+  const handleDeleteTrip = useCallback(() => {
+    if (!trip) return;
+    Alert.alert(
+      t('splitTab.deleteTrip'),
+      t('splitTab.deleteConfirm'),
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: t('splitTab.deleteTrip'),
+          style: 'destructive',
+          onPress: async () => {
+            const { deleteTrip } = useTripStore.getState();
+            await deleteTrip(trip.id);
+            router.back();
+          },
+        },
+      ],
+    );
+  }, [trip, t]);
 
   if (!trip) {
     return (
@@ -64,44 +129,16 @@ export default function TripDetailScreen() {
     const newP: Participant = {
       id: `${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
       name: newParticipantName.trim(),
+      color: '#999999',
     };
     setParticipantEdits(prev => [...prev, newP]);
     setNewParticipantName('');
   };
 
-  const handleDeleteBill = useCallback((bill: Bill) => {
-    Alert.alert(
-      bill.description || t('splitTab.billDescription'),
-      t('splitTab.deleteConfirm'),
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: t('splitTab.deleteTrip'),
-          style: 'destructive',
-          onPress: () => deleteBill(trip.id, bill.id),
-        },
-      ],
-    );
-  }, [trip.id, deleteBill, t]);
-
-  const handleDeleteTrip = useCallback(() => {
-    Alert.alert(
-      t('splitTab.deleteTrip'),
-      t('splitTab.deleteConfirm'),
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: t('splitTab.deleteTrip'),
-          style: 'destructive',
-          onPress: async () => {
-            const { deleteTrip } = useTripStore.getState();
-            await deleteTrip(trip.id);
-            router.back();
-          },
-        },
-      ],
-    );
-  }, [trip.id, t]);
+  const isFullySettled = trip.bills.length > 0 && (() => {
+    // check via settledTransfers length vs computed transfers - simplified check
+    return (trip.settledTransfers?.length ?? 0) > 0;
+  })();
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: C.cream }]}>
@@ -114,9 +151,14 @@ export default function TripDetailScreen() {
         >
           <Text style={[styles.backBtnText, { color: C.rust }]}>‹</Text>
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: C.darkSlate }]} numberOfLines={1}>
-          {trip.name}
-        </Text>
+        <View style={styles.headerCenter}>
+          <Text style={[styles.headerTitle, { color: C.darkSlate }]} numberOfLines={1}>
+            {trip.name}
+          </Text>
+          {isFullySettled && (
+            <Text style={[styles.settledBadge, { color: C.rust }]}>{t('splitTab.settled')}</Text>
+          )}
+        </View>
         <TouchableOpacity
           style={[styles.settleBtn, { backgroundColor: C.rust }]}
           onPress={() => router.push({ pathname: '/trip-settle', params: { id: trip.id } })}
@@ -146,6 +188,9 @@ export default function TripDetailScreen() {
             <View style={styles.chipsRow}>
               {trip.participants.map(p => (
                 <View key={p.id} style={[styles.chip, { backgroundColor: C.cream, borderColor: C.lightBorder }]}>
+                  {p.color ? (
+                    <View style={[styles.colorDot, { backgroundColor: p.color }]} />
+                  ) : null}
                   <Text style={[styles.chipText, { color: C.darkSlate }]}>{p.name}</Text>
                 </View>
               ))}
@@ -154,6 +199,9 @@ export default function TripDetailScreen() {
             <>
               {participantEdits.map((p, idx) => (
                 <View key={p.id} style={styles.editRow}>
+                  {p.color ? (
+                    <View style={[styles.colorDot, { backgroundColor: p.color }]} />
+                  ) : null}
                   <TextInput
                     style={[styles.editInput, { backgroundColor: C.cream, borderColor: C.lightBorder, color: C.darkSlate }]}
                     value={p.name}
@@ -195,18 +243,28 @@ export default function TripDetailScreen() {
         {/* Bills */}
         <View style={styles.billsHeader}>
           <Text style={[styles.sectionTitle, { color: C.darkSlate }]}>🧾 {t('history.title')}</Text>
-          <TouchableOpacity
-            style={[styles.addBillBtn, { backgroundColor: C.rust }]}
-            onPress={() => router.push({ pathname: '/add-bill', params: { tripId: trip.id } })}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.addBillBtnText}>+ {t('splitTab.addBill')}</Text>
-          </TouchableOpacity>
+          <View style={styles.billsActions}>
+            <TouchableOpacity
+              style={[styles.scanBillBtn, { borderColor: C.lightBorder }]}
+              onPress={() => router.push({ pathname: '/add-bill', params: { tripId: trip.id, autoScan: '1' } })}
+              activeOpacity={0.8}
+              hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+            >
+              <Text style={[styles.scanBillBtnText, { color: C.sage }]}>📷</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.addBillBtn, { backgroundColor: C.rust }]}
+              onPress={() => router.push({ pathname: '/add-bill', params: { tripId: trip.id } })}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.addBillBtnText}>+ {t('splitTab.addBill')}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {trip.bills.length === 0 ? (
           <View style={[styles.emptyBills, { borderColor: C.lightBorder }]}>
-            <Text style={[styles.emptyText, { color: C.sage }]}>{t('splitTab.addBill')}</Text>
+            <Text style={[styles.emptyText, { color: C.sage }]}>{t('splitTab.noBillsYet')}</Text>
           </View>
         ) : (
           trip.bills.map(bill => {
@@ -216,7 +274,7 @@ export default function TripDetailScreen() {
                 key={bill.id}
                 style={[styles.billRow, { backgroundColor: C.white, borderColor: C.lightBorder }]}
                 onPress={() => router.push({ pathname: '/add-bill', params: { tripId: trip.id, billId: bill.id } })}
-                onLongPress={() => handleDeleteBill(bill)}
+                onLongPress={() => handleBillLongPress(bill)}
                 activeOpacity={0.75}
               >
                 <View style={styles.billInfo}>
@@ -261,11 +319,19 @@ const styles = StyleSheet.create({
   },
   backBtn: { width: 36, alignItems: 'center' },
   backBtnText: { fontSize: 26, lineHeight: 30 },
+  headerCenter: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8 },
   headerTitle: {
-    flex: 1,
     fontFamily: Typography.serif,
     fontWeight: '700',
     fontSize: 17,
+    flexShrink: 1,
+  },
+  settledBadge: {
+    fontFamily: Typography.mono,
+    fontSize: 10,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
   },
   settleBtn: {
     borderRadius: Radius.sm,
@@ -309,7 +375,11 @@ const styles = StyleSheet.create({
     borderRadius: Radius.sm,
     paddingVertical: 5,
     paddingHorizontal: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
+  colorDot: { width: 10, height: 10, borderRadius: 5 },
   chipText: { fontFamily: Typography.mono, fontSize: 13 },
   editRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8 },
   editInput: {
@@ -336,6 +406,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 10,
   },
+  billsActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  scanBillBtn: {
+    borderWidth: 1.5,
+    borderRadius: Radius.sm,
+    width: 34,
+    height: 34,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  scanBillBtnText: { fontSize: 16 },
   addBillBtn: {
     borderRadius: Radius.sm,
     paddingVertical: 7,

@@ -15,6 +15,7 @@ export interface HistoryEntry {
   people: number;
   homeTotal: number | null;
   homeCurrency: string;
+  imageUri?: string; // saved receipt photo
 }
 
 interface HistoryState {
