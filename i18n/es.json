@@ -58,7 +58,12 @@
     "perPerson": "Por persona",
     "home": "Aprox. {{amount}} {{currency}}",
     "noRate": "Tipo de cambio no disponible",
-    "save": "💾 Guardar"
+    "save": "💾 Guardar",
+    "saveModalTitle": "Guardar cálculo",
+    "saveNamePlaceholder": "Restaurante, café…",
+    "addToTrip": "Añadir a un viaje",
+    "premiumLabel": "Premium",
+    "savedConfirm": "Guardado en historial"
   },
   "roundup": {
     "label": "Redondear a"

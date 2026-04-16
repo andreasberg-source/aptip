@@ -58,7 +58,12 @@
     "perPerson": "Pro Person",
     "home": "Ca. {{amount}} {{currency}}",
     "noRate": "Wechselkurs nicht verfügbar",
-    "save": "💾 Speichern"
+    "save": "💾 Speichern",
+    "saveModalTitle": "Berechnung speichern",
+    "saveNamePlaceholder": "Restaurant, Café…",
+    "addToTrip": "Zu einer Reise hinzufügen",
+    "premiumLabel": "Premium",
+    "savedConfirm": "Im Verlauf gespeichert"
   },
   "roundup": {
     "label": "Aufrunden auf"

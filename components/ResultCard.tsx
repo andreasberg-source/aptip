@@ -22,7 +22,7 @@ export default function ResultCard({ result, homeAmount, homeCurrency, onSave }:
     <View style={[styles.card, { backgroundColor: C.sage }]}>
       <Row label={t('result.original')} value={`${formatAmount(amount)} ${currency}`} />
       <Row
-        label={t('result.tip', { percent: tipPercent })}
+        label={t('result.tip', { percent: +tipPercent.toFixed(1) })}
         value={`${formatAmount(tipAmount)} ${currency}`}
       />
       <Row label={t('result.total')} value={`${formatAmount(total)} ${currency}`} large />
@@ -51,16 +51,16 @@ function Row({ label, value, large }: { label: string; value: string; large?: bo
 
 const styles = StyleSheet.create({
   card: {
-    marginTop: 8,
-    marginBottom: 12,
-    padding: 20,
+    marginTop: 4,
+    marginBottom: 6,
+    padding: 14,
     borderRadius: Radius.sm,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'baseline',
-    paddingVertical: 8,
+    paddingVertical: 6,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(255,255,255,0.2)',
   },
@@ -91,8 +91,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   saveBtn: {
-    marginTop: 14,
-    paddingVertical: 10,
+    marginTop: 10,
+    paddingVertical: 8,
     backgroundColor: 'rgba(255,255,255,0.15)',
     borderRadius: Radius.sm,
     alignItems: 'center',

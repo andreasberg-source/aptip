@@ -58,7 +58,12 @@
     "perPerson": "Par personne",
     "home": "Env. {{amount}} {{currency}}",
     "noRate": "Taux de change indisponible",
-    "save": "💾 Enregistrer"
+    "save": "💾 Enregistrer",
+    "saveModalTitle": "Enregistrer le calcul",
+    "saveNamePlaceholder": "Restaurant, café…",
+    "addToTrip": "Ajouter à un voyage",
+    "premiumLabel": "Premium",
+    "savedConfirm": "Enregistré dans l'historique"
   },
   "roundup": {
     "label": "Arrondir à"

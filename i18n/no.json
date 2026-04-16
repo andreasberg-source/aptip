@@ -58,7 +58,12 @@
     "perPerson": "Per person",
     "home": "Tilsvarer ca. {{amount}} {{currency}}",
     "noRate": "Valutakurs ikke tilgjengelig",
-    "save": "💾 Lagre"
+    "save": "💾 Lagre",
+    "saveModalTitle": "Lagre beregning",
+    "saveNamePlaceholder": "Restaurant, kafé…",
+    "addToTrip": "Legg til en tur",
+    "premiumLabel": "Premium",
+    "savedConfirm": "Lagret i historikk"
   },
   "roundup": {
     "label": "Avrund til"

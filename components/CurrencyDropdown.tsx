@@ -59,7 +59,7 @@ export default function CurrencyDropdown({ value, onChange, priorityCurrencies, 
 
       <Modal
         visible={open}
-        animationType="slide"
+        animationType="fade"
         transparent
         onRequestClose={() => { setOpen(false); setSearch(''); }}
       >
@@ -120,6 +120,7 @@ export default function CurrencyDropdown({ value, onChange, priorityCurrencies, 
               data={filtered}
               keyExtractor={item => item.code}
               keyboardShouldPersistTaps="handled"
+              initialNumToRender={20}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   style={[
@@ -178,12 +179,13 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
   },
   sheet: {
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
     maxHeight: '80%',
+    marginTop: 44,
   },
   sheetHeader: {
     flexDirection: 'row',

@@ -9,6 +9,7 @@ import {
   Platform,
   KeyboardAvoidingView,
   Image,
+  Modal,
 } from 'react-native';
 import TippingCultureModal from '../../components/TippingCultureModal';
 import { useTranslation } from 'react-i18next';
@@ -54,6 +55,11 @@ export default function CalculatorScreen() {
   const [people, setPeople] = useState(defaultPeople);
   const [cultureVisible, setCultureVisible] = useState(false);
   const [serviceType, setServiceType] = useState<ServiceType>('restaurants');
+
+  // Save modal state
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [saveName, setSaveName] = useState('');
+  const [savedVisible, setSavedVisible] = useState(false);
 
   // Pre-fill country from GPS on first load
   const locationDefault = useCountryFromLocation();
@@ -135,7 +141,13 @@ export default function CalculatorScreen() {
     [amount],
   );
 
-  const handleSave = useCallback(async () => {
+  const handleSave = useCallback(() => {
+    if (!result || !countryData) return;
+    setSaveName('');
+    setShowSaveModal(true);
+  }, [result, countryData]);
+
+  const performSave = useCallback(async () => {
     if (!result || !countryData || !continent || !country) return;
     await addEntry({
       continent,
@@ -149,8 +161,12 @@ export default function CalculatorScreen() {
       people,
       homeTotal: homeAmount,
       homeCurrency,
+      name: saveName.trim() || undefined,
     });
-  }, [result, countryData, continent, country, people, homeAmount, homeCurrency, addEntry]);
+    setShowSaveModal(false);
+    setSavedVisible(true);
+    setTimeout(() => setSavedVisible(false), 2000);
+  }, [result, countryData, continent, country, people, homeAmount, homeCurrency, saveName, addEntry]);
 
   return (
     <KeyboardAvoidingView
@@ -218,6 +234,11 @@ export default function CalculatorScreen() {
               onClose={() => setCultureVisible(false)}
             />
             <ServiceTypeSelector value={serviceType} onChange={setServiceType} />
+            {tipRates && (
+              <Text style={[styles.tipRateHint, { color: C.sage }]}>
+                {'😕'} {tipRates.poor}{'% · 🙂 '}{tipRates.ok}{'% · 😄 '}{tipRates.excellent}{'%'}
+              </Text>
+            )}
           </>
         ) : null}
 
@@ -303,6 +324,61 @@ export default function CalculatorScreen() {
 
         <View style={styles.bottomPad} />
       </ScrollView>
+
+      {/* Save modal */}
+      <Modal
+        visible={showSaveModal}
+        animationType="fade"
+        transparent
+        onRequestClose={() => setShowSaveModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalCard, { backgroundColor: C.white }]}>
+            <Text style={[styles.modalTitle, { color: C.darkSlate }]}>{t('result.saveModalTitle')}</Text>
+
+            <TextInput
+              style={[styles.modalInput, { backgroundColor: C.cream, borderColor: C.lightBorder, color: C.darkSlate }]}
+              value={saveName}
+              onChangeText={setSaveName}
+              placeholder={t('result.saveNamePlaceholder')}
+              placeholderTextColor={C.sage}
+              autoCapitalize="words"
+              returnKeyType="done"
+              autoFocus
+            />
+
+            {/* Premium — Add to trip (faded, disabled) */}
+            <View style={[styles.modalPremiumRow, { borderColor: C.lightBorder, opacity: 0.35 }]}>
+              <Text style={[styles.modalPremiumText, { color: C.darkSlate }]}>🔒  {t('result.addToTrip')}</Text>
+              <Text style={[styles.modalPremiumBadge, { backgroundColor: C.gold, color: '#fff' }]}>{t('result.premiumLabel')}</Text>
+            </View>
+
+            <View style={styles.modalBtns}>
+              <TouchableOpacity
+                style={[styles.modalCancelBtn, { borderColor: C.lightBorder }]}
+                onPress={() => setShowSaveModal(false)}
+                activeOpacity={0.7}
+              >
+                <Text style={[styles.modalCancelText, { color: C.sage }]}>{t('cancel') || 'Cancel'}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalSaveBtn, { backgroundColor: C.rust }]}
+                onPress={performSave}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.modalSaveBtnText}>{t('result.save')}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Saved confirmation toast */}
+      {savedVisible && (
+        <View style={[styles.savedToast, { backgroundColor: C.darkSlate }]} pointerEvents="none">
+          <Text style={styles.savedToastText}>✓  {t('result.savedConfirm')}</Text>
+        </View>
+      )}
     </KeyboardAvoidingView>
   );
 }
@@ -310,17 +386,17 @@ export default function CalculatorScreen() {
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   scroll: { flex: 1 },
-  container: { padding: 20, paddingBottom: 40 },
+  container: { padding: 16, paddingBottom: 16 },
   header: {
     alignItems: 'center',
-    marginBottom: 20,
-    paddingBottom: 16,
+    marginBottom: 10,
+    paddingBottom: 10,
     borderBottomWidth: 2,
   },
   logo: {
     width: 200,
-    height: 60,
-    marginBottom: 6,
+    height: 48,
+    marginBottom: 4,
   },
   subtitle: {
     fontFamily: Typography.mono,
@@ -332,7 +408,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'stretch',
     gap: 8,
-    marginBottom: 16,
+    marginBottom: 10,
   },
   pickerFlex: { flex: 1, marginBottom: 0 },
   cultureIcon: {
@@ -343,18 +419,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cultureIconEmoji: { fontSize: 20 },
-  step: { marginBottom: 16 },
+  step: { marginBottom: 10 },
   label: {
     fontFamily: Typography.serif,
     fontWeight: '600',
     fontSize: 15,
-    marginBottom: 8,
+    marginBottom: 6,
   },
   input: {
     borderWidth: 2,
     borderRadius: Radius.sm,
     paddingHorizontal: 14,
-    paddingVertical: 12,
+    paddingVertical: 9,
     fontFamily: Typography.serif,
     fontSize: 16,
   },
@@ -376,7 +452,7 @@ const styles = StyleSheet.create({
     borderRadius: Radius.sm,
     paddingVertical: 10,
     paddingHorizontal: 14,
-    marginTop: 8,
+    marginTop: 4,
   },
   perPersonLabel: {
     fontFamily: Typography.serif,
@@ -387,7 +463,95 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
   },
-  bottomPad: { height: 20 },
+  bottomPad: { height: 8 },
+  tipRateHint: {
+    fontFamily: Typography.mono,
+    fontSize: 11,
+    textAlign: 'center',
+    marginTop: -6,
+    marginBottom: 8,
+    letterSpacing: 0.3,
+  },
+  // Save modal
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.45)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+  },
+  modalCard: {
+    width: '100%',
+    borderRadius: Radius.md,
+    padding: 20,
+    gap: 14,
+  },
+  modalTitle: {
+    fontFamily: Typography.serif,
+    fontWeight: '700',
+    fontSize: 17,
+  },
+  modalInput: {
+    borderWidth: 2,
+    borderRadius: Radius.sm,
+    paddingHorizontal: 14,
+    paddingVertical: 11,
+    fontFamily: Typography.mono,
+    fontSize: 15,
+  },
+  modalPremiumRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderRadius: Radius.sm,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+  },
+  modalPremiumText: {
+    fontFamily: Typography.serif,
+    fontSize: 14,
+    flex: 1,
+  },
+  modalPremiumBadge: {
+    fontFamily: Typography.mono,
+    fontSize: 10,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    borderRadius: Radius.sm,
+    paddingVertical: 3,
+    paddingHorizontal: 7,
+  },
+  modalBtns: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  modalCancelBtn: {
+    flex: 1,
+    borderWidth: 1.5,
+    borderRadius: Radius.sm,
+    paddingVertical: 11,
+    alignItems: 'center',
+  },
+  modalCancelText: { fontFamily: Typography.mono, fontSize: 13, fontWeight: '600' },
+  modalSaveBtn: {
+    flex: 1,
+    borderRadius: Radius.sm,
+    paddingVertical: 11,
+    alignItems: 'center',
+  },
+  modalSaveBtnText: { fontFamily: Typography.mono, fontSize: 13, fontWeight: '600', color: '#fff', letterSpacing: 0.5 },
+  // Saved toast
+  savedToast: {
+    position: 'absolute',
+    top: 60,
+    alignSelf: 'center',
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+  },
+  savedToastText: { fontFamily: Typography.mono, fontSize: 13, color: '#fff', fontWeight: '600' },
   helpBtn: {
     position: 'absolute',
     right: 0,

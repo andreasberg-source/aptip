@@ -58,7 +58,12 @@
     "perPerson": "Per person",
     "home": "Approx. {{amount}} {{currency}}",
     "noRate": "Exchange rate unavailable",
-    "save": "💾 Save"
+    "save": "💾 Save",
+    "saveModalTitle": "Save calculation",
+    "saveNamePlaceholder": "Restaurant, café…",
+    "addToTrip": "Add to a trip",
+    "premiumLabel": "Premium",
+    "savedConfirm": "Saved in history"
   },
   "roundup": {
     "label": "Round up to"

@@ -15,6 +15,7 @@ export interface HistoryEntry {
   people: number;
   homeTotal: number | null;
   homeCurrency: string;
+  name?: string;     // optional label (e.g. restaurant name)
   imageUri?: string; // saved receipt photo
 }
 
