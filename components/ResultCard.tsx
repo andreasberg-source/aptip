@@ -11,9 +11,11 @@ interface Props {
   homeAmount: number | null;
   homeCurrency: string;
   onSave: () => void;
+  roundUpOption?: number | null;
+  onRoundUp?: (value: number) => void;
 }
 
-export default function ResultCard({ result, homeAmount, homeCurrency, onSave }: Props) {
+export default function ResultCard({ result, homeAmount, homeCurrency, onSave, roundUpOption, onRoundUp }: Props) {
   const { t } = useTranslation();
   const C = useColors();
   const { amount, tipPercent, tipAmount, total, currency } = result;
@@ -33,9 +35,22 @@ export default function ResultCard({ result, homeAmount, homeCurrency, onSave }:
           </Text>
         </View>
       )}
-      <TouchableOpacity style={styles.saveBtn} onPress={onSave}>
-        <Text style={styles.saveBtnText}>{t('result.save')}</Text>
-      </TouchableOpacity>
+      <View style={styles.actionRow}>
+        {roundUpOption != null && onRoundUp && (
+          <TouchableOpacity
+            style={[styles.roundUpBtn, { borderColor: C.gold, backgroundColor: 'rgba(255,255,255,0.12)' }]}
+            onPress={() => onRoundUp(roundUpOption)}
+            activeOpacity={0.75}
+          >
+            <Text style={[styles.roundUpText, { color: '#fff' }]}>
+              ↑ {formatAmount(roundUpOption, roundUpOption % 1 === 0 ? 0 : 2)}
+            </Text>
+          </TouchableOpacity>
+        )}
+        <TouchableOpacity style={[styles.saveBtn, { flex: 1 }]} onPress={onSave}>
+          <Text style={styles.saveBtnText}>{t('result.save')}</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -52,9 +67,9 @@ function Row({ label, value, large }: { label: string; value: string; large?: bo
 const styles = StyleSheet.create({
   card: {
     marginTop: 4,
-    marginBottom: 6,
-    padding: 14,
-    borderRadius: Radius.sm,
+    marginBottom: 8,
+    padding: 16,
+    borderRadius: Radius.md,
   },
   row: {
     flexDirection: 'row',
@@ -90,8 +105,25 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.85)',
     textAlign: 'center',
   },
-  saveBtn: {
+  actionRow: {
+    flexDirection: 'row',
+    gap: 8,
     marginTop: 10,
+  },
+  roundUpBtn: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderWidth: 1.5,
+    borderRadius: Radius.sm,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  roundUpText: {
+    fontFamily: Typography.mono,
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  saveBtn: {
     paddingVertical: 8,
     backgroundColor: 'rgba(255,255,255,0.15)',
     borderRadius: Radius.sm,

@@ -63,7 +63,9 @@
     "saveNamePlaceholder": "Restaurant, café…",
     "addToTrip": "Add to a trip",
     "premiumLabel": "Premium",
-    "savedConfirm": "Saved in history"
+    "savedConfirm": "Saved in history",
+    "splitBill": "Split bill",
+    "noTrips": "No trips yet"
   },
   "roundup": {
     "label": "Round up to"
@@ -620,6 +622,7 @@
     "paidBy": "Paid by",
     "splitMode": "Split method",
     "splitEqual": "Equally",
+    "splitPerc": "Percentage",
     "splitPercentage": "Percentage",
     "splitCustom": "Custom",
     "splitItemized": "By items",
@@ -635,6 +638,9 @@
     "editParticipants": "Edit",
     "doneEditing": "Done",
     "remaining": "remaining",
+    "unallocated": "{{pct}}% not yet allocated",
+    "allocated": "fully allocated",
+    "billCountry": "Country",
     "percentageSum": "Must add up to 100%",
     "included": "Who's included",
     "turnavn": "Trip name",
@@ -653,6 +659,12 @@
     "removeSavedName": "Remove this name from suggestions?",
     "currency": "Currency"
   },
+  "cancel": "Cancel",
+  "archive": {
+    "title": "Archive",
+    "empty": "No calculations yet",
+    "emptyHint": "Calculate a tip to see it here"
+  },
   "history": {
     "title": "History",
     "empty": "No tip calculations yet",
@@ -660,6 +672,12 @@
     "people": "{{n}} ppl.",
     "delete": "Delete",
     "removedBills": "Bills from trips"
+  },
+  "premium": {
+    "title": "Premium feature",
+    "upgradeMsg": "This feature requires premium. Toggle Premium mode in Settings.",
+    "tripsLocked": "Trips is a premium feature",
+    "tripsLockedHint": "Enable Premium mode in Settings to manage trips"
   },
   "settings": {
     "title": "Settings",
@@ -688,7 +706,9 @@
     "version": "Version",
     "savedNames": "Saved participant names",
     "savedNamesEmpty": "No saved names yet",
-    "clearSavedName": "Remove"
+    "clearSavedName": "Remove",
+    "devSection": "Developer",
+    "premiumToggle": "Premium mode (test)"
   },
   "about": {
     "title": "About the app",

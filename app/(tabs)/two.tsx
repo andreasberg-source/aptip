@@ -27,14 +27,14 @@ export default function HistoryScreen() {
   return (
     <View style={[styles.flex, { backgroundColor: C.cream }]}>
       <View style={[styles.header, { borderBottomColor: C.sage }]}>
-        <Text style={[styles.title, { color: C.darkSlate }]}>{t('history.title')}</Text>
+        <Text style={[styles.title, { color: C.darkSlate }]}>{t('archive.title')}</Text>
       </View>
 
       {!hasContent ? (
         <View style={styles.empty}>
           <Text style={styles.emptyIcon}>🧾</Text>
-          <Text style={[styles.emptyText, { color: C.darkSlate }]}>{t('history.empty')}</Text>
-          <Text style={[styles.emptyHint, { color: C.sage }]}>{t('history.emptyHint')}</Text>
+          <Text style={[styles.emptyText, { color: C.darkSlate }]}>{t('archive.empty')}</Text>
+          <Text style={[styles.emptyHint, { color: C.sage }]}>{t('archive.emptyHint')}</Text>
         </View>
       ) : (
         <FlatList

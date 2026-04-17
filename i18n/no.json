@@ -63,7 +63,9 @@
     "saveNamePlaceholder": "Restaurant, kafé…",
     "addToTrip": "Legg til en tur",
     "premiumLabel": "Premium",
-    "savedConfirm": "Lagret i historikk"
+    "savedConfirm": "Lagret i historikk",
+    "splitBill": "Splitt regning",
+    "noTrips": "Ingen turer ennå"
   },
   "roundup": {
     "label": "Avrund til"
@@ -620,6 +622,7 @@
     "paidBy": "Betalt av",
     "splitMode": "Delemetode",
     "splitEqual": "Likt",
+    "splitPerc": "Prosent",
     "splitPercentage": "Prosent",
     "splitCustom": "Egendefinert",
     "splitItemized": "Per vare",
@@ -635,6 +638,9 @@
     "editParticipants": "Rediger",
     "doneEditing": "Ferdig",
     "remaining": "gjenstår",
+    "unallocated": "{{pct}}% ikke fordelt",
+    "allocated": "fullt fordelt",
+    "billCountry": "Land",
     "percentageSum": "Må bli 100%",
     "included": "Hvem er med",
     "turnavn": "Turnavn",
@@ -653,6 +659,12 @@
     "removeSavedName": "Fjerne dette navnet fra forslag?",
     "currency": "Valuta"
   },
+  "cancel": "Avbryt",
+  "archive": {
+    "title": "Arkiv",
+    "empty": "Ingen beregninger ennå",
+    "emptyHint": "Beregn et tips for å se det her"
+  },
   "history": {
     "title": "Historikk",
     "empty": "Ingen beregnede tips ennå",
@@ -660,6 +672,12 @@
     "people": "{{n}} pers.",
     "delete": "Slett",
     "removedBills": "Regninger fra turer"
+  },
+  "premium": {
+    "title": "Premiumfunksjon",
+    "upgradeMsg": "Denne funksjonen krever premium. Slå på premiummodus i Innstillinger.",
+    "tripsLocked": "Turer er en premiumfunksjon",
+    "tripsLockedHint": "Aktiver premiummodus i Innstillinger for å administrere turer"
   },
   "settings": {
     "title": "Innstillinger",
@@ -688,7 +706,9 @@
     "version": "Versjon",
     "savedNames": "Lagrede deltakernavn",
     "savedNamesEmpty": "Ingen lagrede navn ennå",
-    "clearSavedName": "Fjern"
+    "clearSavedName": "Fjern",
+    "devSection": "Utvikling",
+    "premiumToggle": "Premiummodus (test)"
   },
   "about": {
     "title": "Om appen",

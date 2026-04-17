@@ -35,7 +35,7 @@ export default function SettingsScreen() {
   const { updateRates, isLoading, lastUpdated, error } = useExchangeRates();
   const {
     userName, homeCurrency, defaultPeople, defaultSatisfaction,
-    keepScreenAwake, darkMode, patch, savedParticipantNames, removeSavedParticipantName,
+    keepScreenAwake, darkMode, isPremium, patch, savedParticipantNames, removeSavedParticipantName,
   } = useSettingsStore();
   const clearAll = useHistoryStore((s) => s.clearAll);
 
@@ -72,6 +72,19 @@ export default function SettingsScreen() {
 
       {/* ── Profile ──────────────────────────────────────── */}
       <SectionHeader label={t('settings.profileSection')} C={C} />
+
+      <View style={[s.section, { borderBottomColor: C.lightBorder }]}>
+        <Text style={[s.label, { color: C.darkSlate }]}>{t('settings.userName')}</Text>
+        <TextInput
+          style={[s.input, { backgroundColor: C.white, borderColor: C.lightBorder, color: C.darkSlate }]}
+          value={userName}
+          onChangeText={(v) => patch({ userName: v })}
+          placeholder={t('settings.userNamePlaceholder')}
+          placeholderTextColor={C.sage}
+          autoCapitalize="words"
+          returnKeyType="done"
+        />
+      </View>
 
       <View style={[s.section, { borderBottomColor: C.lightBorder }]}>
         <Text style={[s.label, { color: C.darkSlate }]}>{t('settings.homeCurrency')}</Text>
@@ -208,22 +221,6 @@ export default function SettingsScreen() {
         </Text>
       </View>
 
-      {/* ── Your name ───────────────────────────────────── */}
-      <SectionHeader label={t('settings.profileSection')} C={C} />
-
-      <View style={[s.section, { borderBottomColor: C.lightBorder }]}>
-        <Text style={[s.label, { color: C.darkSlate }]}>{t('settings.userName')}</Text>
-        <TextInput
-          style={[s.input, { backgroundColor: C.white, borderColor: C.lightBorder, color: C.darkSlate }]}
-          value={userName}
-          onChangeText={(v) => patch({ userName: v })}
-          placeholder={t('settings.userNamePlaceholder')}
-          placeholderTextColor={C.sage}
-          autoCapitalize="words"
-          returnKeyType="done"
-        />
-      </View>
-
       {/* ── Saved participant names ───────────────────────── */}
       <SectionHeader label={t('settings.savedNames')} C={C} />
 
@@ -261,6 +258,18 @@ export default function SettingsScreen() {
         >
           <Text style={[s.dangerBtnText, { color: C.rust }]}>{t('settings.clearHistory')}</Text>
         </TouchableOpacity>
+      </View>
+
+      {/* ── Developer ────────────────────────────────────── */}
+      <SectionHeader label={t('settings.devSection')} C={C} />
+      <View style={[s.compactRow, { borderBottomColor: C.lightBorder }]}>
+        <Text style={[s.rowLabel, { color: C.darkSlate }]}>{t('settings.premiumToggle')}</Text>
+        <Switch
+          value={isPremium}
+          onValueChange={(v) => patch({ isPremium: v })}
+          trackColor={{ false: C.lightBorder, true: C.gold }}
+          thumbColor={isPremium ? C.rust : C.sage}
+        />
       </View>
 
       {/* ── About & Help ──────────────────────────────────── */}
@@ -340,7 +349,7 @@ const makeStyles = (C: any) => StyleSheet.create({
     marginBottom: 8,
   },
   input: {
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderRadius: Radius.sm,
     paddingHorizontal: 14,
     paddingVertical: 10,
@@ -350,7 +359,7 @@ const makeStyles = (C: any) => StyleSheet.create({
   valueBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderRadius: Radius.sm,
     paddingHorizontal: 14,
     paddingVertical: 12,
@@ -426,7 +435,7 @@ const makeStyles = (C: any) => StyleSheet.create({
   flagBtn: {
     width: 40,
     height: 36,
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderRadius: Radius.sm,
     alignItems: 'center',
     justifyContent: 'center',

@@ -32,13 +32,15 @@ export function calculateTip(
 }
 
 /** Return the nearest round-number total above the current total.
- *  Step size is derived from the total's magnitude so the suggestion always ends in 0.
- *  e.g. total=1050 → 1100, total=105 → 110, total=55 → 60
+ *  For totals < 100, rounds to the nearest 5 (e.g. 53 → 55).
+ *  For larger totals, step is magnitude-derived so the suggestion always ends in 0.
+ *  e.g. total=53 → 55, total=105 → 110, total=1050 → 1100
  */
 export function getRoundUpOption(total: number): number | null {
   if (!total || total <= 0) return null;
-  const magnitude = Math.pow(10, Math.floor(Math.log10(total)));
-  const step = Math.max(10, magnitude / 10);
+  const step = total < 100
+    ? 5
+    : Math.max(10, Math.pow(10, Math.floor(Math.log10(total))) / 10);
   const next = Math.ceil((total + Number.EPSILON) / step) * step;
   return next > total ? next : null;
 }

@@ -32,6 +32,8 @@ import {
 } from '../utils/settlement';
 import { parseItemsFromText } from '../utils/parseAmounts';
 import CurrencyDropdown from '../components/CurrencyDropdown';
+import ContinentCountryPicker from '../components/ContinentCountryPicker';
+import { ContinentKey } from '../data/tippingData';
 
 // Lazy-load ML Kit
 let TextRecognition: typeof import('@react-native-ml-kit/text-recognition').default | null = null;
@@ -80,6 +82,10 @@ export default function AddBillScreen() {
     existingBill?.participants ?? trip?.participants.map(p => p.id) ?? [],
   );
   const [capturedImageUri, setCapturedImageUri] = useState<string | undefined>(existingBill?.imageUri);
+
+  // Country picker state
+  const [billContinent, setBillContinent] = useState<ContinentKey | ''>(existingBill?.continent as ContinentKey ?? '');
+  const [billCountry, setBillCountry] = useState(existingBill?.country ?? '');
 
   // From-history picker
   const [showHistoryPicker, setShowHistoryPicker] = useState(false);
@@ -205,6 +211,8 @@ export default function AddBillScreen() {
       items,
       splits,
       imageUri: capturedImageUri,
+      country: billCountry || undefined,
+      continent: billContinent || undefined,
     };
     if (isEdit && billId) {
       await updateBill(tripId, billId, billData);
@@ -212,7 +220,7 @@ export default function AddBillScreen() {
       await addBill(billData);
     }
     router.back();
-  }, [canSave, tripId, billId, isEdit, description, currency, totalAmount, paidBy, splitMode, includedIds, items, capturedImageUri, addBill, updateBill]);
+  }, [canSave, tripId, billId, isEdit, description, currency, totalAmount, paidBy, splitMode, includedIds, items, capturedImageUri, billCountry, billContinent, addBill, updateBill]);
 
   // ── OCR ───────────────────────────────────────────────────────────────────
   const processOcrUri = useCallback(async (uri: string) => {
@@ -421,6 +429,18 @@ export default function AddBillScreen() {
             placeholderTextColor={C.sage}
             autoCapitalize="sentences"
             returnKeyType="done"
+          />
+
+          {/* Country */}
+          <Text style={[styles.label, { color: C.darkSlate }]}>{t('splitTab.billCountry')}</Text>
+          <ContinentCountryPicker
+            continent={billContinent}
+            country={billCountry}
+            onContinentChange={setBillContinent}
+            onCountryChange={setBillCountry}
+            favourites={[]}
+            onToggleFavourite={() => {}}
+            recentCountries={[]}
           />
 
           {/* Amount + Currency */}
@@ -772,8 +792,8 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 13,
     borderBottomWidth: 1,
     gap: 8,
   },
@@ -814,7 +834,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   input: {
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderRadius: Radius.sm,
     paddingHorizontal: 13,
     paddingVertical: 10,

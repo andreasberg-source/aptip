@@ -9,10 +9,11 @@ import {
   StyleSheet,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import i18n from '../i18n';
 
 import { useColors } from '../hooks/useColors';
 import { Typography, Radius } from '../constants/Theme';
-import { SORTED_CURRENCIES } from '../data/currencies';
+import { SORTED_CURRENCIES, getLocalizedCurrencyName } from '../data/currencies';
 
 interface Props {
   value: string;
@@ -27,13 +28,16 @@ export default function CurrencyDropdown({ value, onChange, priorityCurrencies, 
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
 
+  const locale = i18n.language;
+
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     if (!q) return SORTED_CURRENCIES;
-    return SORTED_CURRENCIES.filter(
-      c => c.code.toLowerCase().includes(q) || c.name.toLowerCase().includes(q),
-    );
-  }, [search]);
+    return SORTED_CURRENCIES.filter(c => {
+      const localName = getLocalizedCurrencyName(c.code, locale).toLowerCase();
+      return c.code.toLowerCase().includes(q) || c.name.toLowerCase().includes(q) || localName.includes(q);
+    });
+  }, [search, locale]);
 
   const uniquePriority = priorityCurrencies?.filter(Boolean) ?? [];
 
@@ -138,7 +142,7 @@ export default function CurrencyDropdown({ value, onChange, priorityCurrencies, 
                     {item.code}
                   </Text>
                   <Text style={[styles.rowName, { color: C.sage }]} numberOfLines={1}>
-                    {item.name}
+                    {getLocalizedCurrencyName(item.code, locale)}
                   </Text>
                   {value === item.code && (
                     <Text style={[styles.check, { color: C.rust }]}>✓</Text>
@@ -158,7 +162,7 @@ const styles = StyleSheet.create({
   btn: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderRadius: Radius.sm,
     paddingVertical: 10,
     paddingHorizontal: 12,
@@ -186,6 +190,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 16,
     maxHeight: '80%',
     marginTop: 44,
+    flex: 1,
   },
   sheetHeader: {
     flexDirection: 'row',

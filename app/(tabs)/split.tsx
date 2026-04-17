@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -12,13 +12,15 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import * as ImagePicker from 'expo-image-picker';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 
 import { useTripStore, Trip } from '../../store/tripStore';
+import { useSettingsStore } from '../../store/settingsStore';
 import { useColors } from '../../hooks/useColors';
+import { usePremium } from '../../hooks/usePremium';
 import { Typography, Radius } from '../../constants/Theme';
 import { formatAmount } from '../../utils/tipCalculations';
 import { parseAmountsFromText } from '../../utils/parseAmounts';
@@ -32,7 +34,7 @@ try {
   TextRecognition = null;
 }
 
-type QuickMode = 'equal' | 'custom';
+type QuickMode = 'equal' | 'percentage' | 'custom';
 
 interface QuickPerson {
   key: string;
@@ -40,25 +42,49 @@ interface QuickPerson {
   amount: string;
 }
 
+interface PercPerson {
+  key: string;
+  name: string;
+  pct: string;
+}
+
 export default function SplitScreen() {
   const { t } = useTranslation();
   const C = useColors();
-  const { trips } = useTripStore();
+  const { trips, addBill } = useTripStore();
+  const { userName } = useSettingsStore();
+  const isPremium = usePremium();
+  const { prefillAmount, prefillCurrency } = useLocalSearchParams<{
+    prefillAmount?: string;
+    prefillCurrency?: string;
+  }>();
 
   // Quick Split state
   const [quickAmount, setQuickAmount] = useState('');
   const [quickPeople, setQuickPeople] = useState(2);
   const [quickCurrency, setQuickCurrency] = useState('NOK');
   const [quickMode, setQuickMode] = useState<QuickMode>('equal');
-  const [customPersons, setCustomPersons] = useState<QuickPerson[]>([
-    { key: '1', name: '', amount: '' },
+  const [customPersons, setCustomPersons] = useState<QuickPerson[]>(() => [
+    { key: '1', name: userName || '', amount: '' },
     { key: '2', name: '', amount: '' },
+  ]);
+  const [percPersons, setPercPersons] = useState<PercPerson[]>(() => [
+    { key: '1', name: userName || '', pct: '' },
+    { key: '2', name: '', pct: '' },
   ]);
   const [scanning, setScanning] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
+  const [selectedTripIdForSave, setSelectedTripIdForSave] = useState<string | null>(null);
+  const [savedToTripVisible, setSavedToTripVisible] = useState(false);
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
   const nextKey = useRef(3);
+
+  // Pre-fill from calculator "Splitt regning" button
+  useEffect(() => {
+    if (prefillAmount) setQuickAmount(prefillAmount);
+    if (prefillCurrency) setQuickCurrency(prefillCurrency);
+  }, [prefillAmount, prefillCurrency]);
 
   const totalAmount = parseFloat(quickAmount.replace(',', '.')) || 0;
 
@@ -70,6 +96,9 @@ export default function SplitScreen() {
 
   const customTotal = customPersons.reduce((sum, p) => sum + (parseFloat(p.amount) || 0), 0);
   const customRemaining = totalAmount - customTotal;
+
+  const allocatedPct = percPersons.reduce((sum, p) => sum + (parseFloat(p.pct) || 0), 0);
+  const unallocatedPct = Math.max(0, 100 - allocatedPct);
 
   const activeTrips = trips.filter(t => !t.archived);
 
@@ -110,6 +139,26 @@ export default function SplitScreen() {
   const addCustomPerson = useCallback(() => {
     setCustomPersons(prev => [...prev, { key: String(nextKey.current++), name: '', amount: '' }]);
   }, []);
+
+  const handleSaveToTrip = useCallback(async () => {
+    if (!selectedTripIdForSave || totalAmount <= 0) return;
+    const trip = activeTrips.find(t => t.id === selectedTripIdForSave);
+    if (!trip) return;
+    await addBill({
+      tripId: selectedTripIdForSave,
+      description: `Split ${quickCurrency}`,
+      currency: quickCurrency,
+      totalAmount,
+      paidBy: trip.participants[0]?.id ?? '',
+      participants: trip.participants.map(p => p.id),
+      splitMode: 'equal',
+      splits: {},
+      items: [],
+    });
+    setSelectedTripIdForSave(null);
+    setSavedToTripVisible(true);
+    setTimeout(() => setSavedToTripVisible(false), 2000);
+  }, [selectedTripIdForSave, totalAmount, activeTrips, quickCurrency, addBill]);
 
   const renderTrip = useCallback(({ item }: { item: Trip }) => {
     const totalBills = item.bills.length;
@@ -199,7 +248,7 @@ export default function SplitScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <FlatList
-          data={activeTrips}
+          data={isPremium ? activeTrips : []}
           keyExtractor={item => item.id}
           renderItem={renderTrip}
           keyboardShouldPersistTaps="handled"
@@ -219,9 +268,6 @@ export default function SplitScreen() {
 
               {/* Quick Split */}
               <View style={[styles.card, { backgroundColor: C.white, borderColor: C.lightBorder }]}>
-                <Text style={[styles.sectionTitle, { color: C.darkSlate }]}>{t('splitTab.quickSplit')}</Text>
-                <Text style={[styles.hint, { color: C.sage }]}>{t('splitTab.quickSplitHint')}</Text>
-
                 {/* Amount row with currency + scan */}
                 <View style={styles.amountRow}>
                   <View style={styles.flex}>
@@ -242,10 +288,14 @@ export default function SplitScreen() {
                   </View>
                 </View>
 
-                {/* Scan button */}
+                {/* Scan button — premium only */}
                 <TouchableOpacity
                   style={[styles.scanBtn, { borderColor: C.lightBorder }]}
                   onPress={async () => {
+                    if (!isPremium) {
+                      Alert.alert(t('premium.title'), t('premium.upgradeMsg'));
+                      return;
+                    }
                     if (TextRecognition) {
                       if (!permission?.granted) {
                         const { granted } = await requestPermission();
@@ -266,7 +316,7 @@ export default function SplitScreen() {
 
                 {/* Mode toggle */}
                 <View style={styles.modeRow}>
-                  {(['equal', 'custom'] as QuickMode[]).map(mode => (
+                  {(['equal', 'percentage', 'custom'] as QuickMode[]).map(mode => (
                     <TouchableOpacity
                       key={mode}
                       style={[
@@ -278,7 +328,11 @@ export default function SplitScreen() {
                       activeOpacity={0.7}
                     >
                       <Text style={[styles.modeBtnText, { color: quickMode === mode ? '#fff' : C.darkSlate }]}>
-                        {mode === 'equal' ? t('splitTab.splitEqual') : t('splitTab.splitCustom')}
+                        {mode === 'equal'
+                          ? t('splitTab.splitEqual')
+                          : mode === 'percentage'
+                          ? t('splitTab.splitPerc')
+                          : t('splitTab.splitCustom')}
                       </Text>
                     </TouchableOpacity>
                   ))}
@@ -320,6 +374,75 @@ export default function SplitScreen() {
                       </View>
                     )}
                   </>
+                )}
+
+                {/* Percentage mode */}
+                {quickMode === 'percentage' && (
+                  <View>
+                    {percPersons.map((p, idx) => {
+                      const pctVal = parseFloat(p.pct) || 0;
+                      const personAmt = totalAmount > 0 ? totalAmount * (pctVal / 100) : null;
+                      return (
+                        <View key={p.key} style={styles.customRow}>
+                          <TextInput
+                            style={[styles.customNameInput, { backgroundColor: C.cream, borderColor: C.lightBorder, color: C.darkSlate }]}
+                            value={p.name}
+                            onChangeText={v => setPercPersons(prev => prev.map(pp => pp.key === p.key ? { ...pp, name: v } : pp))}
+                            placeholder={`${t('splitTab.participantName')} ${idx + 1}`}
+                            placeholderTextColor={C.sage}
+                            autoCapitalize="words"
+                          />
+                          <View style={styles.percInputGroup}>
+                            <TextInput
+                              style={[styles.percPctInput, { backgroundColor: C.cream, borderColor: C.lightBorder, color: C.darkSlate }]}
+                              value={p.pct}
+                              onChangeText={v => setPercPersons(prev => prev.map(pp => pp.key === p.key ? { ...pp, pct: v } : pp))}
+                              placeholder="0"
+                              placeholderTextColor={C.sage}
+                              keyboardType="decimal-pad"
+                            />
+                            <Text style={[styles.percSymbol, { color: C.sage }]}>%</Text>
+                          </View>
+                          {personAmt !== null && (
+                            <Text style={[styles.percAmt, { color: C.rust }]}>
+                              {formatAmount(personAmt, 2)}
+                            </Text>
+                          )}
+                          {percPersons.length > 2 && (
+                            <TouchableOpacity
+                              onPress={() => setPercPersons(prev => prev.filter(pp => pp.key !== p.key))}
+                              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                            >
+                              <Text style={[styles.removeText, { color: C.sage }]}>✕</Text>
+                            </TouchableOpacity>
+                          )}
+                        </View>
+                      );
+                    })}
+                    <TouchableOpacity
+                      style={[styles.addPersonBtn, { borderColor: C.lightBorder }]}
+                      onPress={() => {
+                        const key = String(nextKey.current++);
+                        setPercPersons(prev => [...prev, { key, name: '', pct: '' }]);
+                      }}
+                    >
+                      <Text style={[styles.addPersonBtnText, { color: C.sage }]}>+ {t('splitTab.addParticipant')}</Text>
+                    </TouchableOpacity>
+                    {unallocatedPct > 0.005 && (
+                      <View style={[styles.customSummary, { borderColor: C.rust }]}>
+                        <Text style={[styles.customSummaryText, { color: C.rust }]}>
+                          {t('splitTab.unallocated', { pct: unallocatedPct.toFixed(1) })}
+                        </Text>
+                      </View>
+                    )}
+                    {unallocatedPct <= 0.005 && allocatedPct > 0 && (
+                      <View style={[styles.customSummary, { borderColor: C.lightBorder }]}>
+                        <Text style={[styles.customSummaryText, { color: C.sage }]}>
+                          100% {t('splitTab.allocated')}
+                        </Text>
+                      </View>
+                    )}
+                  </View>
                 )}
 
                 {/* Custom mode */}
@@ -368,19 +491,67 @@ export default function SplitScreen() {
                     )}
                   </View>
                 )}
+
+              {/* Save to trip */}
+              {isPremium && totalAmount > 0 && (
+                <View style={[styles.saveTripSection, { borderTopColor: C.lightBorder }]}>
+                  <Text style={[styles.saveTripLabel, { color: C.sage }]}>{t('result.addToTrip')}</Text>
+                  {activeTrips.length === 0 ? (
+                    <Text style={[styles.saveTripEmpty, { color: C.sage }]}>{t('result.noTrips')}</Text>
+                  ) : (
+                    <View style={styles.saveTripChips}>
+                      {activeTrips.map(tr => {
+                        const sel = selectedTripIdForSave === tr.id;
+                        return (
+                          <TouchableOpacity
+                            key={tr.id}
+                            style={[styles.saveTripChip, {
+                              backgroundColor: sel ? C.sage : C.cream,
+                              borderColor: sel ? C.sage : C.lightBorder,
+                            }]}
+                            onPress={() => setSelectedTripIdForSave(sel ? null : tr.id)}
+                            activeOpacity={0.75}
+                          >
+                            <Text style={[styles.saveTripChipText, { color: sel ? '#fff' : C.darkSlate }]}
+                              numberOfLines={1}>
+                              {sel ? '✓ ' : ''}{tr.name}
+                            </Text>
+                          </TouchableOpacity>
+                        );
+                      })}
+                    </View>
+                  )}
+                  {selectedTripIdForSave && (
+                    <TouchableOpacity
+                      style={[styles.saveTripBtn, { backgroundColor: C.rust }]}
+                      onPress={handleSaveToTrip}
+                      activeOpacity={0.8}
+                    >
+                      <Text style={styles.saveTripBtnText}>{t('result.save')}</Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              )}
               </View>
 
               {/* My Trips header */}
-              <View style={styles.tripsHeader}>
-                <Text style={[styles.sectionTitle, { color: C.darkSlate }]}>{t('splitTab.trips')}</Text>
-                <TouchableOpacity
-                  style={[styles.newTripBtn, { backgroundColor: C.rust }]}
-                  onPress={() => router.push('/new-trip')}
-                  activeOpacity={0.8}
-                >
-                  <Text style={styles.newTripBtnText}>+ {t('splitTab.newTrip')}</Text>
-                </TouchableOpacity>
-              </View>
+              {isPremium ? (
+                <View style={styles.tripsHeader}>
+                  <Text style={[styles.sectionTitle, { color: C.darkSlate }]}>{t('splitTab.trips')}</Text>
+                  <TouchableOpacity
+                    style={[styles.newTripBtn, { backgroundColor: C.rust }]}
+                    onPress={() => router.push('/new-trip')}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={styles.newTripBtnText}>+ {t('splitTab.newTrip')}</Text>
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <View style={[styles.premiumLock, { backgroundColor: C.white, borderColor: C.lightBorder }]}>
+                  <Text style={[styles.premiumLockText, { color: C.darkSlate }]}>🔒 {t('premium.tripsLocked')}</Text>
+                  <Text style={[styles.premiumLockHint, { color: C.sage }]}>{t('premium.tripsLockedHint')}</Text>
+                </View>
+              )}
             </>
           }
           ListEmptyComponent={
@@ -393,6 +564,13 @@ export default function SplitScreen() {
           contentContainerStyle={styles.listContent}
         />
       </KeyboardAvoidingView>
+
+      {/* Saved-to-trip toast */}
+      {savedToTripVisible && (
+        <View style={[styles.savedToast, { backgroundColor: C.darkSlate }]} pointerEvents="none">
+          <Text style={styles.savedToastText}>✓  {t('result.savedConfirm')}</Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -405,7 +583,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     paddingTop: 16,
     paddingBottom: 16,
     borderBottomWidth: 2,
@@ -457,7 +635,7 @@ const styles = StyleSheet.create({
   amountRow: { flexDirection: 'row', gap: 10, alignItems: 'flex-start', marginBottom: 10 },
   currencyCol: { width: 90 },
   input: {
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderRadius: Radius.sm,
     paddingHorizontal: 14,
     paddingVertical: 10,
@@ -475,12 +653,13 @@ const styles = StyleSheet.create({
   scanBtnText: { fontFamily: Typography.mono, fontSize: 12 },
   modeRow: { flexDirection: 'row', gap: 8, marginBottom: 14 },
   modeBtn: {
+    flex: 1,
     borderWidth: 1.5,
     borderRadius: Radius.sm,
-    paddingVertical: 7,
-    paddingHorizontal: 16,
+    paddingVertical: 8,
+    alignItems: 'center',
   },
-  modeBtnText: { fontFamily: Typography.mono, fontSize: 13, fontWeight: '600' },
+  modeBtnText: { fontFamily: Typography.mono, fontSize: 12, fontWeight: '600' },
   stepperRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   stepperBtn: {
     width: 44,
@@ -648,4 +827,64 @@ const styles = StyleSheet.create({
   primaryBtn: { borderRadius: Radius.sm, paddingVertical: 12, paddingHorizontal: 24 },
   primaryBtnText: { fontFamily: Typography.mono, fontSize: 14, color: '#fff', fontWeight: '600' },
   cancelText: { fontFamily: Typography.mono, fontSize: 13 },
+  percInputGroup: { flexDirection: 'row', alignItems: 'center', width: 70 },
+  percPctInput: {
+    flex: 1,
+    borderWidth: 1.5,
+    borderRadius: Radius.sm,
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+    fontFamily: Typography.mono,
+    fontSize: 14,
+    textAlign: 'right',
+  },
+  percSymbol: { fontFamily: Typography.mono, fontSize: 13, marginLeft: 4 },
+  percAmt: { fontFamily: Typography.mono, fontSize: 13, fontWeight: '600', minWidth: 60, textAlign: 'right' },
+  premiumLock: {
+    marginHorizontal: 16,
+    marginBottom: 10,
+    borderWidth: 1.5,
+    borderRadius: Radius.md,
+    padding: 16,
+    alignItems: 'center',
+  },
+  premiumLockText: { fontFamily: Typography.serif, fontWeight: '700', fontSize: 15, marginBottom: 4 },
+  premiumLockHint: { fontFamily: Typography.mono, fontSize: 12, textAlign: 'center' },
+  // Save to trip
+  saveTripSection: {
+    borderTopWidth: 1,
+    marginTop: 14,
+    paddingTop: 12,
+  },
+  saveTripLabel: {
+    fontFamily: Typography.mono,
+    fontSize: 10,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: 8,
+  },
+  saveTripEmpty: { fontFamily: Typography.mono, fontSize: 13 },
+  saveTripChips: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 10 },
+  saveTripChip: {
+    borderWidth: 1.5,
+    borderRadius: Radius.sm,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+  },
+  saveTripChipText: { fontFamily: Typography.mono, fontSize: 12, maxWidth: 120 },
+  saveTripBtn: {
+    borderRadius: Radius.sm,
+    paddingVertical: 10,
+    alignItems: 'center',
+  },
+  saveTripBtnText: { fontFamily: Typography.mono, fontSize: 13, fontWeight: '600', color: '#fff', letterSpacing: 0.5 },
+  savedToast: {
+    position: 'absolute',
+    top: 60,
+    alignSelf: 'center',
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+  },
+  savedToastText: { fontFamily: Typography.mono, fontSize: 13, color: '#fff', fontWeight: '600' },
 });

@@ -80,3 +80,21 @@ export const ISO_TO_TIPPING: Record<string, { continent: ContinentKey; country: 
   LB: { continent: 'mellom-osten', country: 'Libanon' },
   JO: { continent: 'mellom-osten', country: 'Jordan' },
 };
+
+/** Reverse map: Norwegian tipping-data country name → ISO 3166-1 alpha-2 code. */
+export const TIPPING_COUNTRY_TO_ISO: Record<string, string> = Object.fromEntries(
+  Object.entries(ISO_TO_TIPPING).map(([iso, { country }]) => [country, iso]),
+);
+
+/** Return a locale-appropriate country name for a Norwegian tipping-data country name.
+ *  Uses Intl.DisplayNames when available, falls back to the original Norwegian name. */
+export function getLocalizedCountryName(norwegianName: string, locale: string): string {
+  try {
+    const iso = TIPPING_COUNTRY_TO_ISO[norwegianName];
+    if (!iso) return norwegianName;
+    const dn = new Intl.DisplayNames([locale], { type: 'region' });
+    return dn.of(iso) ?? norwegianName;
+  } catch {
+    return norwegianName;
+  }
+}

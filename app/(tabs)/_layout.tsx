@@ -52,8 +52,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="two"
         options={{
-          title: t('history.title'),
-          tabBarLabel: t('history.title'),
+          title: t('archive.title'),
+          tabBarLabel: t('archive.title'),
           tabBarIcon: ({ focused }) => <TabIcon emoji="🧾" focused={focused} />,
         }}
       />

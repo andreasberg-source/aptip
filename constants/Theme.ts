@@ -43,9 +43,9 @@ export const Typography = {
 };
 
 export const Radius = {
-  sm: 4,
-  md: 8,
-  lg: 12,
+  sm: 8,
+  md: 12,
+  lg: 16,
 };
 
 /** Distinct colors for trip participants, assigned round-robin. */

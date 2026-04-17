@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     marginTop: -4,
   },
   input: {
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderRadius: Radius.sm,
     paddingHorizontal: 14,
     paddingVertical: 12,
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   },
   participantInput: {
     flex: 1,
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderRadius: Radius.sm,
     paddingHorizontal: 14,
     paddingVertical: 11,
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
   },
   createBtn: {
     borderRadius: Radius.sm,
-    paddingVertical: 15,
+    paddingVertical: 14,
     alignItems: 'center',
   },
   createBtnDisabled: { opacity: 0.4 },

@@ -1,9 +1,11 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import i18n from '../i18n';
 
 import { HistoryEntry } from '../store/historyStore';
 import { formatAmount } from '../utils/tipCalculations';
+import { getLocalizedCountryName } from '../data/countryCodeMap';
 import { useColors } from '../hooks/useColors';
 import { Typography, Radius } from '../constants/Theme';
 
@@ -40,14 +42,24 @@ export default function HistoryItem({ entry, onDelete }: Props) {
   const flag = COUNTRY_FLAGS[entry.country] ?? '🌍';
   const date = new Date(entry.date);
   const dateStr = date.toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' });
+  const localizedCountry = getLocalizedCountryName(entry.country, i18n.language);
 
   return (
     <View style={[styles.card, { backgroundColor: C.white, borderColor: C.lightBorder, shadowColor: C.darkSlate }]}>
       <View style={styles.top}>
         <Text style={styles.flag}>{flag}</Text>
         <View style={styles.info}>
-          <Text style={[styles.country, { color: C.darkSlate }]}>{entry.country}</Text>
-          <Text style={[styles.date, { color: C.sage }]}>{dateStr}</Text>
+          {entry.name ? (
+            <>
+              <Text style={[styles.name, { color: C.darkSlate }]}>{entry.name}</Text>
+              <Text style={[styles.country, { color: C.sage }]}>{localizedCountry} · {dateStr}</Text>
+            </>
+          ) : (
+            <>
+              <Text style={[styles.country, { color: C.darkSlate }]}>{localizedCountry}</Text>
+              <Text style={[styles.date, { color: C.sage }]}>{dateStr}</Text>
+            </>
+          )}
         </View>
         <TouchableOpacity
           style={[styles.deleteBtn, { borderColor: C.rust }]}
@@ -94,17 +106,18 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: Radius.md,
     padding: 14,
-    marginBottom: 12,
-    borderWidth: 1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 4,
-    elevation: 2,
+    marginBottom: 10,
+    borderWidth: 1.5,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 1,
   },
   top: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
   flag: { fontSize: 28, marginRight: 10 },
   info: { flex: 1 },
-  country: { fontFamily: Typography.serif, fontSize: 16, fontWeight: '600' },
+  name: { fontFamily: Typography.serif, fontSize: 16, fontWeight: '700' },
+  country: { fontFamily: Typography.serif, fontSize: 14, fontWeight: '600' },
   date: { fontFamily: Typography.mono, fontSize: 11, marginTop: 2 },
   deleteBtn: {
     paddingVertical: 4,

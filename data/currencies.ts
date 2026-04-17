@@ -64,7 +64,18 @@ export const CURRENCY_NAMES: Record<string, string> = {
 /** Sorted list of [code, name] pairs for display in pickers. */
 export const SORTED_CURRENCIES: { code: string; name: string }[] = Object.entries(CURRENCY_NAMES)
   .map(([code, name]) => ({ code, name }))
-  .sort((a, b) => a.name.localeCompare(b.name));
+  .sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
+
+/** Return a locale-appropriate display name for a currency code.
+ *  Uses Intl.DisplayNames when available (modern Hermes/V8), falls back to CURRENCY_NAMES. */
+export function getLocalizedCurrencyName(code: string, locale: string): string {
+  try {
+    const dn = new Intl.DisplayNames([locale], { type: 'currency' });
+    return dn.of(code) ?? CURRENCY_NAMES[code] ?? code;
+  } catch {
+    return CURRENCY_NAMES[code] ?? code;
+  }
+}
 
 /** Infer a likely home currency from the device locale's currency code. Falls back to USD. */
 export function detectCurrencyFromLocale(currencyCode: string | null | undefined): string {

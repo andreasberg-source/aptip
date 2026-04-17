@@ -21,16 +21,16 @@ import { calculateTip, formatAmount, Satisfaction } from '../../utils/tipCalcula
 import { useHistoryStore } from '../../store/historyStore';
 import { useScanStore } from '../../store/scanStore';
 import { useSettingsStore } from '../../store/settingsStore';
+import { useTripStore } from '../../store/tripStore';
 import { useExchangeRateStore } from '../../store/exchangeRateStore';
 import { Typography, Radius } from '../../constants/Theme';
 import { useColors } from '../../hooks/useColors';
+import { usePremium } from '../../hooks/usePremium';
 import { useCountryFromLocation } from '../../hooks/useCountryFromLocation';
 import ContinentCountryPicker from '../../components/ContinentCountryPicker';
 import ServiceTypeSelector from '../../components/ServiceTypeSelector';
 import SatisfactionSelector from '../../components/SatisfactionSelector';
-import BillSplitter from '../../components/BillSplitter';
 import ResultCard from '../../components/ResultCard';
-import RoundUpSuggestions from '../../components/RoundUpSuggestions';
 
 export default function CalculatorScreen() {
   const { t } = useTranslation();
@@ -42,9 +42,11 @@ export default function CalculatorScreen() {
     [historyEntries],
   );
   const { pendingAmount, clearPendingAmount } = useScanStore();
-  const { homeCurrency, defaultPeople, defaultSatisfaction, favouriteCountries, patch } =
+  const { homeCurrency, defaultSatisfaction, favouriteCountries, userName, patch } =
     useSettingsStore();
   const getHomeAmount = useExchangeRateStore((s) => s.getHomeAmount);
+  const isPremium = usePremium();
+  const { trips, addBill } = useTripStore();
 
   const [continent, setContinent] = useState<ContinentKey | ''>('');
   const [country, setCountry] = useState('');
@@ -52,7 +54,6 @@ export default function CalculatorScreen() {
   const [satisfaction, setSatisfaction] = useState<Satisfaction | null>(defaultSatisfaction);
   const [customPercent, setCustomPercent] = useState('');
   const [roundUpPercent, setRoundUpPercent] = useState<number | null>(null);
-  const [people, setPeople] = useState(defaultPeople);
   const [cultureVisible, setCultureVisible] = useState(false);
   const [serviceType, setServiceType] = useState<ServiceType>('restaurants');
 
@@ -60,6 +61,7 @@ export default function CalculatorScreen() {
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [saveName, setSaveName] = useState('');
   const [savedVisible, setSavedVisible] = useState(false);
+  const [selectedTripId, setSelectedTripId] = useState<string | null>(null);
 
   // Pre-fill country from GPS on first load
   const locationDefault = useCountryFromLocation();
@@ -70,11 +72,7 @@ export default function CalculatorScreen() {
     }
   }, [locationDefault]);
 
-  // Keep people/satisfaction in sync if settings change while on this screen
-  useEffect(() => {
-    setPeople(defaultPeople);
-  }, [defaultPeople]);
-
+  // Keep satisfaction in sync if settings change while on this screen
   useEffect(() => {
     setSatisfaction(defaultSatisfaction);
   }, [defaultSatisfaction]);
@@ -115,13 +113,23 @@ export default function CalculatorScreen() {
   const amount = parseFloat(rawAmount);
   const result =
     countryData && effectiveTipPercent !== null && !isNaN(amount) && amount > 0
-      ? calculateTip(amount, effectiveTipPercent, countryData.currency, people)
+      ? calculateTip(amount, effectiveTipPercent, countryData.currency, 1)
       : null;
 
   const homeAmount =
     result && countryData
       ? getHomeAmount(result.total, countryData.currency, homeCurrency)
       : null;
+
+  const cappedRoundUpOption = useMemo(() => {
+    if (!result) return null;
+    const opt = result.roundUpOption;
+    if (!opt || !tipRates || !satisfaction || satisfaction === 'custom' || satisfaction === 'excellent')
+      return opt ?? null;
+    const nextPct = satisfaction === 'poor' ? tipRates.ok : tipRates.excellent;
+    const maxTotal = result.amount * (1 + nextPct / 100);
+    return opt < maxTotal ? opt : null;
+  }, [result, tipRates, satisfaction]);
 
   const handleSatisfaction = useCallback((s: Satisfaction) => {
     setSatisfaction(s);
@@ -144,11 +152,13 @@ export default function CalculatorScreen() {
   const handleSave = useCallback(() => {
     if (!result || !countryData) return;
     setSaveName('');
+    setSelectedTripId(null);
     setShowSaveModal(true);
   }, [result, countryData]);
 
   const performSave = useCallback(async () => {
     if (!result || !countryData || !continent || !country) return;
+    const descriptionName = saveName.trim() || undefined;
     await addEntry({
       continent,
       country,
@@ -158,15 +168,28 @@ export default function CalculatorScreen() {
       tipAmount: result.tipAmount,
       total: result.total,
       perPerson: result.perPerson,
-      people,
+      people: 1,
       homeTotal: homeAmount,
       homeCurrency,
-      name: saveName.trim() || undefined,
+      name: descriptionName,
     });
+    if (isPremium && selectedTripId) {
+      addBill({
+        tripId: selectedTripId,
+        description: descriptionName || country,
+        totalAmount: result.total,
+        currency: countryData.currency,
+        paidBy: userName || '',
+        participants: [],
+        splitMode: 'equal',
+        splits: {},
+        items: [],
+      });
+    }
     setShowSaveModal(false);
     setSavedVisible(true);
     setTimeout(() => setSavedVisible(false), 2000);
-  }, [result, countryData, continent, country, people, homeAmount, homeCurrency, saveName, addEntry]);
+  }, [result, countryData, continent, country, homeAmount, homeCurrency, saveName, addEntry, isPremium, selectedTripId, addBill, userName]);
 
   return (
     <KeyboardAvoidingView
@@ -209,7 +232,6 @@ export default function CalculatorScreen() {
               setCountry('');
               setSatisfaction(defaultSatisfaction);
               setRawAmount('');
-              setPeople(defaultPeople);
             }}
             onCountryChange={setCountry}
           />
@@ -234,11 +256,13 @@ export default function CalculatorScreen() {
               onClose={() => setCultureVisible(false)}
             />
             <ServiceTypeSelector value={serviceType} onChange={setServiceType} />
-            {tipRates && (
-              <Text style={[styles.tipRateHint, { color: C.sage }]}>
-                {'😕'} {tipRates.poor}{'% · 🙂 '}{tipRates.ok}{'% · 😄 '}{tipRates.excellent}{'%'}
-              </Text>
-            )}
+            {(() => {
+              const cultureText = t(`culture.countries.${country}.${serviceType}`, { defaultValue: '' });
+              if (!cultureText) return null;
+              return (
+                <Text style={[styles.tipRateHint, { color: C.sage }]}>{cultureText}</Text>
+              );
+            })()}
           </>
         ) : null}
 
@@ -292,34 +316,30 @@ export default function CalculatorScreen() {
               homeAmount={homeAmount}
               homeCurrency={homeCurrency}
               onSave={handleSave}
+              roundUpOption={cappedRoundUpOption}
+              onRoundUp={handleRoundUp}
             />
-            <RoundUpSuggestions
-              option={result.roundUpOption}
-              billAmount={result.amount}
-              currency={result.currency}
-              onSelect={handleRoundUp}
-            />
+            {/* Splitt regning */}
+            {countryData && (
+              <TouchableOpacity
+                style={[styles.splitBtn, { backgroundColor: C.white, borderColor: C.lightBorder }]}
+                onPress={() =>
+                  router.push({
+                    pathname: '/(tabs)/split',
+                    params: {
+                      prefillAmount: result.total.toFixed(2),
+                      prefillCurrency: countryData.currency,
+                    },
+                  })
+                }
+                activeOpacity={0.8}
+              >
+                <Text style={[styles.splitBtnText, { color: C.darkSlate }]}>
+                  ✂️ {t('result.splitBill')}
+                </Text>
+              </TouchableOpacity>
+            )}
           </>
-        )}
-
-        {/* Bill splitter — bottom */}
-        <BillSplitter people={people} onChange={setPeople} />
-
-        {/* Per-person — only when split */}
-        {result && people > 1 && (
-          <View
-            style={[
-              styles.perPersonRow,
-              { backgroundColor: C.white, borderColor: C.lightBorder },
-            ]}
-          >
-            <Text style={[styles.perPersonLabel, { color: C.sage }]}>
-              {t('result.perPerson')}
-            </Text>
-            <Text style={[styles.perPersonValue, { color: C.darkSlate }]}>
-              {formatAmount(result.perPerson, 2)} {result.currency}
-            </Text>
-          </View>
         )}
 
         <View style={styles.bottomPad} />
@@ -347,11 +367,54 @@ export default function CalculatorScreen() {
               autoFocus
             />
 
-            {/* Premium — Add to trip (faded, disabled) */}
-            <View style={[styles.modalPremiumRow, { borderColor: C.lightBorder, opacity: 0.35 }]}>
-              <Text style={[styles.modalPremiumText, { color: C.darkSlate }]}>🔒  {t('result.addToTrip')}</Text>
-              <Text style={[styles.modalPremiumBadge, { backgroundColor: C.gold, color: '#fff' }]}>{t('result.premiumLabel')}</Text>
-            </View>
+            {/* Add to trip — active for premium, locked for free */}
+            {isPremium ? (
+              <View style={[styles.modalTripSection, { borderColor: C.lightBorder }]}>
+                <Text style={[styles.modalTripLabel, { color: C.sage }]}>
+                  {t('result.addToTrip')}
+                </Text>
+                {trips.filter(tr => !tr.archived).length === 0 ? (
+                  <Text style={[styles.modalTripEmpty, { color: C.sage }]}>
+                    {t('result.noTrips')}
+                  </Text>
+                ) : (
+                  <View style={styles.modalTripChips}>
+                    {trips.filter(tr => !tr.archived).map(tr => {
+                      const selected = selectedTripId === tr.id;
+                      return (
+                        <TouchableOpacity
+                          key={tr.id}
+                          style={[
+                            styles.modalTripChip,
+                            {
+                              backgroundColor: selected ? C.sage : C.cream,
+                              borderColor: selected ? C.sage : C.lightBorder,
+                            },
+                          ]}
+                          onPress={() => setSelectedTripId(selected ? null : tr.id)}
+                          activeOpacity={0.75}
+                        >
+                          <Text
+                            style={[
+                              styles.modalTripChipText,
+                              { color: selected ? '#fff' : C.darkSlate },
+                            ]}
+                            numberOfLines={1}
+                          >
+                            {selected ? '✓ ' : ''}{tr.name}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
+                )}
+              </View>
+            ) : (
+              <View style={[styles.modalPremiumRow, { borderColor: C.lightBorder, opacity: 0.35 }]}>
+                <Text style={[styles.modalPremiumText, { color: C.darkSlate }]}>🔒  {t('result.addToTrip')}</Text>
+                <Text style={[styles.modalPremiumBadge, { backgroundColor: C.gold, color: '#fff' }]}>{t('result.premiumLabel')}</Text>
+              </View>
+            )}
 
             <View style={styles.modalBtns}>
               <TouchableOpacity
@@ -427,51 +490,67 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   input: {
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderRadius: Radius.sm,
     paddingHorizontal: 14,
-    paddingVertical: 9,
+    paddingVertical: 10,
     fontFamily: Typography.serif,
     fontSize: 16,
   },
   amountRow: { flexDirection: 'row', gap: 10 },
   amountInput: { flex: 1, fontFamily: Typography.mono, fontSize: 18 },
   scanBtn: {
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderRadius: Radius.sm,
     width: 52,
     alignItems: 'center',
     justifyContent: 'center',
   },
   scanBtnIcon: { fontSize: 22 },
-  perPersonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  bottomPad: { height: 20 },
+  tipRateHint: {
+    fontFamily: Typography.mono,
+    fontSize: 12,
+    marginTop: -4,
+    marginBottom: 8,
+    lineHeight: 18,
+    paddingHorizontal: 4,
+  },
+  splitBtn: {
     borderWidth: 1.5,
     borderRadius: Radius.sm,
     paddingVertical: 10,
-    paddingHorizontal: 14,
-    marginTop: 4,
-  },
-  perPersonLabel: {
-    fontFamily: Typography.serif,
-    fontSize: 14,
-  },
-  perPersonValue: {
-    fontFamily: Typography.mono,
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  bottomPad: { height: 8 },
-  tipRateHint: {
-    fontFamily: Typography.mono,
-    fontSize: 11,
-    textAlign: 'center',
-    marginTop: -6,
+    alignItems: 'center',
     marginBottom: 8,
-    letterSpacing: 0.3,
   },
+  splitBtnText: {
+    fontFamily: Typography.mono,
+    fontSize: 13,
+    fontWeight: '600',
+    letterSpacing: 0.5,
+  },
+  // Trip section in save modal
+  modalTripSection: {
+    borderWidth: 1,
+    borderRadius: Radius.sm,
+    padding: 10,
+  },
+  modalTripLabel: {
+    fontFamily: Typography.mono,
+    fontSize: 10,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: 8,
+  },
+  modalTripEmpty: { fontFamily: Typography.mono, fontSize: 13 },
+  modalTripChips: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
+  modalTripChip: {
+    borderWidth: 1.5,
+    borderRadius: Radius.sm,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+  },
+  modalTripChipText: { fontFamily: Typography.mono, fontSize: 12, maxWidth: 120 },
   // Save modal
   modalOverlay: {
     flex: 1,
@@ -492,7 +571,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   modalInput: {
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderRadius: Radius.sm,
     paddingHorizontal: 14,
     paddingVertical: 11,

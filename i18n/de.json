@@ -63,7 +63,9 @@
     "saveNamePlaceholder": "Restaurant, Café…",
     "addToTrip": "Zu einer Reise hinzufügen",
     "premiumLabel": "Premium",
-    "savedConfirm": "Im Verlauf gespeichert"
+    "savedConfirm": "Im Verlauf gespeichert",
+    "splitBill": "Rechnung aufteilen",
+    "noTrips": "Noch keine Reisen"
   },
   "roundup": {
     "label": "Aufrunden auf"
@@ -620,6 +622,7 @@
     "paidBy": "Bezahlt von",
     "splitMode": "Aufteilungsmethode",
     "splitEqual": "Gleichmäßig",
+    "splitPerc": "Prozentsatz",
     "splitPercentage": "Prozentsatz",
     "splitCustom": "Benutzerdefiniert",
     "splitItemized": "Nach Posten",
@@ -635,6 +638,9 @@
     "editParticipants": "Bearbeiten",
     "doneEditing": "Fertig",
     "remaining": "verbleibend",
+    "unallocated": "{{pct}}% nicht zugeteilt",
+    "allocated": "vollständig zugeteilt",
+    "billCountry": "Land",
     "percentageSum": "Muss 100% ergeben",
     "included": "Wer ist dabei",
     "turnavn": "Reisename",
@@ -651,6 +657,18 @@
     "removedBillsSection": "Entfernte Rechnungen",
     "scanAmount": "Bon scannen",
     "removeSavedName": "Gespeicherten Namen entfernen?"
+  },
+  "cancel": "Abbrechen",
+  "archive": {
+    "title": "Archiv",
+    "empty": "Noch keine Berechnungen",
+    "emptyHint": "Berechnen Sie ein Trinkgeld, um es hier zu sehen"
+  },
+  "premium": {
+    "title": "Premium-Funktion",
+    "upgradeMsg": "Diese Funktion erfordert den Premium-Modus. Aktivieren Sie ihn in den Einstellungen.",
+    "tripsLocked": "Reisen ist eine Premium-Funktion",
+    "tripsLockedHint": "Premium-Modus in den Einstellungen aktivieren"
   },
   "history": {
     "title": "Verlauf",
@@ -687,7 +705,9 @@
     "version": "Version",
     "savedNames": "Gespeicherte Teilnehmernamen",
     "savedNamesEmpty": "Keine gespeicherten Namen",
-    "clearSavedName": "Entfernen"
+    "clearSavedName": "Entfernen",
+    "devSection": "Entwickler",
+    "premiumToggle": "Premium-Modus (Test)"
   },
   "about": {
     "title": "Über die App",

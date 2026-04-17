@@ -15,6 +15,7 @@ export interface PersistedSettings {
   hasOnboarded: boolean;
   favouriteCountries: string[];
   savedParticipantNames: string[];
+  isPremium: boolean;
 }
 
 interface SettingsState extends PersistedSettings {
@@ -35,6 +36,7 @@ const DEFAULTS: PersistedSettings = {
   hasOnboarded: false,
   favouriteCountries: [],
   savedParticipantNames: [],
+  isPremium: true,
 };
 
 export const useSettingsStore = create<SettingsState>((set, get) => ({

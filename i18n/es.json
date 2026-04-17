@@ -63,7 +63,9 @@
     "saveNamePlaceholder": "Restaurante, café…",
     "addToTrip": "Añadir a un viaje",
     "premiumLabel": "Premium",
-    "savedConfirm": "Guardado en historial"
+    "savedConfirm": "Guardado en historial",
+    "splitBill": "Dividir cuenta",
+    "noTrips": "No hay viajes aún"
   },
   "roundup": {
     "label": "Redondear a"
@@ -620,6 +622,7 @@
     "paidBy": "Pagado por",
     "splitMode": "Método de división",
     "splitEqual": "Igualmente",
+    "splitPerc": "Porcentaje",
     "splitPercentage": "Porcentaje",
     "splitCustom": "Personalizado",
     "splitItemized": "Por artículos",
@@ -635,6 +638,9 @@
     "editParticipants": "Editar",
     "doneEditing": "Listo",
     "remaining": "restante",
+    "unallocated": "{{pct}}% sin asignar",
+    "allocated": "completamente asignado",
+    "billCountry": "País",
     "percentageSum": "Debe sumar 100%",
     "included": "Quién está incluido",
     "turnavn": "Nombre del viaje",
@@ -652,6 +658,18 @@
     "scanAmount": "Escanear recibo",
     "removeSavedName": "¿Eliminar este nombre de las sugerencias?",
     "currency": "Moneda"
+  },
+  "cancel": "Cancelar",
+  "archive": {
+    "title": "Archivo",
+    "empty": "Sin cálculos aún",
+    "emptyHint": "Calcula una propina para verla aquí"
+  },
+  "premium": {
+    "title": "Función premium",
+    "upgradeMsg": "Esta función requiere el modo premium. Actívalo en Configuración.",
+    "tripsLocked": "Los viajes son una función premium",
+    "tripsLockedHint": "Activa el modo premium en Configuración"
   },
   "history": {
     "title": "Historial",
@@ -688,7 +706,9 @@
     "version": "Versión",
     "savedNames": "Nombres de participantes guardados",
     "savedNamesEmpty": "No hay nombres guardados",
-    "clearSavedName": "Eliminar"
+    "clearSavedName": "Eliminar",
+    "devSection": "Desarrollador",
+    "premiumToggle": "Modo premium (prueba)"
   },
   "about": {
     "title": "Acerca de",

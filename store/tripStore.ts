@@ -32,6 +32,8 @@ export interface Bill {
   splits: Record<string, number>; // participantId → amount owed (pre-computed on save)
   imageUri?: string;      // saved receipt photo
   linkedHistoryId?: string; // linked tip-calculator history entry
+  country?: string;       // country this bill was incurred in
+  continent?: string;     // continent key (for tipping data lookup)
 }
 
 export interface SettledTransfer {
