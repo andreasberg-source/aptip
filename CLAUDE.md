@@ -96,3 +96,47 @@ Every user-visible string must use `t('key')` from `useTranslation()`. Add new k
 
 ### Adding countries
 Edit `data/tippingData.ts`: add an entry under the correct `ContinentKey` with `{ currency, poor, ok, excellent }` tip percentages. Also add a fallback NOK rate to `defaultExchangeRates` in the same file.
+
+## UI conventions
+
+`constants/Theme.ts` exports `Colors`, `Typography`, `Radius`, and `Spacing`. Always import these instead of hardcoding values.
+
+### Color semantics
+| Token | Use for |
+|---|---|
+| `C.rust` | Primary actions, selected states, amounts, CTAs |
+| `C.sage` | Secondary/muted labels, inactive chips, minor actions |
+| `C.darkSlate` | Body text, participant names |
+| `C.cream` | Screen backgrounds, input backgrounds |
+| `C.white` | Card surfaces, modal sheets |
+| `C.lightBorder` | All borders on cards and inputs |
+
+### Buttons
+- **Primary CTA** (Save, Calculate, Confirm): `backgroundColor: C.rust`, `color: '#fff'`, `borderRadius: Radius.md`, `paddingVertical: 14`
+- **Secondary / outline** (Cancel, mode toggles unselected): `backgroundColor: C.white`, `borderColor: C.lightBorder`, `borderWidth: 1.5`
+- **Active chip** (selected filter/mode): `backgroundColor: C.rust`, `color: '#fff'` — same `borderRadius` as inactive state
+
+### Inputs (`TextInput`)
+`backgroundColor: C.cream`, `borderColor: C.lightBorder`, `borderWidth: 1.5`, `borderRadius: Radius.sm`, text color `C.darkSlate`, placeholder color `C.sage`.
+
+### Cards / panels
+`backgroundColor: C.white`, `borderWidth: 1.5`, `borderColor: C.lightBorder`, `borderRadius: Radius.md`. Internal padding: `Spacing.lg` (16) horizontal, `Spacing.md` (12) vertical.
+
+### Spacing
+Use `Spacing.*` for all padding/margin/gap values — never hardcode numbers. Standard screen content padding: `Spacing.lg` (16). Gap between list items: `Spacing.sm`–`Spacing.md` (8–12).
+
+### Typography
+- `Typography.serif` (Georgia): screen titles, card headings, names
+- `Typography.mono` (Courier New): amounts, currency codes, uppercase labels, timestamps
+- Never hardcode a font family string — always reference `Typography.*`.
+
+### Copy / vocabulary guide
+Use these i18n keys — never invent synonyms or inline strings:
+| Action | i18n key |
+|---|---|
+| Dismiss / go back | `cancel` (root) |
+| Save to history or trip | `result.save` |
+| Settlement screen title | `splitTab.settlement` |
+| Currency picker label | `splitTab.currency` |
+
+When adding new user-visible strings: add to **all five** locale files simultaneously (`no/en/fr/es/de`), nest under the relevant screen namespace (e.g. `splitTab.myNewKey`), and use camelCase keys.

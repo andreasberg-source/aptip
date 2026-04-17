@@ -595,15 +595,15 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   helpBtn: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
   },
   helpBtnText: {
     fontFamily: Typography.mono,
-    fontSize: 16,
+    fontSize: 22,
     fontWeight: '700',
   },
   card: {

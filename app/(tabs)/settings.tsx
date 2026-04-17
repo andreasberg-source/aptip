@@ -288,8 +288,17 @@ export default function SettingsScreen() {
           onPress={() => router.push('/help')}
           activeOpacity={0.7}
         >
-          <Text style={s.bottomLinkEmoji}>❓</Text>
-          <Text style={[s.bottomLinkText, { color: C.darkSlate }]}>{t('help.title')}</Text>
+          <Text style={s.bottomLinkEmoji}>🧮</Text>
+          <Text style={[s.bottomLinkText, { color: C.darkSlate }]}>{t('settings.helpTips')}</Text>
+          <Text style={[s.chevron, { color: C.sage }]}>›</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[s.bottomLinkBtn, { backgroundColor: C.white, borderColor: C.lightBorder }]}
+          onPress={() => router.push('/help-split')}
+          activeOpacity={0.7}
+        >
+          <Text style={s.bottomLinkEmoji}>🧾</Text>
+          <Text style={[s.bottomLinkText, { color: C.darkSlate }]}>{t('settings.helpSplit')}</Text>
           <Text style={[s.chevron, { color: C.sage }]}>›</Text>
         </TouchableOpacity>
       </View>

@@ -768,7 +768,12 @@ export default function AddBillScreen() {
                   activeOpacity={0.7}
                 >
                   <View style={styles.historyRowInfo}>
-                    <Text style={[styles.historyRowCountry, { color: C.darkSlate }]}>{item.country}</Text>
+                    <Text style={[styles.historyRowName, { color: C.darkSlate }]}>
+                      {item.name ? item.name : item.country}
+                    </Text>
+                    {item.name ? (
+                      <Text style={[styles.historyRowCountry, { color: C.sage }]}>{item.country}</Text>
+                    ) : null}
                     <Text style={[styles.historyRowDate, { color: C.sage }]}>{formatDate(item.date)}</Text>
                   </View>
                   <Text style={[styles.historyRowAmount, { color: C.rust }]}>
@@ -1081,7 +1086,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
   },
   historyRowInfo: { flex: 1 },
-  historyRowCountry: { fontFamily: Typography.serif, fontWeight: '600', fontSize: 14 },
+  historyRowName: { fontFamily: Typography.serif, fontWeight: '700', fontSize: 14 },
+  historyRowCountry: { fontFamily: Typography.serif, fontWeight: '400', fontSize: 12 },
   historyRowDate: { fontFamily: Typography.mono, fontSize: 11 },
   historyRowAmount: { fontFamily: Typography.mono, fontSize: 15, fontWeight: '700' },
 });

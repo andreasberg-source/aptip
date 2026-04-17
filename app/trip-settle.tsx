@@ -123,13 +123,32 @@ export default function SettleScreen() {
   const allSettled = transfers.length > 0 && transfers.every(t => isTransferSettled(t.fromId, t.toId));
 
   const handleShare = useCallback(async () => {
-    const lines = transfers.map(tr => {
-      const settledMark = isTransferSettled(tr.fromId, tr.toId) ? ' ✓' : '';
-      return `${tr.fromName} → ${tr.toName}: ${tr.amount.toFixed(2)} ${settleCurrency}${settledMark}`;
-    });
-    const text = `${t('splitTab.shareSettlement')}: ${trip.name}\n\n${lines.join('\n')}`;
+    const pending = transfers.filter(tr => !isTransferSettled(tr.fromId, tr.toId));
+    const lines = pending.map(tr =>
+      `${tr.fromName} → ${tr.toName}: ${tr.amount.toFixed(2)} ${settleCurrency}`
+    );
+    const text =
+      t('splitTab.shareGroupHeader', { trip: trip.name }) +
+      '\n\n' +
+      lines.join('\n') +
+      '\n\n' +
+      t('splitTab.shareAppCredit');
     await Share.share({ message: text });
   }, [transfers, settleCurrency, trip.name, t, settledTransfers]);
+
+  const handleSharePerson = useCallback((fromId: string, fromName: string) => {
+    const myTransfers = transfers.filter(tr => tr.fromId === fromId);
+    const lines = myTransfers.map(tr =>
+      `  • ${tr.toName}: ${tr.amount.toFixed(2)} ${settleCurrency}`
+    );
+    const text =
+      t('splitTab.sharePersonHeader', { name: fromName, trip: trip.name }) +
+      '\n\n' +
+      lines.join('\n') +
+      '\n\n' +
+      t('splitTab.shareAppCredit');
+    Share.share({ message: text });
+  }, [transfers, settleCurrency, trip.name, t]);
 
   // Participant balances computed in settleCurrency
   const participantBalances = useMemo(() => {
@@ -238,6 +257,14 @@ export default function SettleScreen() {
                     )}
                   </View>
                 </View>
+                <TouchableOpacity
+                  style={[styles.sharePersonBtn, { borderColor: C.lightBorder }]}
+                  onPress={() => handleSharePerson(transfer.fromId, transfer.fromName)}
+                  activeOpacity={0.7}
+                  hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                >
+                  <Text style={[styles.sharePersonBtnText, { color: C.sage }]}>⬆</Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                   style={[
                     styles.settleCheckBtn,
@@ -370,6 +397,15 @@ const styles = StyleSheet.create({
   transferPrimary: { fontFamily: Typography.mono, fontSize: 18, fontWeight: '700' },
   transferSecondary: { fontFamily: Typography.mono, fontSize: 13 },
   strikethrough: { textDecorationLine: 'line-through' },
+  sharePersonBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    borderWidth: 1.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  sharePersonBtnText: { fontSize: 14, fontWeight: '600' },
   settleCheckBtn: {
     width: 36,
     height: 36,
