@@ -53,7 +53,7 @@ export default function OnboardingScreen() {
       homeCurrency: selectedCurrency,
       hasOnboarded: true,
     });
-    router.replace('/(tabs)/index' as any);
+    router.replace('/(tabs)' as any);
   };
 
   return (

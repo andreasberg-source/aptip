@@ -34,6 +34,9 @@ export interface Bill {
   linkedHistoryId?: string; // linked tip-calculator history entry
   country?: string;       // country this bill was incurred in
   continent?: string;     // continent key (for tipping data lookup)
+  serviceType?: string;   // 'restaurants' | 'taxis' | 'shops' | 'services'
+  tipPercent?: number;
+  tipAmount?: number;
 }
 
 export interface SettledTransfer {

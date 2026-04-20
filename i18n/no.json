@@ -1,7 +1,7 @@
 {
   "app": {
     "title": "Adjust the tip",
-    "subtitle": "Tipskalkulator for den reisende"
+    "subtitle": "Tipskalkulator"
   },
   "onboarding": {
     "welcome": "Velkommen til Adjust the tip",
@@ -58,14 +58,20 @@
     "perPerson": "Per person",
     "home": "Tilsvarer ca. {{amount}} {{currency}}",
     "noRate": "Valutakurs ikke tilgjengelig",
-    "save": "💾 Lagre",
-    "saveModalTitle": "Lagre beregning",
+    "save": "Lagre",
+    "saveModalTitle": "Lagre regning",
     "saveNamePlaceholder": "Restaurant, kafé…",
     "addToTrip": "Legg til en tur",
     "premiumLabel": "Premium",
-    "savedConfirm": "Lagret i historikk",
+    "savedConfirm": "Lagret",
+    "saved": "Lagret",
     "splitBill": "Splitt regning",
-    "noTrips": "Ingen turer ennå"
+    "roundUp": "Rund opp",
+    "noTrips": "Ingen turer ennå",
+    "selectTrip": "Velg tur...",
+    "newTrip": "+ Ny tur",
+    "billName": "Navn på regning",
+    "billNamePlaceholder": "Restaurant, kafé..."
   },
   "roundup": {
     "label": "Avrund til"
@@ -625,6 +631,10 @@
     "splitPerc": "Prosent",
     "splitPercentage": "Prosent",
     "splitCustom": "Egendefinert",
+    "modeEqual": "Likt",
+    "modePercentage": "Prosent",
+    "modeCustom": "Egendefinert",
+    "billsTitle": "Regninger",
     "splitItemized": "Per vare",
     "addItem": "Legg til vare",
     "scanItems": "Skann kvittering",
@@ -662,11 +672,18 @@
     "removeSavedName": "Fjerne dette navnet fra forslag?",
     "currency": "Valuta"
   },
+  "tripsTab": {
+    "title": "Turer",
+    "noTrips": "Ingen turer ennå",
+    "noTripsHint": "Trykk + Ny tur for å komme i gang"
+  },
   "cancel": "Avbryt",
   "archive": {
     "title": "Arkiv",
     "empty": "Ingen beregninger ennå",
-    "emptyHint": "Beregn et tips for å se det her"
+    "emptyHint": "Beregn et tips for å se det her",
+    "addToTrip": "Legg til i tur",
+    "addedToTrip": "Lagt til i tur"
   },
   "history": {
     "title": "Historikk",
@@ -699,7 +716,7 @@
     "darkMode": "Mørk modus",
     "dangerSection": "Data",
     "clearHistory": "Tøm arkiv",
-    "clearHistoryConfirm": "Er du sikker? Dette kan ikke angres.",
+    "clearHistoryConfirm": "Er du sikker? Beregninger knyttet til turer beholdes.",
     "language": "Språk",
     "rates": "Oppdater valutakurser",
     "ratesLoading": "Henter kurser...",
@@ -713,7 +730,9 @@
     "devSection": "Utvikling",
     "premiumToggle": "Premiummodus (test)",
     "helpTips": "Hjelp: Tipskalkulator",
-    "helpSplit": "Hjelp: Del regning"
+    "helpSplit": "Hjelp: Del regning",
+    "helpTrips": "Hjelp: Turer",
+    "archiveLink": "Arkiv"
   },
   "about": {
     "title": "Om appen",
@@ -744,16 +763,37 @@
   },
   "helpSplit": {
     "title": "Slik fungerer Del",
-    "intro": "En guide til Del-fanen for å holde styr på og gjøre opp felles utgifter.",
-    "step1Title": "1. Rask deling",
-    "step1Body": "Skriv inn beløp og antall personer for å se hva hver person skylder. Bruk Egendefinert-modus for å legge inn navn og individuelle beløp.",
-    "step2Title": "2. Opprett en tur",
-    "step2Body": "Trykk '+ Ny tur', gi den et navn og legg til minst 2 deltakere. Ditt eget navn fra Innstillinger foreslås automatisk.",
-    "step3Title": "3. Legg til regninger",
-    "step3Body": "Inne på en tur, trykk '+ Legg til regning'. Fyll inn beskrivelse, beløp og hvem som betalte. Velg delemetode: likt, prosentvis, egendefinert eller skann kvittering. Du kan også hente fra arkiv.",
-    "step4Title": "4. Gjør opp",
-    "step4Body": "Trykk 'Gjør opp' for å se nødvendige overføringer. Beløp konverteres automatisk. Trykk ○ ved siden av en overføring for å merke den som gjennomført.",
-    "step5Title": "5. Del oppgjøret",
-    "step5Body": "Trykk del-knappen i oppgjørsskjermen for å sende en oppsummering til gruppa, eller del oppgjøret direkte til enkeltpersoner."
+    "intro": "En guide til rask deling av regninger.",
+    "step1Title": "1. Velg land og skriv inn beløp",
+    "step1Body": "Velg landet du er i for å sette valuta automatisk. Skriv inn totalbeløpet, eller skann kvitteringen med kameraknappen.",
+    "step2Title": "2. Angi antall og delemetode",
+    "step2Body": "Velg antall personer, deretter delemetode: likt, prosentvis eller egendefinert beløp per person.",
+    "step3Title": "3. Lagre til tur",
+    "step3Body": "Trykk Lagre (krever Premium) for å gi regningen et navn og knytte den til en eksisterende tur, eller opprett en ny tur."
+  },
+  "helpTrips": {
+    "title": "Slik bruker du Turer",
+    "intro": "En guide til å holde styr på og gjøre opp felles utgifter på tur.",
+    "step1Title": "1. Opprett en tur",
+    "step1Body": "Trykk '+ Ny tur', gi den et navn og legg til minst 2 deltakere. Ditt eget navn fra Innstillinger foreslås automatisk.",
+    "step2Title": "2. Legg til regninger",
+    "step2Body": "Inne på en tur, trykk '+ Legg til regning'. Fyll inn beskrivelse, beløp og hvem som betalte. Velg delemetode: likt, prosentvis, egendefinert eller skann kvittering.",
+    "step3Title": "3. Gjør opp",
+    "step3Body": "Trykk 'Gjør opp' for å se nødvendige overføringer. Beløp konverteres automatisk. Trykk ○ ved siden av en overføring for å merke den som gjennomført.",
+    "step4Title": "4. Del oppgjøret",
+    "step4Body": "Trykk del-knappen i oppgjørsskjermen for å sende en oppsummering til hele gruppa, eller del direkte til enkeltpersoner."
+  },
+  "tip": {
+    "tipsTab": "Velg land for å se riktig tipsprosent. Trykk 'Splitt regning' for å dele kostnadene.",
+    "splitTab": "Legg til deltakere og regninger for å dele kostnadene automatisk.",
+    "archiveTab": "Lagrede beregninger vises her. Trykk på en for å legge den til på en tur."
+  },
+  "ocrReview": {
+    "title": "Gjennomgå kvittering",
+    "selectLines": "Velg linjer å inkludere",
+    "confirm": "Bekreft {{count}} elementer",
+    "badgeTotal": "TOTAL",
+    "badgeInfo": "INFO",
+    "noLines": "Ingen linjer funnet i bildet"
   }
 }

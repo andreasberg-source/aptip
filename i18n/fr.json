@@ -1,7 +1,7 @@
 {
   "app": {
     "title": "Adjust the tip",
-    "subtitle": "Calculateur de pourboire pour le voyageur"
+    "subtitle": "Calculateur de pourboire"
   },
   "onboarding": {
     "welcome": "Bienvenue dans Adjust the tip",
@@ -58,14 +58,20 @@
     "perPerson": "Par personne",
     "home": "Env. {{amount}} {{currency}}",
     "noRate": "Taux de change indisponible",
-    "save": "💾 Enregistrer",
-    "saveModalTitle": "Enregistrer le calcul",
+    "save": "Enregistrer",
+    "saveModalTitle": "Enregistrer la note",
     "saveNamePlaceholder": "Restaurant, café…",
     "addToTrip": "Ajouter à un voyage",
     "premiumLabel": "Premium",
-    "savedConfirm": "Enregistré dans l'historique",
+    "savedConfirm": "Enregistré",
+    "saved": "Enregistré",
     "splitBill": "Partager la note",
-    "noTrips": "Pas encore de voyages"
+    "roundUp": "Arrondir",
+    "noTrips": "Pas encore de voyages",
+    "selectTrip": "Choisir un voyage...",
+    "newTrip": "+ Nouveau voyage",
+    "billName": "Nom de la facture",
+    "billNamePlaceholder": "Restaurant, café..."
   },
   "roundup": {
     "label": "Arrondir à"
@@ -625,6 +631,10 @@
     "splitPerc": "Pourcentage",
     "splitPercentage": "Pourcentage",
     "splitCustom": "Personnalisé",
+    "modeEqual": "Égal",
+    "modePercentage": "Pourcentage",
+    "modeCustom": "Personnalisé",
+    "billsTitle": "Factures",
     "splitItemized": "Par articles",
     "addItem": "Ajouter un article",
     "scanItems": "Scanner le reçu",
@@ -662,11 +672,18 @@
     "removeSavedName": "Supprimer ce nom des suggestions?",
     "currency": "Devise"
   },
+  "tripsTab": {
+    "title": "Voyages",
+    "noTrips": "Pas encore de voyages",
+    "noTripsHint": "Appuyez sur + Nouveau voyage pour commencer"
+  },
   "cancel": "Annuler",
   "archive": {
     "title": "Archive",
     "empty": "Aucun calcul encore",
-    "emptyHint": "Calculez un pourboire pour le voir ici"
+    "emptyHint": "Calculez un pourboire pour le voir ici",
+    "addToTrip": "Ajouter au voyage",
+    "addedToTrip": "Ajouté au voyage"
   },
   "premium": {
     "title": "Fonctionnalité premium",
@@ -699,7 +716,7 @@
     "darkMode": "Mode sombre",
     "dangerSection": "Données",
     "clearHistory": "Effacer l'archive",
-    "clearHistoryConfirm": "Êtes-vous sûr ? Cette action est irréversible.",
+    "clearHistoryConfirm": "Êtes-vous sûr ? Les calculs liés aux voyages seront conservés.",
     "language": "Langue",
     "rates": "Mettre à jour les taux",
     "ratesLoading": "Récupération des taux...",
@@ -713,7 +730,9 @@
     "devSection": "Développeur",
     "premiumToggle": "Mode premium (test)",
     "helpTips": "Aide : Calculateur de pourboire",
-    "helpSplit": "Aide : Partager l'addition"
+    "helpSplit": "Aide : Partager l'addition",
+    "helpTrips": "Aide : Voyages",
+    "archiveLink": "Archive"
   },
   "about": {
     "title": "À propos",
@@ -744,16 +763,37 @@
   },
   "helpSplit": {
     "title": "Comment fonctionne Partager",
-    "intro": "Un guide pour l'onglet Partager pour suivre et régler les dépenses communes.",
-    "step1Title": "1. Partage rapide",
-    "step1Body": "Entrez un montant et le nombre de personnes pour voir immédiatement la part de chacun.",
-    "step2Title": "2. Créer un voyage",
-    "step2Body": "Appuyez sur '+ Nouveau voyage', donnez-lui un nom et ajoutez au moins 2 participants.",
-    "step3Title": "3. Ajouter des factures",
-    "step3Body": "Dans un voyage, appuyez sur '+ Ajouter une facture'. Entrez la description, le montant et qui a payé.",
-    "step4Title": "4. Régler",
-    "step4Body": "Appuyez sur 'Régler' pour voir le nombre minimum de transferts nécessaires. Les montants sont convertis automatiquement.",
-    "step5Title": "5. Partager le règlement",
-    "step5Body": "Appuyez sur le bouton de partage (↑) pour envoyer un résumé de qui doit quoi."
+    "intro": "Guide pour partager rapidement une note.",
+    "step1Title": "1. Choisir le pays et saisir le montant",
+    "step1Body": "Sélectionnez votre pays pour définir automatiquement la devise. Entrez le montant total ou scannez un reçu.",
+    "step2Title": "2. Nombre de personnes et méthode",
+    "step2Body": "Choisissez le nombre de personnes, puis la méthode : à parts égales, par pourcentage ou montants personnalisés.",
+    "step3Title": "3. Enregistrer dans un voyage",
+    "step3Body": "Appuyez sur Enregistrer (Premium requis) pour nommer la facture et l'ajouter à un voyage existant ou en créer un nouveau."
+  },
+  "helpTrips": {
+    "title": "Comment fonctionnent les Voyages",
+    "intro": "Guide pour suivre et régler les dépenses communes en voyage.",
+    "step1Title": "1. Créer un voyage",
+    "step1Body": "Appuyez sur '+ Nouveau voyage', donnez-lui un nom et ajoutez au moins 2 participants.",
+    "step2Title": "2. Ajouter des factures",
+    "step2Body": "Dans un voyage, appuyez sur '+ Ajouter une facture'. Entrez la description, le montant et qui a payé.",
+    "step3Title": "3. Régler les comptes",
+    "step3Body": "Appuyez sur 'Régler' pour voir les transferts nécessaires. Les montants sont convertis automatiquement.",
+    "step4Title": "4. Partager le règlement",
+    "step4Body": "Appuyez sur le bouton de partage pour envoyer un résumé au groupe ou directement à chaque participant."
+  },
+  "tip": {
+    "tipsTab": "Sélectionnez un pays pour voir le bon pourcentage de pourboire. Appuyez sur 'Partager l'addition' pour répartir les frais.",
+    "splitTab": "Ajoutez des participants et des factures pour répartir les coûts automatiquement.",
+    "archiveTab": "Les calculs enregistrés apparaissent ici. Appuyez sur l'un d'eux pour l'ajouter à un voyage."
+  },
+  "ocrReview": {
+    "title": "Vérifier le reçu",
+    "selectLines": "Sélectionner les lignes à inclure",
+    "confirm": "Confirmer {{count}} éléments",
+    "badgeTotal": "TOTAL",
+    "badgeInfo": "INFO",
+    "noLines": "Aucune ligne trouvée dans l'image"
   }
 }

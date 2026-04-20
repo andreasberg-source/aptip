@@ -34,9 +34,10 @@ const COUNTRY_FLAGS: Record<string, string> = {
 interface Props {
   entry: HistoryEntry;
   onDelete: (id: string) => void;
+  onPress?: () => void;
 }
 
-export default function HistoryItem({ entry, onDelete }: Props) {
+export default function HistoryItem({ entry, onDelete, onPress }: Props) {
   const { t } = useTranslation();
   const C = useColors();
   const flag = COUNTRY_FLAGS[entry.country] ?? '🌍';
@@ -44,8 +45,10 @@ export default function HistoryItem({ entry, onDelete }: Props) {
   const dateStr = date.toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' });
   const localizedCountry = getLocalizedCountryName(entry.country, i18n.language);
 
-  return (
-    <View style={[styles.card, { backgroundColor: C.white, borderColor: C.lightBorder, shadowColor: C.darkSlate }]}>
+  const cardStyle = [styles.card, { backgroundColor: C.white, borderColor: C.lightBorder, shadowColor: C.darkSlate }];
+
+  const inner = (
+    <>
       <View style={styles.top}>
         <Text style={styles.flag}>{flag}</Text>
         <View style={styles.info}>
@@ -98,8 +101,13 @@ export default function HistoryItem({ entry, onDelete }: Props) {
           })}
         </Text>
       )}
-    </View>
+    </>
   );
+
+  if (onPress) {
+    return <TouchableOpacity style={cardStyle} onPress={onPress} activeOpacity={0.7}>{inner}</TouchableOpacity>;
+  }
+  return <View style={cardStyle}>{inner}</View>;
 }
 
 const styles = StyleSheet.create({

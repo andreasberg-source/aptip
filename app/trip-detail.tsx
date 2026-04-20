@@ -13,6 +13,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 import { useTripStore, Bill, Participant } from '../store/tripStore';
+import { useSettingsStore } from '../store/settingsStore';
 import { useColors } from '../hooks/useColors';
 import { Typography, Radius } from '../constants/Theme';
 
@@ -27,11 +28,14 @@ export default function TripDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const { trips, updateTrip, deleteBill, detachBill } = useTripStore();
+  const { savedParticipantNames } = useSettingsStore();
   const trip = trips.find(t => t.id === id);
 
   const [editingParticipants, setEditingParticipants] = useState(false);
   const [participantEdits, setParticipantEdits] = useState<Participant[]>([]);
   const [newParticipantName, setNewParticipantName] = useState('');
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [editNameValue, setEditNameValue] = useState('');
 
   // Hooks must all be called before any conditional return
   const handleBillLongPress = useCallback((bill: Bill) => {
@@ -152,10 +156,37 @@ export default function TripDetailScreen() {
           <Text style={[styles.backBtnText, { color: C.rust }]}>‹</Text>
         </TouchableOpacity>
         <View style={styles.headerCenter}>
-          <Text style={[styles.headerTitle, { color: C.darkSlate }]} numberOfLines={1}>
-            {trip.name}
-          </Text>
-          {isFullySettled && (
+          {isEditingName ? (
+            <View style={styles.nameEditRow}>
+              <TextInput
+                style={[styles.nameEditInput, { backgroundColor: C.cream, borderColor: C.lightBorder, color: C.darkSlate }]}
+                value={editNameValue}
+                onChangeText={setEditNameValue}
+                autoFocus
+                returnKeyType="done"
+                onSubmitEditing={async () => {
+                  if (editNameValue.trim()) await updateTrip(trip.id, { name: editNameValue.trim() });
+                  setIsEditingName(false);
+                }}
+              />
+              <TouchableOpacity onPress={async () => {
+                if (editNameValue.trim()) await updateTrip(trip.id, { name: editNameValue.trim() });
+                setIsEditingName(false);
+              }} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+                <Text style={[styles.nameEditConfirm, { color: C.rust }]}>✓</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => setIsEditingName(false)} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+                <Text style={[styles.nameEditCancel, { color: C.sage }]}>✕</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <TouchableOpacity onPress={() => { setEditNameValue(trip.name); setIsEditingName(true); }} activeOpacity={0.7}>
+              <Text style={[styles.headerTitle, { color: C.darkSlate }]} numberOfLines={1}>
+                {trip.name} <Text style={{ color: C.sage, fontSize: 14 }}>✎</Text>
+              </Text>
+            </TouchableOpacity>
+          )}
+          {isFullySettled && !isEditingName && (
             <Text style={[styles.settledBadge, { color: C.rust }]}>{t('splitTab.settled')}</Text>
           )}
         </View>
@@ -236,13 +267,42 @@ export default function TripDetailScreen() {
                   <Text style={styles.addInlineBtnText}>+</Text>
                 </TouchableOpacity>
               </View>
+              {savedParticipantNames.length > 0 && (
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 8 }}>
+                  <View style={{ flexDirection: 'row', gap: 8 }}>
+                    {savedParticipantNames.map(name => (
+                      <TouchableOpacity
+                        key={name}
+                        style={[styles.savedNameChip, { borderColor: C.lightBorder, backgroundColor: C.cream }]}
+                        onPress={() => {
+                          const emptyIdx = participantEdits.findIndex(p => !p.name.trim());
+                          if (emptyIdx >= 0) {
+                            setParticipantEdits(prev =>
+                              prev.map((p, i) => i === emptyIdx ? { ...p, name } : p)
+                            );
+                          } else {
+                            setParticipantEdits(prev => [...prev, {
+                              id: `${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+                              name,
+                              color: '#999999',
+                            }]);
+                          }
+                        }}
+                        activeOpacity={0.7}
+                      >
+                        <Text style={[styles.savedNameChipText, { color: C.darkSlate }]}>{name}</Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </ScrollView>
+              )}
             </>
           )}
         </View>
 
         {/* Bills */}
         <View style={styles.billsHeader}>
-          <Text style={[styles.sectionTitle, { color: C.darkSlate }]}>🧾 {t('history.title')}</Text>
+          <Text style={[styles.sectionTitle, { color: C.darkSlate }]}>🧾 {t('splitTab.billsTitle')}</Text>
           <View style={styles.billsActions}>
             <TouchableOpacity
               style={[styles.scanBillBtn, { borderColor: C.lightBorder }]}
@@ -319,13 +379,26 @@ const styles = StyleSheet.create({
   },
   backBtn: { width: 36, alignItems: 'center' },
   backBtnText: { fontSize: 26, lineHeight: 30 },
-  headerCenter: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8 },
+  headerCenter: { flex: 1, flexDirection: 'column', justifyContent: 'center', gap: 2 },
   headerTitle: {
     fontFamily: Typography.serif,
     fontWeight: '700',
     fontSize: 17,
     flexShrink: 1,
   },
+  nameEditRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  nameEditInput: {
+    flex: 1,
+    borderWidth: 1.5,
+    borderRadius: Radius.sm,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    fontFamily: Typography.serif,
+    fontWeight: '700',
+    fontSize: 16,
+  },
+  nameEditConfirm: { fontSize: 20, fontWeight: '700' },
+  nameEditCancel: { fontSize: 16 },
   settledBadge: {
     fontFamily: Typography.mono,
     fontSize: 10,
@@ -400,6 +473,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   addInlineBtnText: { color: '#fff', fontSize: 20, lineHeight: 24 },
+  savedNameChip: {
+    borderWidth: 1.5,
+    borderRadius: Radius.sm,
+    paddingVertical: 5,
+    paddingHorizontal: 12,
+  },
+  savedNameChipText: {
+    fontFamily: Typography.mono,
+    fontSize: 12,
+  },
   billsHeader: {
     flexDirection: 'row',
     alignItems: 'center',

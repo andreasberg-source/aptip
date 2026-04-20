@@ -13,6 +13,7 @@ import {
   Modal,
   FlatList,
   Image,
+  Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -30,10 +31,10 @@ import {
   computePercentageSplits,
   computeItemizedSplits,
 } from '../utils/settlement';
-import { parseItemsFromText } from '../utils/parseAmounts';
-import CurrencyDropdown from '../components/CurrencyDropdown';
+import { classifyOcrLines, OcrLine } from '../utils/parseAmounts';
 import ContinentCountryPicker from '../components/ContinentCountryPicker';
-import { ContinentKey } from '../data/tippingData';
+import ServiceTypeSelector from '../components/ServiceTypeSelector';
+import { tippingData, ContinentKey, ServiceType } from '../data/tippingData';
 
 // Lazy-load ML Kit
 let TextRecognition: typeof import('@react-native-ml-kit/text-recognition').default | null = null;
@@ -75,7 +76,6 @@ export default function AddBillScreen() {
   // Form state
   const [description, setDescription] = useState(existingBill?.description ?? '');
   const [rawAmount, setRawAmount] = useState(existingBill ? String(existingBill.totalAmount) : '');
-  const [currency, setCurrency] = useState(existingBill?.currency ?? trip?.lastCurrency ?? 'USD');
   const [paidBy, setPaidBy] = useState(existingBill?.paidBy ?? trip?.participants[0]?.id ?? '');
   const [splitMode, setSplitMode] = useState<SplitMode>(existingBill?.splitMode ?? 'equal');
   const [includedIds, setIncludedIds] = useState<string[]>(
@@ -83,12 +83,25 @@ export default function AddBillScreen() {
   );
   const [capturedImageUri, setCapturedImageUri] = useState<string | undefined>(existingBill?.imageUri);
 
+  // Service type state
+  const [serviceType, setServiceType] = useState<ServiceType>((existingBill?.serviceType as ServiceType) ?? 'restaurants');
+
   // Country picker state
   const [billContinent, setBillContinent] = useState<ContinentKey | ''>(existingBill?.continent as ContinentKey ?? '');
   const [billCountry, setBillCountry] = useState(existingBill?.country ?? '');
 
+  // Derived currency from country picker
+  const currency = useMemo(() => {
+    if (billContinent && billCountry) {
+      const c = (tippingData[billContinent as ContinentKey] as any)?.[billCountry]?.currency;
+      if (c) return c as string;
+    }
+    return existingBill?.currency ?? trip?.lastCurrency ?? 'USD';
+  }, [billContinent, billCountry, existingBill?.currency, trip?.lastCurrency]);
+
   // From-history picker
   const [showHistoryPicker, setShowHistoryPicker] = useState(false);
+  const [linkedHistoryId, setLinkedHistoryId] = useState<string | undefined>(existingBill?.linkedHistoryId);
 
   // Percentage splits state
   const [percentages, setPercentages] = useState<Record<string, string>>(() => {
@@ -125,13 +138,15 @@ export default function AddBillScreen() {
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
   const [cameraLayout, setCameraLayout] = useState({ width: 0, height: 0 });
+  const [ocrLines, setOcrLines] = useState<OcrLine[]>([]);
+  const [showOcrReview, setShowOcrReview] = useState(false);
+  const [ocrChecked, setOcrChecked] = useState<Set<string>>(new Set());
+  const [ocrEdits, setOcrEdits] = useState<Record<string, { label: string; amount: string }>>({});
+  const OCR_IMAGE_HEIGHT = Math.round(Dimensions.get('window').height * 0.35);
 
   const participants = trip?.participants ?? [];
   const includedParticipants = participants.filter(p => includedIds.includes(p.id));
 
-  const tripCurrencies = trip
-    ? [...new Set([trip.lastCurrency, ...trip.bills.map(b => b.currency)].filter(Boolean))]
-    : [];
 
   useEffect(() => {
     if (!existingBill) {
@@ -213,6 +228,8 @@ export default function AddBillScreen() {
       imageUri: capturedImageUri,
       country: billCountry || undefined,
       continent: billContinent || undefined,
+      serviceType,
+      linkedHistoryId,
     };
     if (isEdit && billId) {
       await updateBill(tripId, billId, billData);
@@ -220,7 +237,7 @@ export default function AddBillScreen() {
       await addBill(billData);
     }
     router.back();
-  }, [canSave, tripId, billId, isEdit, description, currency, totalAmount, paidBy, splitMode, includedIds, items, capturedImageUri, billCountry, billContinent, addBill, updateBill]);
+  }, [canSave, tripId, billId, isEdit, description, currency, totalAmount, paidBy, splitMode, includedIds, items, capturedImageUri, billCountry, billContinent, serviceType, addBill, updateBill]);
 
   // ── OCR ───────────────────────────────────────────────────────────────────
   const processOcrUri = useCallback(async (uri: string) => {
@@ -229,19 +246,19 @@ export default function AddBillScreen() {
     try {
       if (!TextRecognition) throw new Error('OCR not available');
       const result = await TextRecognition.recognize(uri);
-      const parsed = parseItemsFromText(result.text);
-      if (parsed.length > 0) {
-        const newItems: BillItem[] = parsed.map(item => ({
-          id: generateId(),
-          label: item.label,
-          amount: item.value,
-          assignedTo: [],
-        }));
-        setItems(prev => [...prev, ...newItems]);
-        setSplitMode('itemized');
-      } else {
-        Alert.alert('No items found', 'Could not detect line items. Add them manually.');
+      const rawLines: string[] =
+        result.blocks.length > 0
+          ? result.blocks.flatMap(b => b.lines.map((l: any) => l.text))
+          : result.text.split('\n');
+      const classified = classifyOcrLines(rawLines);
+      if (classified.length === 0) {
+        Alert.alert('No text found', 'Could not detect any text in the image. Try a clearer photo.');
+        return;
       }
+      setOcrLines(classified);
+      setOcrChecked(new Set(classified.filter(l => l.kind === 'item').map(l => l.id)));
+      setOcrEdits({});
+      setShowOcrReview(true);
     } catch (e: any) {
       Alert.alert('Scan error', e.message ?? 'Could not process image');
     } finally {
@@ -256,6 +273,20 @@ export default function AddBillScreen() {
       await processOcrUri(result.assets[0].uri);
     }
   }, [processOcrUri]);
+
+  const handleOcrConfirm = useCallback(() => {
+    const newItems: BillItem[] = ocrLines
+      .filter(l => ocrChecked.has(l.id))
+      .map(l => {
+        const label = (ocrEdits[l.id]?.label ?? l.label) || l.text.slice(0, 40);
+        const value = parseFloat((ocrEdits[l.id]?.amount ?? String(l.amount ?? 0)).replace(',', '.')) || 0;
+        return { id: generateId(), label, amount: value, assignedTo: [] };
+      })
+      .filter(item => item.amount > 0);
+    setItems(prev => [...prev, ...newItems]);
+    setSplitMode('itemized');
+    setShowOcrReview(false);
+  }, [ocrLines, ocrChecked, ocrEdits]);
 
   // Auto-trigger camera/scan when opened via the "Scan & Split" shortcut button
   useEffect(() => {
@@ -443,7 +474,10 @@ export default function AddBillScreen() {
             recentCountries={[]}
           />
 
-          {/* Amount + Currency */}
+          {/* Service type */}
+          <ServiceTypeSelector value={serviceType} onChange={setServiceType} />
+
+          {/* Amount + derived currency badge */}
           <View style={styles.row}>
             <View style={styles.flex}>
               <Text style={[styles.label, { color: C.darkSlate }]}>{t('splitTab.amountLabel')}</Text>
@@ -459,11 +493,9 @@ export default function AddBillScreen() {
             </View>
             <View style={styles.currencyCol}>
               <Text style={[styles.label, { color: C.darkSlate }]}>{t('splitTab.currency')}</Text>
-              <CurrencyDropdown
-                value={currency}
-                onChange={setCurrency}
-                priorityCurrencies={tripCurrencies}
-              />
+              <View style={[styles.currencyBadge, { backgroundColor: C.cream, borderColor: C.lightBorder }]}>
+                <Text style={[styles.currencyBadgeText, { color: C.rust }]}>{currency}</Text>
+              </View>
             </View>
           </View>
 
@@ -738,6 +770,99 @@ export default function AddBillScreen() {
         </View>
       </Modal>
 
+      {/* OCR Review Modal */}
+      <Modal
+        visible={showOcrReview}
+        animationType="slide"
+        transparent
+        onRequestClose={() => setShowOcrReview(false)}
+      >
+        <View style={styles.ocrOverlay}>
+          <View style={[styles.ocrSheet, { backgroundColor: C.white }]}>
+            {/* Header */}
+            <View style={[styles.modalHeader, { borderBottomColor: C.lightBorder }]}>
+              <TouchableOpacity onPress={() => setShowOcrReview(false)}>
+                <Text style={[styles.modalClose, { color: C.sage }]}>✕</Text>
+              </TouchableOpacity>
+              <Text style={[styles.modalTitle, { color: C.darkSlate }]}>Review scan</Text>
+              <View style={{ width: 28 }} />
+            </View>
+
+            {/* Receipt image */}
+            {capturedImageUri && (
+              <Image
+                source={{ uri: capturedImageUri }}
+                style={[styles.ocrImage, { height: OCR_IMAGE_HEIGHT }]}
+                resizeMode="contain"
+              />
+            )}
+
+            {/* Checklist */}
+            <Text style={[styles.ocrSectionLabel, { color: C.sage, borderBottomColor: C.lightBorder }]}>
+              Select items to add ({ocrLines.filter(l => ocrChecked.has(l.id)).length} selected)
+            </Text>
+            <FlatList
+              data={ocrLines}
+              keyExtractor={l => l.id}
+              style={{ flex: 1 }}
+              renderItem={({ item: line }) => {
+                const checked = ocrChecked.has(line.id);
+                const editLabel = ocrEdits[line.id]?.label ?? line.label;
+                const editAmount = ocrEdits[line.id]?.amount ?? (line.amount != null ? String(line.amount) : '');
+                return (
+                  <TouchableOpacity
+                    style={[styles.ocrRow, { borderBottomColor: C.lightBorder, opacity: line.kind === 'header' ? 0.45 : 1 }]}
+                    onPress={() => {
+                      setOcrChecked(prev => {
+                        const next = new Set(prev);
+                        if (next.has(line.id)) next.delete(line.id); else next.add(line.id);
+                        return next;
+                      });
+                    }}
+                    activeOpacity={0.7}
+                  >
+                    <View style={[styles.ocrCheckbox, { borderColor: checked ? C.rust : C.lightBorder, backgroundColor: checked ? C.rust : C.white }]}>
+                      {checked && <Text style={styles.ocrCheckMark}>✓</Text>}
+                    </View>
+                    <View style={styles.ocrRowContent}>
+                      <TextInput
+                        style={[styles.ocrLabelInput, { color: C.darkSlate, borderColor: C.lightBorder }]}
+                        value={editLabel}
+                        onChangeText={v => setOcrEdits(prev => ({ ...prev, [line.id]: { label: v, amount: prev[line.id]?.amount ?? editAmount } }))}
+                        placeholderTextColor={C.sage}
+                        returnKeyType="done"
+                      />
+                      {line.amount != null && (
+                        <TextInput
+                          style={[styles.ocrAmountInput, { color: C.rust, borderColor: C.lightBorder }]}
+                          value={editAmount}
+                          onChangeText={v => setOcrEdits(prev => ({ ...prev, [line.id]: { label: prev[line.id]?.label ?? editLabel, amount: v } }))}
+                          keyboardType="decimal-pad"
+                          returnKeyType="done"
+                        />
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                );
+              }}
+            />
+
+            {/* Confirm button */}
+            <View style={[styles.ocrFooter, { borderTopColor: C.lightBorder, backgroundColor: C.white }]}>
+              <TouchableOpacity
+                style={[styles.ocrConfirmBtn, { backgroundColor: C.rust }]}
+                onPress={handleOcrConfirm}
+                activeOpacity={0.85}
+              >
+                <Text style={styles.ocrConfirmBtnText}>
+                  Add {ocrLines.filter(l => ocrChecked.has(l.id)).length} items
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
       {/* From History Modal */}
       <Modal
         visible={showHistoryPicker}
@@ -761,8 +886,10 @@ export default function AddBillScreen() {
                   style={[styles.historyRow, { borderBottomColor: C.lightBorder }]}
                   onPress={() => {
                     setRawAmount(String(item.total));
-                    setCurrency(item.currency);
-                    if (!description) setDescription(item.country);
+                    if (!description) setDescription(item.name || item.country);
+                    if (item.continent) setBillContinent(item.continent as ContinentKey);
+                    if (item.country) setBillCountry(item.country);
+                    setLinkedHistoryId(item.id);
                     setShowHistoryPicker(false);
                   }}
                   activeOpacity={0.7}
@@ -849,6 +976,16 @@ const styles = StyleSheet.create({
   },
   row: { flexDirection: 'row', gap: 10, alignItems: 'flex-start' },
   currencyCol: { width: 90 },
+  currencyBadge: {
+    borderWidth: 1.5,
+    borderRadius: Radius.sm,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 44,
+  },
+  currencyBadgeText: { fontFamily: Typography.mono, fontSize: 16, fontWeight: '700', letterSpacing: 1 },
   chipsScroll: { marginBottom: 4 },
   chipsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 4 },
   chip: {
@@ -1061,11 +1198,11 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
+    padding: 24,
   },
   modalSheet: {
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+    borderRadius: 16,
     maxHeight: '70%',
   },
   modalHeader: {
@@ -1090,4 +1227,88 @@ const styles = StyleSheet.create({
   historyRowCountry: { fontFamily: Typography.serif, fontWeight: '400', fontSize: 12 },
   historyRowDate: { fontFamily: Typography.mono, fontSize: 11 },
   historyRowAmount: { fontFamily: Typography.mono, fontSize: 15, fontWeight: '700' },
+  // OCR Review Modal
+  ocrOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'flex-end',
+  },
+  ocrSheet: {
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    maxHeight: '92%',
+    flex: 1,
+    marginTop: 60,
+  },
+  ocrImage: {
+    width: '100%',
+    backgroundColor: '#000',
+  },
+  ocrSectionLabel: {
+    fontFamily: Typography.mono,
+    fontSize: 11,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderBottomWidth: 0.5,
+  },
+  ocrRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderBottomWidth: 0.5,
+    gap: 10,
+  },
+  ocrCheckbox: {
+    width: 22,
+    height: 22,
+    borderRadius: 5,
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  ocrCheckMark: { color: '#fff', fontSize: 13, fontWeight: '700' },
+  ocrRowContent: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  ocrLabelInput: {
+    flex: 1,
+    fontFamily: Typography.mono,
+    fontSize: 13,
+    paddingVertical: 3,
+    paddingHorizontal: 6,
+    borderWidth: 1,
+    borderRadius: Radius.sm,
+  },
+  ocrAmountInput: {
+    width: 72,
+    fontFamily: Typography.mono,
+    fontSize: 13,
+    fontWeight: '700',
+    textAlign: 'right',
+    paddingVertical: 3,
+    paddingHorizontal: 6,
+    borderWidth: 1,
+    borderRadius: Radius.sm,
+  },
+  ocrFooter: {
+    padding: 16,
+    borderTopWidth: 1,
+  },
+  ocrConfirmBtn: {
+    borderRadius: Radius.md,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  ocrConfirmBtnText: {
+    fontFamily: Typography.mono,
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#fff',
+  },
 });

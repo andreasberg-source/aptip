@@ -5,6 +5,14 @@ export interface ParsedAmount {
   isTotal: boolean; // detected as the bill total
 }
 
+export interface OcrLine {
+  id: string;
+  text: string;
+  label: string;
+  amount: number | null;
+  kind: 'item' | 'total' | 'skip' | 'header';
+}
+
 // Lines whose amount is the final bill total
 const TOTAL_KEYWORDS = [
   'grand total', 'total due', 'amount due', 'balance due', 'total amount',
@@ -124,4 +132,35 @@ export function parseItemsFromText(text: string): Array<{ label: string; value: 
   }
 
   return results;
+}
+
+/**
+ * Classify raw OCR text lines for the assisted review modal.
+ * Every non-empty line is returned; `kind` determines pre-check state.
+ */
+export function classifyOcrLines(rawLines: string[]): OcrLine[] {
+  const result: OcrLine[] = [];
+  let idx = 0;
+  for (const raw of rawLines) {
+    const trimmed = raw.trim();
+    if (!trimmed) continue;
+
+    const lower = trimmed.toLowerCase();
+    const isTotal = TOTAL_KEYWORDS.some(k => lower.includes(k));
+    const isSkip = SKIP_KEYWORDS.some(k => lower.includes(k));
+
+    const amounts = extractValues(trimmed);
+    const amount = amounts.length > 0 ? amounts[0] : null;
+
+    const label = extractLabel(trimmed) || trimmed.slice(0, 40);
+
+    let kind: OcrLine['kind'];
+    if (isTotal) kind = 'total';
+    else if (isSkip) kind = 'skip';
+    else if (amount !== null) kind = 'item';
+    else kind = 'header';
+
+    result.push({ id: String(idx++), text: trimmed, label, amount, kind });
+  }
+  return result;
 }

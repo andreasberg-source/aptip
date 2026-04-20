@@ -9,6 +9,7 @@ import {
   Alert,
   TextInput,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { router } from 'expo-router';
 
@@ -16,6 +17,7 @@ import { supportedLanguages, changeLanguage, LanguageCode } from '../../i18n';
 import { useExchangeRates } from '../../hooks/useExchangeRates';
 import { useSettingsStore } from '../../store/settingsStore';
 import { useHistoryStore } from '../../store/historyStore';
+import { useTripStore } from '../../store/tripStore';
 import { useColors } from '../../hooks/useColors';
 import { Typography, Radius } from '../../constants/Theme';
 import { CURRENCY_NAMES } from '../../data/currencies';
@@ -37,7 +39,8 @@ export default function SettingsScreen() {
     userName, homeCurrency, defaultPeople, defaultSatisfaction,
     keepScreenAwake, darkMode, isPremium, patch, savedParticipantNames, removeSavedParticipantName,
   } = useSettingsStore();
-  const clearAll = useHistoryStore((s) => s.clearAll);
+  const clearNonTrip = useHistoryStore((s) => s.clearNonTrip);
+  const { trips } = useTripStore();
 
   const currentLang = i18n.language as LanguageCode;
   const currentLangLabel = supportedLanguages.find((l) => l.code === currentLang)?.label ?? '';
@@ -52,11 +55,12 @@ export default function SettingsScreen() {
   })();
 
   const handleClearHistory = () => {
+    const protectedIds = trips.flatMap(tr => tr.bills.map(b => b.linkedHistoryId).filter((id): id is string => !!id));
     Alert.alert(
       t('settings.clearHistory'),
       t('settings.clearHistoryConfirm'),
       [
-        { text: t('history.delete'), style: 'destructive', onPress: () => clearAll() },
+        { text: t('history.delete'), style: 'destructive', onPress: () => clearNonTrip(protectedIds) },
         { text: 'Cancel', style: 'cancel' },
       ],
     );
@@ -65,9 +69,11 @@ export default function SettingsScreen() {
   const s = makeStyles(C);
 
   return (
-    <ScrollView style={[s.flex, { backgroundColor: C.cream }]} contentContainerStyle={s.container}>
-      <View style={[s.header, { borderBottomColor: C.sage }]}>
-        <Text style={[s.title, { color: C.darkSlate }]}>{t('settings.title')}</Text>
+    <SafeAreaView style={[s.flex, { backgroundColor: C.cream }]}>
+    <ScrollView style={s.flex} contentContainerStyle={s.container}>
+      <View style={[s.header, { borderBottomColor: C.sage, backgroundColor: C.cream }]}>
+        <Text style={[s.headerIcon, { color: C.rust }]}>⚙️</Text>
+        <Text style={[s.title, { color: C.rust }]}>{t('settings.title')}</Text>
       </View>
 
       {/* ── Profile ──────────────────────────────────────── */}
@@ -276,6 +282,15 @@ export default function SettingsScreen() {
       <View style={s.bottomLinks}>
         <TouchableOpacity
           style={[s.bottomLinkBtn, { backgroundColor: C.white, borderColor: C.lightBorder }]}
+          onPress={() => router.push('/(tabs)/two' as any)}
+          activeOpacity={0.7}
+        >
+          <Text style={s.bottomLinkEmoji}>🗃️</Text>
+          <Text style={[s.bottomLinkText, { color: C.darkSlate }]}>{t('settings.archiveLink')}</Text>
+          <Text style={[s.chevron, { color: C.sage }]}>›</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[s.bottomLinkBtn, { backgroundColor: C.white, borderColor: C.lightBorder }]}
           onPress={() => router.push('/about')}
           activeOpacity={0.7}
         >
@@ -283,28 +298,11 @@ export default function SettingsScreen() {
           <Text style={[s.bottomLinkText, { color: C.darkSlate }]}>{t('about.title')}</Text>
           <Text style={[s.chevron, { color: C.sage }]}>›</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={[s.bottomLinkBtn, { backgroundColor: C.white, borderColor: C.lightBorder }]}
-          onPress={() => router.push('/help')}
-          activeOpacity={0.7}
-        >
-          <Text style={s.bottomLinkEmoji}>🧮</Text>
-          <Text style={[s.bottomLinkText, { color: C.darkSlate }]}>{t('settings.helpTips')}</Text>
-          <Text style={[s.chevron, { color: C.sage }]}>›</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[s.bottomLinkBtn, { backgroundColor: C.white, borderColor: C.lightBorder }]}
-          onPress={() => router.push('/help-split')}
-          activeOpacity={0.7}
-        >
-          <Text style={s.bottomLinkEmoji}>🧾</Text>
-          <Text style={[s.bottomLinkText, { color: C.darkSlate }]}>{t('settings.helpSplit')}</Text>
-          <Text style={[s.chevron, { color: C.sage }]}>›</Text>
-        </TouchableOpacity>
       </View>
 
       <View style={s.bottomPad} />
     </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -322,15 +320,20 @@ const makeStyles = (C: any) => StyleSheet.create({
   flex: { flex: 1 },
   container: { paddingBottom: 40 },
   header: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 16,
     borderBottomWidth: 2,
+    gap: 8,
   },
+  headerIcon: { fontSize: 22 },
   title: {
     fontFamily: Typography.serif,
     fontSize: 22,
     fontWeight: '700',
+    flex: 1,
   },
   section: {
     paddingHorizontal: 20,

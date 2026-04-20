@@ -1,10 +1,11 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
-  FlatList,
+  ScrollView,
+  Modal,
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
@@ -17,14 +18,19 @@ import { useTranslation } from 'react-i18next';
 import * as ImagePicker from 'expo-image-picker';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 
-import { useTripStore, Trip } from '../../store/tripStore';
+import { useTripStore } from '../../store/tripStore';
 import { useSettingsStore } from '../../store/settingsStore';
+import { useHistoryStore } from '../../store/historyStore';
 import { useColors } from '../../hooks/useColors';
 import { usePremium } from '../../hooks/usePremium';
 import { Typography, Radius } from '../../constants/Theme';
 import { formatAmount } from '../../utils/tipCalculations';
 import { parseAmountsFromText } from '../../utils/parseAmounts';
-import CurrencyDropdown from '../../components/CurrencyDropdown';
+import ContinentCountryPicker from '../../components/ContinentCountryPicker';
+import TripPickerDropdown from '../../components/TripPickerDropdown';
+import TipBanner from '../../components/TipBanner';
+import { useCountryFromLocation } from '../../hooks/useCountryFromLocation';
+import { tippingData, ContinentKey } from '../../data/tippingData';
 
 // Lazy-load ML Kit
 let TextRecognition: typeof import('@react-native-ml-kit/text-recognition').default | null = null;
@@ -52,17 +58,36 @@ export default function SplitScreen() {
   const { t } = useTranslation();
   const C = useColors();
   const { trips, addBill } = useTripStore();
-  const { userName } = useSettingsStore();
+  const { userName, homeCurrency, favouriteCountries, patch, savedParticipantNames, addSavedParticipantName } = useSettingsStore();
+  const { entries: historyEntries, addEntry } = useHistoryStore();
   const isPremium = usePremium();
-  const { prefillAmount, prefillCurrency } = useLocalSearchParams<{
+  const { prefillAmount, prefillCurrency: _prefillCurrency, prefillContinent, prefillCountry } = useLocalSearchParams<{
     prefillAmount?: string;
     prefillCurrency?: string;
+    prefillContinent?: string;
+    prefillCountry?: string;
   }>();
+  const locationDefault = useCountryFromLocation();
+
+  const recentCountries = useMemo(
+    () => [...new Set(historyEntries.map(e => e.country))].slice(0, 3),
+    [historyEntries],
+  );
+
+  // Country / currency state
+  const [quickContinent, setQuickContinent] = useState<ContinentKey | ''>('');
+  const [quickCountry, setQuickCountry] = useState('');
+
+  const countryData = useMemo(() => {
+    if (!quickContinent || !quickCountry) return null;
+    return (tippingData[quickContinent as ContinentKey] as any)?.[quickCountry] ?? null;
+  }, [quickContinent, quickCountry]);
+
+  const quickCurrency: string = countryData?.currency ?? 'NOK';
 
   // Quick Split state
   const [quickAmount, setQuickAmount] = useState('');
   const [quickPeople, setQuickPeople] = useState(2);
-  const [quickCurrency, setQuickCurrency] = useState('NOK');
   const [quickMode, setQuickMode] = useState<QuickMode>('equal');
   const [customPersons, setCustomPersons] = useState<QuickPerson[]>(() => [
     { key: '1', name: userName || '', amount: '' },
@@ -74,17 +99,62 @@ export default function SplitScreen() {
   ]);
   const [scanning, setScanning] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
-  const [selectedTripIdForSave, setSelectedTripIdForSave] = useState<string | null>(null);
-  const [savedToTripVisible, setSavedToTripVisible] = useState(false);
+
+  // Save modal state
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [saveName, setSaveName] = useState('');
+  const [selectedTripId, setSelectedTripId] = useState<string | null>(null);
+  const [savedVisible, setSavedVisible] = useState(false);
+
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
   const nextKey = useRef(3);
 
-  // Pre-fill from calculator "Splitt regning" button
+  // Name autocomplete
+  const [focusedNameKey, setFocusedNameKey] = useState<string | null>(null);
+  const getNameSuggestions = useCallback((currentValue: string) => {
+    if (!savedParticipantNames.length) return [];
+    const q = currentValue.trim().toLowerCase();
+    return savedParticipantNames.filter(n =>
+      q === '' || n.toLowerCase().includes(q)
+    ).slice(0, 5);
+  }, [savedParticipantNames]);
+
+  // Pre-fill from calculator "Splitt regning" or location
   useEffect(() => {
     if (prefillAmount) setQuickAmount(prefillAmount);
-    if (prefillCurrency) setQuickCurrency(prefillCurrency);
-  }, [prefillAmount, prefillCurrency]);
+    if (prefillContinent) setQuickContinent(prefillContinent as ContinentKey);
+    else if (locationDefault?.continent && !quickContinent) setQuickContinent(locationDefault.continent as ContinentKey);
+    if (prefillCountry) setQuickCountry(prefillCountry);
+    else if (locationDefault?.country && !quickCountry) setQuickCountry(locationDefault.country);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prefillAmount, prefillContinent, prefillCountry, locationDefault?.continent, locationDefault?.country]);
+
+  // Sync person arrays with quickPeople count
+  useEffect(() => {
+    setCustomPersons(prev => {
+      if (quickPeople > prev.length) {
+        const added = Array.from({ length: quickPeople - prev.length }, (_, i) => ({
+          key: String(nextKey.current++),
+          name: '',
+          amount: '',
+        }));
+        return [...prev, ...added];
+      }
+      return prev.slice(0, quickPeople);
+    });
+    setPercPersons(prev => {
+      if (quickPeople > prev.length) {
+        const added = Array.from({ length: quickPeople - prev.length }, (_, i) => ({
+          key: String(nextKey.current++),
+          name: '',
+          pct: '',
+        }));
+        return [...prev, ...added];
+      }
+      return prev.slice(0, quickPeople);
+    });
+  }, [quickPeople]);
 
   const totalAmount = parseFloat(quickAmount.replace(',', '.')) || 0;
 
@@ -102,7 +172,16 @@ export default function SplitScreen() {
 
   const activeTrips = trips.filter(t => !t.archived);
 
-  // OCR for Quick Split
+  const handleToggleFavourite = useCallback(
+    (c: string) => {
+      const updated = favouriteCountries.includes(c)
+        ? favouriteCountries.filter(f => f !== c)
+        : [...favouriteCountries, c];
+      patch({ favouriteCountries: updated });
+    },
+    [favouriteCountries, patch],
+  );
+
   const processOcrUri = useCallback(async (uri: string) => {
     setScanning(true);
     try {
@@ -138,70 +217,52 @@ export default function SplitScreen() {
 
   const addCustomPerson = useCallback(() => {
     setCustomPersons(prev => [...prev, { key: String(nextKey.current++), name: '', amount: '' }]);
+    setQuickPeople(p => p + 1);
   }, []);
 
-  const handleSaveToTrip = useCallback(async () => {
-    if (!selectedTripIdForSave || totalAmount <= 0) return;
-    const trip = activeTrips.find(t => t.id === selectedTripIdForSave);
-    if (!trip) return;
-    await addBill({
-      tripId: selectedTripIdForSave,
-      description: `Split ${quickCurrency}`,
+  const handleSave = useCallback(async () => {
+    if (totalAmount <= 0) return;
+    const label = saveName.trim() || `Split ${quickCurrency}`;
+    await addEntry({
+      continent: quickContinent || '',
+      country: quickCountry || '',
       currency: quickCurrency,
-      totalAmount,
-      paidBy: trip.participants[0]?.id ?? '',
-      participants: trip.participants.map(p => p.id),
-      splitMode: 'equal',
-      splits: {},
-      items: [],
+      amount: totalAmount,
+      tipPercent: 0,
+      tipAmount: 0,
+      total: totalAmount,
+      perPerson: quickPeople > 0 ? totalAmount / quickPeople : totalAmount,
+      people: quickPeople,
+      homeTotal: null,
+      homeCurrency,
+      name: label,
     });
-    setSelectedTripIdForSave(null);
-    setSavedToTripVisible(true);
-    setTimeout(() => setSavedToTripVisible(false), 2000);
-  }, [selectedTripIdForSave, totalAmount, activeTrips, quickCurrency, addBill]);
+    if (selectedTripId) {
+      const trip = activeTrips.find(tr => tr.id === selectedTripId);
+      if (trip) {
+        await addBill({
+          tripId: selectedTripId,
+          description: label,
+          currency: quickCurrency,
+          totalAmount,
+          country: quickCountry || undefined,
+          continent: quickContinent || undefined,
+          paidBy: trip.participants[0]?.id ?? '',
+          participants: trip.participants.map(p => p.id),
+          splitMode: 'equal',
+          splits: {},
+          items: [],
+        });
+      }
+    }
+    setShowSaveModal(false);
+    setSaveName('');
+    setSelectedTripId(null);
+    setSavedVisible(true);
+    setTimeout(() => setSavedVisible(false), 2000);
+  }, [totalAmount, saveName, quickCurrency, quickContinent, quickCountry, quickPeople, homeCurrency, selectedTripId, activeTrips, addEntry, addBill]);
 
-  const renderTrip = useCallback(({ item }: { item: Trip }) => {
-    const totalBills = item.bills.length;
-    const currencies = [...new Set(item.bills.map(b => b.currency))];
-    const currencyLabel = currencies.join(', ') || item.lastCurrency;
-    const isSettled = (item.settledTransfers?.length ?? 0) > 0 && item.bills.length > 0;
-
-    return (
-      <TouchableOpacity
-        style={[styles.tripCard, { backgroundColor: C.white, borderColor: isSettled ? C.rust : C.lightBorder }]}
-        onPress={() => router.push({ pathname: '/trip-detail', params: { id: item.id } })}
-        activeOpacity={0.75}
-      >
-        <View style={styles.tripCardInner}>
-          <View style={styles.tripNameRow}>
-            <Text style={[styles.tripName, { color: C.darkSlate }]} numberOfLines={1}>
-              {item.name}
-            </Text>
-            {isSettled && (
-              <Text style={[styles.settledBadge, { color: C.rust }]}>{t('splitTab.settled')}</Text>
-            )}
-          </View>
-          <View style={styles.tripMeta}>
-            <Text style={[styles.tripMetaText, { color: C.sage }]}>
-              👥 {item.participants.length}  ·  🧾 {totalBills} {t('splitTab.bills')}
-            </Text>
-            {currencies.length > 0 && (
-              <Text style={[styles.tripCurrency, { color: C.sage }]}>{currencyLabel}</Text>
-            )}
-          </View>
-          {/* Participant color dots */}
-          <View style={styles.colorDotsRow}>
-            {item.participants.slice(0, 8).map(p => (
-              <View key={p.id} style={[styles.colorDot, { backgroundColor: p.color ?? C.sage }]} />
-            ))}
-          </View>
-        </View>
-        <Text style={[styles.tripChevron, { color: C.sage }]}>›</Text>
-      </TouchableOpacity>
-    );
-  }, [C, t]);
-
-  // Camera view for Quick Split
+  // Camera view
   if (showCamera) {
     if (!permission?.granted) {
       return (
@@ -215,7 +276,7 @@ export default function SplitScreen() {
               <Text style={styles.primaryBtnText}>{t('scan.permissionBtn')}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setShowCamera(false)} style={{ marginTop: 12 }}>
-              <Text style={[styles.cancelText, { color: C.sage }]}>Cancel</Text>
+              <Text style={[styles.cancelText, { color: C.sage }]}>{t('cancel')}</Text>
             </TouchableOpacity>
           </View>
         </SafeAreaView>
@@ -247,213 +308,250 @@ export default function SplitScreen() {
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <FlatList
-          data={isPremium ? activeTrips : []}
-          keyExtractor={item => item.id}
-          renderItem={renderTrip}
+        <ScrollView
+          style={styles.flex}
+          contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
-          ListHeaderComponent={
-            <>
-              {/* Header */}
-              <View style={[styles.header, { borderBottomColor: C.sage }]}>
-                <Text style={[styles.title, { color: C.darkSlate }]}>✂️ {t('splitTab.title')}</Text>
-                <TouchableOpacity
-                  style={styles.helpBtn}
-                  onPress={() => router.push('/help-split')}
-                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                >
-                  <Text style={[styles.helpBtnText, { color: C.sage }]}>?</Text>
-                </TouchableOpacity>
+        >
+          {/* Header */}
+          <View style={[styles.header, { borderBottomColor: C.sage }]}>
+            <Text style={[styles.headerIcon, { color: C.rust }]}>✂️</Text>
+            <Text style={[styles.title, { color: C.rust }]}>{t('splitTab.title')}</Text>
+            <TouchableOpacity
+              style={styles.helpBtn}
+              onPress={() => router.push('/help-split')}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
+              <Text style={[styles.helpBtnText, { color: C.rust }]}>?</Text>
+            </TouchableOpacity>
+          </View>
+
+          <TipBanner tipKey="split" text={t('tip.splitTab')} />
+
+          {/* Quick Split Card */}
+          <View style={[styles.card, { backgroundColor: C.white, borderColor: C.lightBorder }]}>
+
+            {/* Country picker */}
+            <ContinentCountryPicker
+              continent={quickContinent}
+              country={quickCountry}
+              onContinentChange={setQuickContinent}
+              onCountryChange={setQuickCountry}
+              favourites={favouriteCountries}
+              onToggleFavourite={handleToggleFavourite}
+              recentCountries={recentCountries}
+              style={styles.pickerMargin}
+            />
+
+            {/* Amount + scan */}
+            <Text style={[styles.label, { color: C.darkSlate }]}>{t('splitTab.amountLabel')}</Text>
+            <View style={styles.amountRow}>
+              <TextInput
+                style={[styles.input, { backgroundColor: C.cream, borderColor: C.lightBorder, color: C.darkSlate }]}
+                value={quickAmount}
+                onChangeText={setQuickAmount}
+                placeholder="0.00"
+                placeholderTextColor={C.sage}
+                keyboardType="decimal-pad"
+                returnKeyType="done"
+              />
+              <TouchableOpacity
+                style={[styles.scanIconBtn, { borderColor: C.lightBorder, backgroundColor: C.cream }]}
+                onPress={async () => {
+                  if (!isPremium) {
+                    Alert.alert(t('premium.title'), t('premium.upgradeMsg'));
+                    return;
+                  }
+                  if (TextRecognition) {
+                    if (!permission?.granted) {
+                      const { granted } = await requestPermission();
+                      if (!granted) { await handlePickImage(); return; }
+                    }
+                    setShowCamera(true);
+                  } else {
+                    await handlePickImage();
+                  }
+                }}
+                disabled={scanning}
+                activeOpacity={0.7}
+              >
+                {scanning
+                  ? <ActivityIndicator size="small" color={C.rust} />
+                  : <Text style={styles.scanIconText}>📷</Text>}
+              </TouchableOpacity>
+            </View>
+
+            {/* People stepper — global */}
+            <View style={[styles.stepperRow, styles.stepperMargin]}>
+              <TouchableOpacity
+                style={[styles.stepperBtn, { backgroundColor: C.sage }, quickPeople <= 1 && styles.disabled]}
+                onPress={() => setQuickPeople(p => Math.max(1, p - 1))}
+                disabled={quickPeople <= 1}
+              >
+                <Text style={styles.stepperBtnText}>−</Text>
+              </TouchableOpacity>
+              <View style={[styles.stepperCount, { backgroundColor: C.cream, borderColor: C.lightBorder }]}>
+                <Text style={[styles.stepperCountText, { color: C.darkSlate }]}>
+                  {quickPeople === 1
+                    ? t('split.onePerson')
+                    : t('split.people', { n: quickPeople })}
+                </Text>
               </View>
+              <TouchableOpacity
+                style={[styles.stepperBtn, { backgroundColor: C.sage }, quickPeople >= 20 && styles.disabled]}
+                onPress={() => setQuickPeople(p => Math.min(20, p + 1))}
+                disabled={quickPeople >= 20}
+              >
+                <Text style={styles.stepperBtnText}>+</Text>
+              </TouchableOpacity>
+            </View>
 
-              {/* Quick Split */}
-              <View style={[styles.card, { backgroundColor: C.white, borderColor: C.lightBorder }]}>
-                {/* Amount row with currency + scan */}
-                <View style={styles.amountRow}>
-                  <View style={styles.flex}>
-                    <Text style={[styles.label, { color: C.darkSlate }]}>{t('splitTab.amountLabel')}</Text>
-                    <TextInput
-                      style={[styles.input, { backgroundColor: C.cream, borderColor: C.lightBorder, color: C.darkSlate }]}
-                      value={quickAmount}
-                      onChangeText={setQuickAmount}
-                      placeholder="0.00"
-                      placeholderTextColor={C.sage}
-                      keyboardType="decimal-pad"
-                      returnKeyType="done"
-                    />
-                  </View>
-                  <View style={styles.currencyCol}>
-                    <Text style={[styles.label, { color: C.darkSlate }]}>{t('splitTab.currency')}</Text>
-                    <CurrencyDropdown value={quickCurrency} onChange={setQuickCurrency} />
-                  </View>
-                </View>
-
-                {/* Scan button — premium only */}
+            {/* Mode toggle */}
+            <View style={styles.modeRow}>
+              {(['equal', 'percentage', 'custom'] as QuickMode[]).map(mode => (
                 <TouchableOpacity
-                  style={[styles.scanBtn, { borderColor: C.lightBorder }]}
-                  onPress={async () => {
-                    if (!isPremium) {
-                      Alert.alert(t('premium.title'), t('premium.upgradeMsg'));
-                      return;
-                    }
-                    if (TextRecognition) {
-                      if (!permission?.granted) {
-                        const { granted } = await requestPermission();
-                        if (!granted) { await handlePickImage(); return; }
-                      }
-                      setShowCamera(true);
-                    } else {
-                      await handlePickImage();
-                    }
-                  }}
-                  disabled={scanning}
+                  key={mode}
+                  style={[
+                    styles.modeBtn,
+                    { borderColor: quickMode === mode ? C.rust : C.lightBorder },
+                    { backgroundColor: quickMode === mode ? C.rust : C.cream },
+                  ]}
+                  onPress={() => setQuickMode(mode)}
                   activeOpacity={0.7}
                 >
-                  {scanning
-                    ? <ActivityIndicator size="small" color={C.rust} />
-                    : <Text style={[styles.scanBtnText, { color: C.sage }]}>📷 {t('splitTab.scanAmount')}</Text>}
+                  <Text style={[styles.modeBtnText, { color: quickMode === mode ? '#fff' : C.darkSlate }]}>
+                    {t(`splitTab.mode${mode.charAt(0).toUpperCase() + mode.slice(1)}`)}
+                  </Text>
                 </TouchableOpacity>
+              ))}
+            </View>
 
-                {/* Mode toggle */}
-                <View style={styles.modeRow}>
-                  {(['equal', 'percentage', 'custom'] as QuickMode[]).map(mode => (
-                    <TouchableOpacity
-                      key={mode}
-                      style={[
-                        styles.modeBtn,
-                        { borderColor: C.lightBorder, backgroundColor: C.cream },
-                        quickMode === mode && { backgroundColor: C.rust, borderColor: C.rust },
-                      ]}
-                      onPress={() => setQuickMode(mode)}
-                      activeOpacity={0.7}
-                    >
-                      <Text style={[styles.modeBtnText, { color: quickMode === mode ? '#fff' : C.darkSlate }]}>
-                        {mode === 'equal'
-                          ? t('splitTab.splitEqual')
-                          : mode === 'percentage'
-                          ? t('splitTab.splitPerc')
-                          : t('splitTab.splitCustom')}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
+            {/* Equal mode result */}
+            {quickMode === 'equal' && equalResult !== null && (
+              <View style={[styles.quickResult, { backgroundColor: C.cream, borderColor: C.lightBorder }]}>
+                <Text style={[styles.quickResultLabel, { color: C.sage }]}>{t('splitTab.perPerson')}</Text>
+                <Text style={[styles.quickResultValue, { color: C.rust }]}>
+                  {formatAmount(equalResult, 2)} {quickCurrency}
+                </Text>
+              </View>
+            )}
 
-                {/* Equal mode */}
-                {quickMode === 'equal' && (
-                  <>
-                    <View style={styles.stepperRow}>
-                      <TouchableOpacity
-                        style={[styles.stepperBtn, { backgroundColor: C.sage }, quickPeople <= 1 && styles.disabled]}
-                        onPress={() => setQuickPeople(p => Math.max(1, p - 1))}
-                        disabled={quickPeople <= 1}
-                      >
-                        <Text style={styles.stepperBtnText}>−</Text>
-                      </TouchableOpacity>
-                      <View style={[styles.stepperCount, { backgroundColor: C.cream, borderColor: C.lightBorder }]}>
-                        <Text style={[styles.stepperCountText, { color: C.darkSlate }]}>
-                          {quickPeople === 1
-                            ? t('split.onePerson')
-                            : t('split.people', { n: quickPeople })}
-                        </Text>
-                      </View>
-                      <TouchableOpacity
-                        style={[styles.stepperBtn, { backgroundColor: C.sage }, quickPeople >= 20 && styles.disabled]}
-                        onPress={() => setQuickPeople(p => Math.min(20, p + 1))}
-                        disabled={quickPeople >= 20}
-                      >
-                        <Text style={styles.stepperBtnText}>+</Text>
-                      </TouchableOpacity>
-                    </View>
-
-                    {equalResult !== null && (
-                      <View style={[styles.quickResult, { backgroundColor: C.cream, borderColor: C.lightBorder }]}>
-                        <Text style={[styles.quickResultLabel, { color: C.sage }]}>{t('splitTab.perPerson')}</Text>
-                        <Text style={[styles.quickResultValue, { color: C.rust }]}>
-                          {formatAmount(equalResult, 2)} {quickCurrency}
-                        </Text>
-                      </View>
-                    )}
-                  </>
-                )}
-
-                {/* Percentage mode */}
-                {quickMode === 'percentage' && (
-                  <View>
-                    {percPersons.map((p, idx) => {
-                      const pctVal = parseFloat(p.pct) || 0;
-                      const personAmt = totalAmount > 0 ? totalAmount * (pctVal / 100) : null;
-                      return (
-                        <View key={p.key} style={styles.customRow}>
+            {/* Percentage mode */}
+            {quickMode === 'percentage' && (
+              <View>
+                {percPersons.map((p, idx) => {
+                  const pctVal = parseFloat(p.pct) || 0;
+                  const personAmt = totalAmount > 0 ? totalAmount * (pctVal / 100) : null;
+                  const nameKey = `perc_${p.key}`;
+                  const suggestions = focusedNameKey === nameKey ? getNameSuggestions(p.name) : [];
+                  return (
+                    <View key={p.key}>
+                      <View style={styles.customRow}>
+                        <TextInput
+                          style={[styles.customNameInput, { backgroundColor: C.cream, borderColor: C.lightBorder, color: C.darkSlate }]}
+                          value={p.name}
+                          onChangeText={v => setPercPersons(prev => prev.map(pp => pp.key === p.key ? { ...pp, name: v } : pp))}
+                          onFocus={() => setFocusedNameKey(nameKey)}
+                          onBlur={() => {
+                            if (p.name.trim()) addSavedParticipantName(p.name.trim());
+                            setTimeout(() => setFocusedNameKey(prev => prev === nameKey ? null : prev), 150);
+                          }}
+                          placeholder={`${t('splitTab.participantName')} ${idx + 1}`}
+                          placeholderTextColor={C.sage}
+                          autoCapitalize="words"
+                        />
+                        <View style={styles.percInputGroup}>
                           <TextInput
-                            style={[styles.customNameInput, { backgroundColor: C.cream, borderColor: C.lightBorder, color: C.darkSlate }]}
-                            value={p.name}
-                            onChangeText={v => setPercPersons(prev => prev.map(pp => pp.key === p.key ? { ...pp, name: v } : pp))}
-                            placeholder={`${t('splitTab.participantName')} ${idx + 1}`}
+                            style={[styles.percPctInput, { backgroundColor: C.cream, borderColor: C.lightBorder, color: C.darkSlate }]}
+                            value={p.pct}
+                            onChangeText={v => setPercPersons(prev => prev.map(pp => pp.key === p.key ? { ...pp, pct: v } : pp))}
+                            placeholder="0"
                             placeholderTextColor={C.sage}
-                            autoCapitalize="words"
+                            keyboardType="decimal-pad"
                           />
-                          <View style={styles.percInputGroup}>
-                            <TextInput
-                              style={[styles.percPctInput, { backgroundColor: C.cream, borderColor: C.lightBorder, color: C.darkSlate }]}
-                              value={p.pct}
-                              onChangeText={v => setPercPersons(prev => prev.map(pp => pp.key === p.key ? { ...pp, pct: v } : pp))}
-                              placeholder="0"
-                              placeholderTextColor={C.sage}
-                              keyboardType="decimal-pad"
-                            />
-                            <Text style={[styles.percSymbol, { color: C.sage }]}>%</Text>
-                          </View>
-                          {personAmt !== null && (
-                            <Text style={[styles.percAmt, { color: C.rust }]}>
-                              {formatAmount(personAmt, 2)}
-                            </Text>
-                          )}
-                          {percPersons.length > 2 && (
-                            <TouchableOpacity
-                              onPress={() => setPercPersons(prev => prev.filter(pp => pp.key !== p.key))}
-                              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                            >
-                              <Text style={[styles.removeText, { color: C.sage }]}>✕</Text>
-                            </TouchableOpacity>
-                          )}
+                          <Text style={[styles.percSymbol, { color: C.sage }]}>%</Text>
                         </View>
-                      );
-                    })}
-                    <TouchableOpacity
-                      style={[styles.addPersonBtn, { borderColor: C.lightBorder }]}
-                      onPress={() => {
-                        const key = String(nextKey.current++);
-                        setPercPersons(prev => [...prev, { key, name: '', pct: '' }]);
-                      }}
-                    >
-                      <Text style={[styles.addPersonBtnText, { color: C.sage }]}>+ {t('splitTab.addParticipant')}</Text>
-                    </TouchableOpacity>
-                    {unallocatedPct > 0.005 && (
-                      <View style={[styles.customSummary, { borderColor: C.rust }]}>
-                        <Text style={[styles.customSummaryText, { color: C.rust }]}>
-                          {t('splitTab.unallocated', { pct: unallocatedPct.toFixed(1) })}
-                        </Text>
+                        {personAmt !== null && (
+                          <Text style={[styles.percAmt, { color: C.rust }]}>
+                            {formatAmount(personAmt, 2)}
+                          </Text>
+                        )}
+                        {percPersons.length > 2 && (
+                          <TouchableOpacity
+                            onPress={() => {
+                              setPercPersons(prev => prev.filter(pp => pp.key !== p.key));
+                              setQuickPeople(prev => Math.max(1, prev - 1));
+                            }}
+                            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                          >
+                            <Text style={[styles.removeText, { color: C.sage }]}>✕</Text>
+                          </TouchableOpacity>
+                        )}
                       </View>
-                    )}
-                    {unallocatedPct <= 0.005 && allocatedPct > 0 && (
-                      <View style={[styles.customSummary, { borderColor: C.lightBorder }]}>
-                        <Text style={[styles.customSummaryText, { color: C.sage }]}>
-                          100% {t('splitTab.allocated')}
-                        </Text>
-                      </View>
-                    )}
+                      {suggestions.length > 0 && (
+                        <View style={[styles.suggestionList, { backgroundColor: C.white, borderColor: C.lightBorder }]}>
+                          {suggestions.map(name => (
+                            <TouchableOpacity
+                              key={name}
+                              style={styles.suggestionRow}
+                              onPress={() => {
+                                setPercPersons(prev => prev.map(pp => pp.key === p.key ? { ...pp, name } : pp));
+                                setFocusedNameKey(null);
+                              }}
+                            >
+                              <Text style={[styles.suggestionText, { color: C.darkSlate }]}>{name}</Text>
+                            </TouchableOpacity>
+                          ))}
+                        </View>
+                      )}
+                    </View>
+                  );
+                })}
+                <TouchableOpacity
+                  style={[styles.addPersonBtn, { borderColor: C.lightBorder }]}
+                  onPress={() => {
+                    const key = String(nextKey.current++);
+                    setPercPersons(prev => [...prev, { key, name: '', pct: '' }]);
+                    setQuickPeople(p => p + 1);
+                  }}
+                >
+                  <Text style={[styles.addPersonBtnText, { color: C.sage }]}>+ {t('splitTab.addParticipant')}</Text>
+                </TouchableOpacity>
+                {unallocatedPct > 0.005 && (
+                  <View style={[styles.customSummary, { borderColor: C.rust }]}>
+                    <Text style={[styles.customSummaryText, { color: C.rust }]}>
+                      {t('splitTab.unallocated', { pct: unallocatedPct.toFixed(1) })}
+                    </Text>
                   </View>
                 )}
+                {unallocatedPct <= 0.005 && allocatedPct > 0 && (
+                  <View style={[styles.customSummary, { borderColor: C.lightBorder }]}>
+                    <Text style={[styles.customSummaryText, { color: C.sage }]}>
+                      100% {t('splitTab.allocated')}
+                    </Text>
+                  </View>
+                )}
+              </View>
+            )}
 
-                {/* Custom mode */}
-                {quickMode === 'custom' && (
-                  <View>
-                    {customPersons.map((p, idx) => (
-                      <View key={p.key} style={styles.customRow}>
+            {/* Custom mode */}
+            {quickMode === 'custom' && (
+              <View>
+                {customPersons.map((p, idx) => {
+                  const nameKey = `custom_${p.key}`;
+                  const suggestions = focusedNameKey === nameKey ? getNameSuggestions(p.name) : [];
+                  return (
+                    <View key={p.key}>
+                      <View style={styles.customRow}>
                         <TextInput
                           style={[styles.customNameInput, { backgroundColor: C.cream, borderColor: C.lightBorder, color: C.darkSlate }]}
                           value={p.name}
                           onChangeText={v => setCustomPersons(prev => prev.map(cp => cp.key === p.key ? { ...cp, name: v } : cp))}
+                          onFocus={() => setFocusedNameKey(nameKey)}
+                          onBlur={() => {
+                            if (p.name.trim()) addSavedParticipantName(p.name.trim());
+                            setTimeout(() => setFocusedNameKey(prev => prev === nameKey ? null : prev), 150);
+                          }}
                           placeholder={`${t('splitTab.participantName')} ${idx + 1}`}
                           placeholderTextColor={C.sage}
                           autoCapitalize="words"
@@ -468,107 +566,133 @@ export default function SplitScreen() {
                         />
                         {customPersons.length > 2 && (
                           <TouchableOpacity
-                            onPress={() => setCustomPersons(prev => prev.filter(cp => cp.key !== p.key))}
+                            onPress={() => {
+                              setCustomPersons(prev => prev.filter(cp => cp.key !== p.key));
+                              setQuickPeople(prev => Math.max(1, prev - 1));
+                            }}
                             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                           >
                             <Text style={[styles.removeText, { color: C.sage }]}>✕</Text>
                           </TouchableOpacity>
                         )}
                       </View>
-                    ))}
-                    <TouchableOpacity
-                      style={[styles.addPersonBtn, { borderColor: C.lightBorder }]}
-                      onPress={addCustomPerson}
-                    >
-                      <Text style={[styles.addPersonBtnText, { color: C.sage }]}>+ {t('splitTab.addParticipant')}</Text>
-                    </TouchableOpacity>
-                    {totalAmount > 0 && (
-                      <View style={[styles.customSummary, { borderColor: C.lightBorder }]}>
-                        <Text style={[styles.customSummaryText, { color: Math.abs(customRemaining) < 0.01 ? C.sage : C.rust }]}>
-                          {t('splitTab.remaining')}: {customRemaining.toFixed(2)} {quickCurrency}
-                        </Text>
-                      </View>
-                    )}
+                      {suggestions.length > 0 && (
+                        <View style={[styles.suggestionList, { backgroundColor: C.white, borderColor: C.lightBorder }]}>
+                          {suggestions.map(name => (
+                            <TouchableOpacity
+                              key={name}
+                              style={styles.suggestionRow}
+                              onPress={() => {
+                                setCustomPersons(prev => prev.map(cp => cp.key === p.key ? { ...cp, name } : cp));
+                                setFocusedNameKey(null);
+                              }}
+                            >
+                              <Text style={[styles.suggestionText, { color: C.darkSlate }]}>{name}</Text>
+                            </TouchableOpacity>
+                          ))}
+                        </View>
+                      )}
+                    </View>
+                  );
+                })}
+                <TouchableOpacity
+                  style={[styles.addPersonBtn, { borderColor: C.lightBorder }]}
+                  onPress={addCustomPerson}
+                >
+                  <Text style={[styles.addPersonBtnText, { color: C.sage }]}>+ {t('splitTab.addParticipant')}</Text>
+                </TouchableOpacity>
+                {totalAmount > 0 && (
+                  <View style={[styles.customSummary, { borderColor: Math.abs(customRemaining) < 0.01 ? C.lightBorder : C.rust }]}>
+                    <Text style={[styles.customSummaryText, { color: Math.abs(customRemaining) < 0.01 ? C.sage : C.rust }]}>
+                      {t('splitTab.remaining')}: {customRemaining.toFixed(2)} {quickCurrency}
+                    </Text>
                   </View>
                 )}
-
-              {/* Save to trip */}
-              {isPremium && totalAmount > 0 && (
-                <View style={[styles.saveTripSection, { borderTopColor: C.lightBorder }]}>
-                  <Text style={[styles.saveTripLabel, { color: C.sage }]}>{t('result.addToTrip')}</Text>
-                  {activeTrips.length === 0 ? (
-                    <Text style={[styles.saveTripEmpty, { color: C.sage }]}>{t('result.noTrips')}</Text>
-                  ) : (
-                    <View style={styles.saveTripChips}>
-                      {activeTrips.map(tr => {
-                        const sel = selectedTripIdForSave === tr.id;
-                        return (
-                          <TouchableOpacity
-                            key={tr.id}
-                            style={[styles.saveTripChip, {
-                              backgroundColor: sel ? C.sage : C.cream,
-                              borderColor: sel ? C.sage : C.lightBorder,
-                            }]}
-                            onPress={() => setSelectedTripIdForSave(sel ? null : tr.id)}
-                            activeOpacity={0.75}
-                          >
-                            <Text style={[styles.saveTripChipText, { color: sel ? '#fff' : C.darkSlate }]}
-                              numberOfLines={1}>
-                              {sel ? '✓ ' : ''}{tr.name}
-                            </Text>
-                          </TouchableOpacity>
-                        );
-                      })}
-                    </View>
-                  )}
-                  {selectedTripIdForSave && (
-                    <TouchableOpacity
-                      style={[styles.saveTripBtn, { backgroundColor: C.rust }]}
-                      onPress={handleSaveToTrip}
-                      activeOpacity={0.8}
-                    >
-                      <Text style={styles.saveTripBtnText}>{t('result.save')}</Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
-              )}
               </View>
+            )}
 
-              {/* My Trips header */}
-              {isPremium ? (
-                <View style={styles.tripsHeader}>
-                  <Text style={[styles.sectionTitle, { color: C.darkSlate }]}>{t('splitTab.trips')}</Text>
-                  <TouchableOpacity
-                    style={[styles.newTripBtn, { backgroundColor: C.rust }]}
-                    onPress={() => router.push('/new-trip')}
-                    activeOpacity={0.8}
-                  >
-                    <Text style={styles.newTripBtnText}>+ {t('splitTab.newTrip')}</Text>
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <View style={[styles.premiumLock, { backgroundColor: C.white, borderColor: C.lightBorder }]}>
-                  <Text style={[styles.premiumLockText, { color: C.darkSlate }]}>🔒 {t('premium.tripsLocked')}</Text>
-                  <Text style={[styles.premiumLockHint, { color: C.sage }]}>{t('premium.tripsLockedHint')}</Text>
-                </View>
-              )}
-            </>
-          }
-          ListEmptyComponent={
-            <View style={styles.emptyState}>
-              <Text style={styles.emptyIcon}>🗺️</Text>
-              <Text style={[styles.emptyText, { color: C.darkSlate }]}>{t('splitTab.noTrips')}</Text>
-              <Text style={[styles.emptyHint, { color: C.sage }]}>{t('splitTab.noTripsHint')}</Text>
-            </View>
-          }
-          contentContainerStyle={styles.listContent}
-        />
+            {/* Save button (Premium only) */}
+            {isPremium && totalAmount > 0 && (
+              <View style={[styles.saveSection, { borderTopColor: C.lightBorder }]}>
+                <TouchableOpacity
+                  style={[styles.saveBtn, { backgroundColor: C.rust }]}
+                  onPress={() => {
+                    setSaveName('');
+                    setShowSaveModal(true);
+                  }}
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.saveBtnText}>💾 {t('result.save')}</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+
+          <TouchableOpacity
+            style={[styles.archiveBtn, { borderColor: C.lightBorder }]}
+            onPress={() => router.push('/(tabs)/two' as any)}
+            activeOpacity={0.7}
+          >
+            <Text style={[styles.archiveBtnText, { color: C.sage }]}>🗃️  {t('settings.archiveLink')}</Text>
+          </TouchableOpacity>
+
+          <View style={styles.bottomPad} />
+        </ScrollView>
       </KeyboardAvoidingView>
 
-      {/* Saved-to-trip toast */}
-      {savedToTripVisible && (
+      {/* Save modal */}
+      <Modal
+        visible={showSaveModal}
+        animationType="fade"
+        transparent
+        onRequestClose={() => setShowSaveModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalCard, { backgroundColor: C.white }]}>
+            <Text style={[styles.modalTitle, { color: C.darkSlate }]}>{t('result.saveModalTitle')}</Text>
+
+            <TextInput
+              style={[styles.modalInput, { backgroundColor: C.cream, borderColor: C.lightBorder, color: C.darkSlate }]}
+              value={saveName}
+              onChangeText={setSaveName}
+              placeholder={t('result.billNamePlaceholder')}
+              placeholderTextColor={C.sage}
+              autoCapitalize="words"
+              returnKeyType="done"
+              autoFocus
+            />
+
+            <TripPickerDropdown
+              value={selectedTripId}
+              onChange={setSelectedTripId}
+              trips={activeTrips}
+              label={t('result.addToTrip')}
+            />
+
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={[styles.modalCancelBtn, { borderColor: C.lightBorder }]}
+                onPress={() => setShowSaveModal(false)}
+                activeOpacity={0.7}
+              >
+                <Text style={[styles.modalCancelText, { color: C.sage }]}>{t('cancel')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalSaveBtn, { backgroundColor: C.rust }]}
+                onPress={handleSave}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.modalSaveText}>{t('result.saved')}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Saved toast */}
+      {savedVisible && (
         <View style={[styles.savedToast, { backgroundColor: C.darkSlate }]} pointerEvents="none">
-          <Text style={styles.savedToastText}>✓  {t('result.savedConfirm')}</Text>
+          <Text style={styles.savedToastText}>✓  {t('result.saved')}</Text>
         </View>
       )}
     </SafeAreaView>
@@ -578,21 +702,23 @@ export default function SplitScreen() {
 const styles = StyleSheet.create({
   safe: { flex: 1 },
   flex: { flex: 1 },
-  listContent: { paddingBottom: 32 },
+  scrollContent: { paddingBottom: 32 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingTop: 16,
     paddingBottom: 16,
     borderBottomWidth: 2,
     marginBottom: 16,
+    gap: 8,
   },
+  headerIcon: { fontSize: 22 },
   title: {
     fontFamily: Typography.serif,
     fontSize: 22,
     fontWeight: '700',
+    flex: 1,
   },
   helpBtn: {
     width: 36,
@@ -613,53 +739,33 @@ const styles = StyleSheet.create({
     borderRadius: Radius.md,
     padding: 16,
   },
-  sectionTitle: {
-    fontFamily: Typography.serif,
-    fontWeight: '700',
-    fontSize: 16,
-    marginBottom: 4,
-  },
-  hint: {
-    fontFamily: Typography.mono,
-    fontSize: 11,
-    marginBottom: 14,
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
-  },
+  pickerMargin: { marginBottom: 14 },
   label: {
     fontFamily: Typography.serif,
     fontWeight: '600',
     fontSize: 14,
     marginBottom: 6,
   },
-  amountRow: { flexDirection: 'row', gap: 10, alignItems: 'flex-start', marginBottom: 10 },
-  currencyCol: { width: 90 },
+  amountRow: { flexDirection: 'row', gap: 8, alignItems: 'center', marginBottom: 14 },
   input: {
+    flex: 1,
     borderWidth: 1.5,
     borderRadius: Radius.sm,
     paddingHorizontal: 14,
     paddingVertical: 10,
     fontFamily: Typography.mono,
     fontSize: 18,
-    marginBottom: 4,
   },
-  scanBtn: {
+  scanIconBtn: {
+    width: 48,
+    height: 48,
     borderWidth: 1.5,
     borderRadius: Radius.sm,
-    paddingVertical: 8,
     alignItems: 'center',
-    marginBottom: 12,
+    justifyContent: 'center',
   },
-  scanBtnText: { fontFamily: Typography.mono, fontSize: 12 },
-  modeRow: { flexDirection: 'row', gap: 8, marginBottom: 14 },
-  modeBtn: {
-    flex: 1,
-    borderWidth: 1.5,
-    borderRadius: Radius.sm,
-    paddingVertical: 8,
-    alignItems: 'center',
-  },
-  modeBtnText: { fontFamily: Typography.mono, fontSize: 12, fontWeight: '600' },
+  scanIconText: { fontSize: 20 },
+  stepperMargin: { marginBottom: 14 },
   stepperRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   stepperBtn: {
     width: 44,
@@ -671,26 +777,34 @@ const styles = StyleSheet.create({
   stepperBtnText: { color: '#fff', fontSize: 22, fontWeight: '600', lineHeight: 26 },
   stepperCount: {
     flex: 1,
-    borderWidth: 2,
-    borderRadius: Radius.sm,
-    paddingVertical: 10,
-    alignItems: 'center',
-  },
-  stepperCountText: { fontFamily: Typography.mono, fontSize: 16 },
-  disabled: { opacity: 0.35 },
-  quickResult: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 14,
     borderWidth: 1.5,
     borderRadius: Radius.sm,
     paddingVertical: 10,
-    paddingHorizontal: 14,
+    alignItems: 'center',
   },
-  quickResultLabel: { fontFamily: Typography.serif, fontSize: 14 },
-  quickResultValue: { fontFamily: Typography.mono, fontSize: 20, fontWeight: '700' },
-  customRow: { flexDirection: 'row', gap: 8, alignItems: 'center', marginBottom: 8 },
+  stepperCountText: { fontFamily: Typography.mono, fontSize: 14 },
+  disabled: { opacity: 0.4 },
+  modeRow: { flexDirection: 'row', gap: 8, marginBottom: 14 },
+  modeBtn: {
+    flex: 1,
+    borderWidth: 1.5,
+    borderRadius: Radius.sm,
+    paddingVertical: 8,
+    alignItems: 'center',
+  },
+  modeBtnText: { fontFamily: Typography.mono, fontSize: 12, fontWeight: '600' },
+  quickResult: {
+    borderWidth: 1.5,
+    borderRadius: Radius.sm,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  quickResultLabel: { fontFamily: Typography.mono, fontSize: 12 },
+  quickResultValue: { fontFamily: Typography.mono, fontSize: 22, fontWeight: '700' },
+  customRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8 },
   customNameInput: {
     flex: 1,
     borderWidth: 1.5,
@@ -727,73 +841,99 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   customSummaryText: { fontFamily: Typography.mono, fontSize: 12 },
-  tripsHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    marginBottom: 10,
-  },
-  newTripBtn: {
+  percInputGroup: { flexDirection: 'row', alignItems: 'center', width: 80, flexShrink: 0 },
+  percPctInput: {
+    flex: 1,
+    borderWidth: 1.5,
     borderRadius: Radius.sm,
+    paddingHorizontal: 8,
     paddingVertical: 8,
-    paddingHorizontal: 14,
-  },
-  newTripBtnText: {
     fontFamily: Typography.mono,
-    fontSize: 13,
-    color: '#fff',
-    fontWeight: '600',
+    fontSize: 14,
+    textAlign: 'right',
   },
-  tripCard: {
-    flexDirection: 'row',
+  percSymbol: { fontFamily: Typography.mono, fontSize: 13, marginLeft: 4 },
+  percAmt: { fontFamily: Typography.mono, fontSize: 13, fontWeight: '600', width: 65, flexShrink: 0, textAlign: 'right' },
+  suggestionList: {
+    borderWidth: 1,
+    borderRadius: Radius.sm,
+    marginBottom: 4,
+    overflow: 'hidden',
+  },
+  suggestionRow: { paddingVertical: 8, paddingHorizontal: 12 },
+  suggestionText: { fontFamily: Typography.mono, fontSize: 13 },
+  archiveBtn: {
+    borderWidth: 1.5,
+    borderRadius: Radius.sm,
+    paddingVertical: 10,
     alignItems: 'center',
     marginHorizontal: 16,
-    marginBottom: 10,
-    borderWidth: 1.5,
-    borderRadius: Radius.md,
-    padding: 14,
+    marginTop: 8,
+    marginBottom: 4,
   },
-  tripCardInner: { flex: 1 },
-  tripNameRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 4 },
-  tripName: {
-    fontFamily: Typography.serif,
-    fontWeight: '700',
-    fontSize: 16,
-    flexShrink: 1,
+  archiveBtnText: { fontFamily: Typography.mono, fontSize: 13 },
+  saveSection: {
+    borderTopWidth: 1,
+    marginTop: 14,
+    paddingTop: 12,
   },
-  settledBadge: {
-    fontFamily: Typography.mono,
-    fontSize: 10,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
-  },
-  tripMeta: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 },
-  tripMetaText: { fontFamily: Typography.mono, fontSize: 12 },
-  tripCurrency: { fontFamily: Typography.mono, fontSize: 12 },
-  colorDotsRow: { flexDirection: 'row', gap: 4 },
-  colorDot: { width: 8, height: 8, borderRadius: 4 },
-  tripChevron: { fontSize: 22, marginLeft: 8 },
-  emptyState: {
+  saveBtn: {
+    borderRadius: Radius.sm,
+    paddingVertical: 12,
     alignItems: 'center',
-    paddingVertical: 40,
-    paddingHorizontal: 32,
   },
-  emptyIcon: { fontSize: 40, marginBottom: 12 },
-  emptyText: {
+  saveBtnText: { fontFamily: Typography.mono, fontSize: 14, fontWeight: '600', color: '#fff', letterSpacing: 0.5 },
+  // Modal
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.45)',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  modalCard: {
+    borderRadius: Radius.md,
+    padding: 20,
+    gap: 14,
+  },
+  modalTitle: {
     fontFamily: Typography.serif,
     fontWeight: '700',
-    fontSize: 16,
-    marginBottom: 6,
-    textAlign: 'center',
+    fontSize: 17,
   },
-  emptyHint: {
+  modalInput: {
+    borderWidth: 1.5,
+    borderRadius: Radius.sm,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
     fontFamily: Typography.mono,
-    fontSize: 12,
-    textAlign: 'center',
-    lineHeight: 18,
+    fontSize: 15,
   },
+  modalButtons: { flexDirection: 'row', gap: 10, marginTop: 4 },
+  modalCancelBtn: {
+    flex: 1,
+    borderWidth: 1.5,
+    borderRadius: Radius.sm,
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  modalCancelText: { fontFamily: Typography.mono, fontSize: 14 },
+  modalSaveBtn: {
+    flex: 1,
+    borderRadius: Radius.sm,
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  modalSaveText: { fontFamily: Typography.mono, fontSize: 14, fontWeight: '600', color: '#fff' },
+  // Toast
+  savedToast: {
+    position: 'absolute',
+    top: 60,
+    alignSelf: 'center',
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+  },
+  savedToastText: { fontFamily: Typography.mono, fontSize: 13, color: '#fff', fontWeight: '600' },
   // Camera
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
   centerText: { fontFamily: Typography.serif, fontSize: 15 },
@@ -827,64 +967,5 @@ const styles = StyleSheet.create({
   primaryBtn: { borderRadius: Radius.sm, paddingVertical: 12, paddingHorizontal: 24 },
   primaryBtnText: { fontFamily: Typography.mono, fontSize: 14, color: '#fff', fontWeight: '600' },
   cancelText: { fontFamily: Typography.mono, fontSize: 13 },
-  percInputGroup: { flexDirection: 'row', alignItems: 'center', width: 70 },
-  percPctInput: {
-    flex: 1,
-    borderWidth: 1.5,
-    borderRadius: Radius.sm,
-    paddingHorizontal: 8,
-    paddingVertical: 8,
-    fontFamily: Typography.mono,
-    fontSize: 14,
-    textAlign: 'right',
-  },
-  percSymbol: { fontFamily: Typography.mono, fontSize: 13, marginLeft: 4 },
-  percAmt: { fontFamily: Typography.mono, fontSize: 13, fontWeight: '600', minWidth: 60, textAlign: 'right' },
-  premiumLock: {
-    marginHorizontal: 16,
-    marginBottom: 10,
-    borderWidth: 1.5,
-    borderRadius: Radius.md,
-    padding: 16,
-    alignItems: 'center',
-  },
-  premiumLockText: { fontFamily: Typography.serif, fontWeight: '700', fontSize: 15, marginBottom: 4 },
-  premiumLockHint: { fontFamily: Typography.mono, fontSize: 12, textAlign: 'center' },
-  // Save to trip
-  saveTripSection: {
-    borderTopWidth: 1,
-    marginTop: 14,
-    paddingTop: 12,
-  },
-  saveTripLabel: {
-    fontFamily: Typography.mono,
-    fontSize: 10,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    marginBottom: 8,
-  },
-  saveTripEmpty: { fontFamily: Typography.mono, fontSize: 13 },
-  saveTripChips: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 10 },
-  saveTripChip: {
-    borderWidth: 1.5,
-    borderRadius: Radius.sm,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-  },
-  saveTripChipText: { fontFamily: Typography.mono, fontSize: 12, maxWidth: 120 },
-  saveTripBtn: {
-    borderRadius: Radius.sm,
-    paddingVertical: 10,
-    alignItems: 'center',
-  },
-  saveTripBtnText: { fontFamily: Typography.mono, fontSize: 13, fontWeight: '600', color: '#fff', letterSpacing: 0.5 },
-  savedToast: {
-    position: 'absolute',
-    top: 60,
-    alignSelf: 'center',
-    borderRadius: 20,
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-  },
-  savedToastText: { fontFamily: Typography.mono, fontSize: 13, color: '#fff', fontWeight: '600' },
+  bottomPad: { height: 20 },
 });

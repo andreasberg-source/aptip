@@ -1,7 +1,7 @@
 {
   "app": {
     "title": "Adjust the tip",
-    "subtitle": "Calculadora de propinas para el viajero"
+    "subtitle": "Calculadora de propinas"
   },
   "onboarding": {
     "welcome": "Bienvenido a Adjust the tip",
@@ -58,14 +58,20 @@
     "perPerson": "Por persona",
     "home": "Aprox. {{amount}} {{currency}}",
     "noRate": "Tipo de cambio no disponible",
-    "save": "💾 Guardar",
-    "saveModalTitle": "Guardar cálculo",
+    "save": "Guardar",
+    "saveModalTitle": "Guardar factura",
     "saveNamePlaceholder": "Restaurante, café…",
     "addToTrip": "Añadir a un viaje",
     "premiumLabel": "Premium",
-    "savedConfirm": "Guardado en historial",
+    "savedConfirm": "Guardado",
+    "saved": "Guardado",
     "splitBill": "Dividir cuenta",
-    "noTrips": "No hay viajes aún"
+    "roundUp": "Redondear",
+    "noTrips": "No hay viajes aún",
+    "selectTrip": "Seleccionar viaje...",
+    "newTrip": "+ Nuevo viaje",
+    "billName": "Nombre de la factura",
+    "billNamePlaceholder": "Restaurante, café..."
   },
   "roundup": {
     "label": "Redondear a"
@@ -625,6 +631,10 @@
     "splitPerc": "Porcentaje",
     "splitPercentage": "Porcentaje",
     "splitCustom": "Personalizado",
+    "modeEqual": "Igual",
+    "modePercentage": "Porcentaje",
+    "modeCustom": "Personalizado",
+    "billsTitle": "Facturas",
     "splitItemized": "Por artículos",
     "addItem": "Añadir artículo",
     "scanItems": "Escanear recibo",
@@ -662,11 +672,18 @@
     "removeSavedName": "¿Eliminar este nombre de las sugerencias?",
     "currency": "Moneda"
   },
+  "tripsTab": {
+    "title": "Viajes",
+    "noTrips": "No hay viajes aún",
+    "noTripsHint": "Toca + Nuevo viaje para empezar"
+  },
   "cancel": "Cancelar",
   "archive": {
     "title": "Archivo",
     "empty": "Sin cálculos aún",
-    "emptyHint": "Calcula una propina para verla aquí"
+    "emptyHint": "Calcula una propina para verla aquí",
+    "addToTrip": "Agregar al viaje",
+    "addedToTrip": "Agregado al viaje"
   },
   "premium": {
     "title": "Función premium",
@@ -699,7 +716,7 @@
     "darkMode": "Modo oscuro",
     "dangerSection": "Datos",
     "clearHistory": "Borrar archivo",
-    "clearHistoryConfirm": "¿Estás seguro? Esta acción no se puede deshacer.",
+    "clearHistoryConfirm": "¿Estás seguro? Los cálculos vinculados a viajes se conservarán.",
     "language": "Idioma",
     "rates": "Actualizar tipos de cambio",
     "ratesLoading": "Obteniendo tipos...",
@@ -713,7 +730,9 @@
     "devSection": "Desarrollador",
     "premiumToggle": "Modo premium (prueba)",
     "helpTips": "Ayuda: Calculadora de propinas",
-    "helpSplit": "Ayuda: Dividir cuenta"
+    "helpSplit": "Ayuda: Dividir cuenta",
+    "helpTrips": "Ayuda: Viajes",
+    "archiveLink": "Archivo"
   },
   "about": {
     "title": "Acerca de",
@@ -743,17 +762,38 @@
     "step8Body": "En el selector de países, toca ★ junto a cualquier país para guardarlo como favorito. Los favoritos aparecen al principio de la lista."
   },
   "helpSplit": {
-    "title": "Cómo usar: División",
-    "intro": "Una guía rápida para dividir cuentas entre personas.",
-    "step1Title": "1. División rápida",
-    "step1Body": "Usa División rápida para repartir cualquier importe al instante sin crear un viaje. Ingresa el total, elige el número de personas y ve la parte de cada uno.",
-    "step2Title": "2. Crear un viaje",
-    "step2Body": "Toca + para crear un viaje nuevo. Dale un nombre, agrega participantes y elige una moneda base.",
-    "step3Title": "3. Agregar cuentas",
-    "step3Body": "Dentro de un viaje, toca + para agregar una cuenta. Selecciona quién pagó, ingresa el importe y elige cómo dividirlo: igualmente, por importe personalizado o por porcentaje.",
-    "step4Title": "4. Modos de división",
-    "step4Body": "Igual divide la cuenta en partes iguales. Personalizado permite ingresar importes específicos por persona. Porcentaje te da control total sobre el reparto.",
-    "step5Title": "5. Liquidar",
-    "step5Body": "Toca Liquidar en un viaje para ver quién le debe a quién. Puedes marcar las transferencias como completadas y compartir el resumen con los participantes."
+    "title": "Cómo funciona División",
+    "intro": "Guía para dividir cuentas rápidamente.",
+    "step1Title": "1. Elegir país e ingresar importe",
+    "step1Body": "Selecciona tu país para definir la moneda automáticamente. Ingresa el importe total o escanea un recibo.",
+    "step2Title": "2. Personas y método de división",
+    "step2Body": "Elige el número de personas, luego el método: igualmente, por porcentaje o importes personalizados.",
+    "step3Title": "3. Guardar en un viaje",
+    "step3Body": "Toca Guardar (requiere Premium) para nombrar la cuenta y añadirla a un viaje existente o crear uno nuevo."
+  },
+  "helpTrips": {
+    "title": "Cómo funcionan los Viajes",
+    "intro": "Guía para llevar y saldar los gastos compartidos.",
+    "step1Title": "1. Crear un viaje",
+    "step1Body": "Toca '+ Nuevo viaje', dale un nombre y agrega al menos 2 participantes.",
+    "step2Title": "2. Agregar cuentas",
+    "step2Body": "Dentro de un viaje, toca '+ Agregar cuenta'. Ingresa descripción, importe y quién pagó.",
+    "step3Title": "3. Liquidar",
+    "step3Body": "Toca 'Liquidar' para ver las transferencias necesarias. Los importes se convierten automáticamente.",
+    "step4Title": "4. Compartir liquidación",
+    "step4Body": "Toca el botón de compartir para enviar un resumen al grupo o directamente a cada participante."
+  },
+  "tip": {
+    "tipsTab": "Selecciona un país para ver el porcentaje de propina correcto. Toca 'Dividir cuenta' para compartir los costos.",
+    "splitTab": "Agrega participantes y facturas para dividir los costos automáticamente.",
+    "archiveTab": "Los cálculos guardados aparecen aquí. Toca uno para añadirlo a un viaje."
+  },
+  "ocrReview": {
+    "title": "Revisar recibo",
+    "selectLines": "Seleccionar líneas a incluir",
+    "confirm": "Confirmar {{count}} elementos",
+    "badgeTotal": "TOTAL",
+    "badgeInfo": "INFO",
+    "noLines": "No se encontraron líneas en la imagen"
   }
 }

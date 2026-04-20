@@ -1,7 +1,7 @@
 {
   "app": {
     "title": "Adjust the tip",
-    "subtitle": "Tip calculator for the traveller"
+    "subtitle": "Tip Calculator"
   },
   "onboarding": {
     "welcome": "Welcome to Adjust the tip",
@@ -58,14 +58,20 @@
     "perPerson": "Per person",
     "home": "Approx. {{amount}} {{currency}}",
     "noRate": "Exchange rate unavailable",
-    "save": "💾 Save",
-    "saveModalTitle": "Save calculation",
+    "save": "Save",
+    "saveModalTitle": "Save bill",
     "saveNamePlaceholder": "Restaurant, café…",
     "addToTrip": "Add to a trip",
     "premiumLabel": "Premium",
-    "savedConfirm": "Saved in history",
+    "savedConfirm": "Saved",
+    "saved": "Saved",
     "splitBill": "Split bill",
-    "noTrips": "No trips yet"
+    "roundUp": "Round up",
+    "noTrips": "No trips yet",
+    "selectTrip": "Select trip...",
+    "newTrip": "+ New trip",
+    "billName": "Bill name",
+    "billNamePlaceholder": "Restaurant, café..."
   },
   "roundup": {
     "label": "Round up to"
@@ -625,6 +631,10 @@
     "splitPerc": "Percentage",
     "splitPercentage": "Percentage",
     "splitCustom": "Custom",
+    "modeEqual": "Equal",
+    "modePercentage": "Percent",
+    "modeCustom": "Custom",
+    "billsTitle": "Bills",
     "splitItemized": "By items",
     "addItem": "Add item",
     "scanItems": "Scan receipt",
@@ -662,11 +672,18 @@
     "removeSavedName": "Remove this name from suggestions?",
     "currency": "Currency"
   },
+  "tripsTab": {
+    "title": "Trips",
+    "noTrips": "No trips yet",
+    "noTripsHint": "Tap + New Trip to get started"
+  },
   "cancel": "Cancel",
   "archive": {
     "title": "Archive",
     "empty": "No calculations yet",
-    "emptyHint": "Calculate a tip to see it here"
+    "emptyHint": "Calculate a tip to see it here",
+    "addToTrip": "Add to trip",
+    "addedToTrip": "Added to trip"
   },
   "history": {
     "title": "History",
@@ -699,7 +716,7 @@
     "darkMode": "Dark mode",
     "dangerSection": "Data",
     "clearHistory": "Clear archive",
-    "clearHistoryConfirm": "Are you sure? This cannot be undone.",
+    "clearHistoryConfirm": "Are you sure? Calculations linked to trips will be kept.",
     "language": "Language",
     "rates": "Update exchange rates",
     "ratesLoading": "Fetching rates...",
@@ -713,7 +730,9 @@
     "devSection": "Developer",
     "premiumToggle": "Premium mode (test)",
     "helpTips": "Help: Tip calculator",
-    "helpSplit": "Help: Split bill"
+    "helpSplit": "Help: Split bill",
+    "helpTrips": "Help: Trips",
+    "archiveLink": "Archive"
   },
   "about": {
     "title": "About the app",
@@ -744,16 +763,37 @@
   },
   "helpSplit": {
     "title": "How Split works",
-    "intro": "A guide to the Split tab for tracking and settling shared expenses.",
-    "step1Title": "1. Quick Split",
-    "step1Body": "Enter an amount and number of people to see each person's share instantly. Use Custom mode to enter names and individual amounts.",
-    "step2Title": "2. Create a Trip",
-    "step2Body": "Tap '+ New Trip', give it a name and add at least 2 participants. Your name from Settings is suggested automatically.",
-    "step3Title": "3. Add Bills",
-    "step3Body": "Inside a trip, tap '+ Add Bill'. Enter a description, amount and who paid. Choose how to split: equally, by percentage, custom amounts, or scan a receipt. You can also pre-fill from the archive.",
-    "step4Title": "4. Settle Up",
-    "step4Body": "Tap 'Settle Up' to see the transfers needed to clear all debts. Amounts are converted automatically. Tap ○ next to a transfer to mark it as done.",
-    "step5Title": "5. Share Settlement",
-    "step5Body": "Tap the share button in the settlement screen to send a group summary, or share directly with individual participants."
+    "intro": "A guide to quick bill splitting.",
+    "step1Title": "1. Choose country and enter amount",
+    "step1Body": "Select your country to set the currency automatically. Enter the total amount, or scan a receipt with the camera button.",
+    "step2Title": "2. Set people and split method",
+    "step2Body": "Choose the number of people, then select how to split: equally, by percentage, or custom amounts per person.",
+    "step3Title": "3. Save to a trip",
+    "step3Body": "Tap Save (requires Premium) to give the bill a name and add it to an existing trip, or create a new trip."
+  },
+  "helpTrips": {
+    "title": "How Trips works",
+    "intro": "A guide to tracking and settling shared expenses on a trip.",
+    "step1Title": "1. Create a trip",
+    "step1Body": "Tap '+ New Trip', give it a name and add at least 2 participants. Your name from Settings is suggested automatically.",
+    "step2Title": "2. Add bills",
+    "step2Body": "Inside a trip, tap '+ Add Bill'. Enter a description, amount and who paid. Choose how to split: equally, by percentage, custom amounts, or scan a receipt.",
+    "step3Title": "3. Settle up",
+    "step3Body": "Tap 'Settle Up' to see the transfers needed to clear all debts. Amounts are converted automatically. Tap ○ next to a transfer to mark it as done.",
+    "step4Title": "4. Share settlement",
+    "step4Body": "Tap the share button to send a group summary, or share directly with individual participants."
+  },
+  "tip": {
+    "tipsTab": "Select a country to see the right tip percentage. Tap 'Split bill' to share costs.",
+    "splitTab": "Add participants and bills to split costs automatically.",
+    "archiveTab": "Saved calculations appear here. Tap one to add it to a trip."
+  },
+  "ocrReview": {
+    "title": "Review receipt",
+    "selectLines": "Select lines to include",
+    "confirm": "Confirm {{count}} items",
+    "badgeTotal": "TOTAL",
+    "badgeInfo": "INFO",
+    "noLines": "No lines found in image"
   }
 }

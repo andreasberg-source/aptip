@@ -16,6 +16,7 @@ export interface PersistedSettings {
   favouriteCountries: string[];
   savedParticipantNames: string[];
   isPremium: boolean;
+  dismissedTips: string[];
 }
 
 interface SettingsState extends PersistedSettings {
@@ -24,6 +25,7 @@ interface SettingsState extends PersistedSettings {
   patch: (updates: Partial<PersistedSettings>) => Promise<void>;
   addSavedParticipantName: (name: string) => Promise<void>;
   removeSavedParticipantName: (name: string) => Promise<void>;
+  dismissTip: (key: string) => Promise<void>;
 }
 
 const DEFAULTS: PersistedSettings = {
@@ -37,6 +39,7 @@ const DEFAULTS: PersistedSettings = {
   favouriteCountries: [],
   savedParticipantNames: [],
   isPremium: true,
+  dismissedTips: [],
 };
 
 export const useSettingsStore = create<SettingsState>((set, get) => ({
@@ -59,7 +62,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
 
   patch: async (updates) => {
     set(updates as Partial<SettingsState>);
-    const { loaded, load, patch, addSavedParticipantName, removeSavedParticipantName, ...current } = get();
+    const { loaded, load, patch, addSavedParticipantName, removeSavedParticipantName, dismissTip, ...current } = get();
     await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...current, ...updates }));
   },
 
@@ -70,14 +73,23 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
     if (existing.includes(trimmed)) return;
     const updated = [...existing, trimmed];
     set({ savedParticipantNames: updated });
-    const { loaded, load, patch, addSavedParticipantName, removeSavedParticipantName, ...current } = get();
+    const { loaded, load, patch, addSavedParticipantName, removeSavedParticipantName, dismissTip, ...current } = get();
     await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify(current));
   },
 
   removeSavedParticipantName: async (name) => {
     const updated = get().savedParticipantNames.filter((n) => n !== name);
     set({ savedParticipantNames: updated });
-    const { loaded, load, patch, addSavedParticipantName, removeSavedParticipantName, ...current } = get();
+    const { loaded, load, patch, addSavedParticipantName, removeSavedParticipantName, dismissTip, ...current } = get();
+    await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify(current));
+  },
+
+  dismissTip: async (key) => {
+    const existing = get().dismissedTips;
+    if (existing.includes(key)) return;
+    const updated = [...existing, key];
+    set({ dismissedTips: updated });
+    const { loaded, load, patch, addSavedParticipantName, removeSavedParticipantName, dismissTip, ...current } = get();
     await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify(current));
   },
 }));

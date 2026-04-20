@@ -24,6 +24,7 @@ interface HistoryState {
   addEntry: (entry: Omit<HistoryEntry, 'id' | 'date'>) => Promise<void>;
   removeEntry: (id: string) => Promise<void>;
   clearAll: () => Promise<void>;
+  clearNonTrip: (protectedIds: string[]) => Promise<void>;
   loadHistory: () => Promise<void>;
 }
 
@@ -71,5 +72,11 @@ export const useHistoryStore = create<HistoryState>((set, get) => ({
   clearAll: async () => {
     set({ entries: [] });
     await AsyncStorage.removeItem(STORAGE_KEY);
+  },
+
+  clearNonTrip: async (protectedIds) => {
+    const kept = get().entries.filter(e => protectedIds.includes(e.id));
+    set({ entries: kept });
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(kept));
   },
 }));

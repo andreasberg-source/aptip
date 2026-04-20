@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useTranslation } from 'react-i18next';
 
@@ -32,7 +32,7 @@ export default function ServiceTypeSelector({ value, onChange }: Props) {
         <Picker
           selectedValue={value}
           onValueChange={(val) => onChange(val as ServiceType)}
-          style={{ color: C.darkSlate }}
+          style={{ color: C.darkSlate, fontSize: 16, ...(Platform.OS === 'web' ? { height: 48 } : {}) }}
           dropdownIconColor={C.sage}
         >
           {OPTIONS.map(({ key, emoji }) => (
@@ -62,5 +62,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: Radius.sm,
     overflow: 'hidden',
+    ...(Platform.OS === 'web' ? { height: 48 } : {}),
   },
 });

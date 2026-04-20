@@ -1,7 +1,7 @@
 {
   "app": {
     "title": "Adjust the tip",
-    "subtitle": "Trinkgeldrechner für Reisende"
+    "subtitle": "Trinkgeldrechner"
   },
   "onboarding": {
     "welcome": "Willkommen bei Adjust the tip",
@@ -58,14 +58,20 @@
     "perPerson": "Pro Person",
     "home": "Ca. {{amount}} {{currency}}",
     "noRate": "Wechselkurs nicht verfügbar",
-    "save": "💾 Speichern",
-    "saveModalTitle": "Berechnung speichern",
+    "save": "Speichern",
+    "saveModalTitle": "Rechnung speichern",
     "saveNamePlaceholder": "Restaurant, Café…",
     "addToTrip": "Zu einer Reise hinzufügen",
     "premiumLabel": "Premium",
-    "savedConfirm": "Im Verlauf gespeichert",
+    "savedConfirm": "Gespeichert",
+    "saved": "Gespeichert",
     "splitBill": "Rechnung aufteilen",
-    "noTrips": "Noch keine Reisen"
+    "roundUp": "Aufrunden",
+    "noTrips": "Noch keine Reisen",
+    "selectTrip": "Reise auswählen...",
+    "newTrip": "+ Neue Reise",
+    "billName": "Rechnungsname",
+    "billNamePlaceholder": "Restaurant, Café..."
   },
   "roundup": {
     "label": "Aufrunden auf"
@@ -625,6 +631,10 @@
     "splitPerc": "Prozentsatz",
     "splitPercentage": "Prozentsatz",
     "splitCustom": "Benutzerdefiniert",
+    "modeEqual": "Gleich",
+    "modePercentage": "Prozent",
+    "modeCustom": "Benutzerdefiniert",
+    "billsTitle": "Rechnungen",
     "splitItemized": "Nach Posten",
     "addItem": "Artikel hinzufügen",
     "scanItems": "Quittung scannen",
@@ -661,11 +671,18 @@
     "scanAmount": "Bon scannen",
     "removeSavedName": "Gespeicherten Namen entfernen?"
   },
+  "tripsTab": {
+    "title": "Reisen",
+    "noTrips": "Noch keine Reisen",
+    "noTripsHint": "Tippen Sie auf + Neue Reise, um zu beginnen"
+  },
   "cancel": "Abbrechen",
   "archive": {
     "title": "Archiv",
     "empty": "Noch keine Berechnungen",
-    "emptyHint": "Berechnen Sie ein Trinkgeld, um es hier zu sehen"
+    "emptyHint": "Berechnen Sie ein Trinkgeld, um es hier zu sehen",
+    "addToTrip": "Zur Reise hinzufügen",
+    "addedToTrip": "Zur Reise hinzugefügt"
   },
   "premium": {
     "title": "Premium-Funktion",
@@ -698,7 +715,7 @@
     "darkMode": "Dunkler Modus",
     "dangerSection": "Daten",
     "clearHistory": "Archiv löschen",
-    "clearHistoryConfirm": "Bist du sicher? Das kann nicht rückgängig gemacht werden.",
+    "clearHistoryConfirm": "Sicher? Mit Reisen verknüpfte Berechnungen werden behalten.",
     "language": "Sprache",
     "rates": "Wechselkurse aktualisieren",
     "ratesLoading": "Kurse werden abgerufen...",
@@ -712,7 +729,9 @@
     "devSection": "Entwickler",
     "premiumToggle": "Premium-Modus (Test)",
     "helpTips": "Hilfe: Trinkgeldrechner",
-    "helpSplit": "Hilfe: Rechnung teilen"
+    "helpSplit": "Hilfe: Rechnung teilen",
+    "helpTrips": "Hilfe: Reisen",
+    "archiveLink": "Archiv"
   },
   "about": {
     "title": "Über die App",
@@ -743,16 +762,37 @@
   },
   "helpSplit": {
     "title": "Anleitung: Teilen",
-    "intro": "Eine kurze Übersicht zur Rechnungsaufteilung unter Personen.",
-    "step1Title": "1. Schnell teilen",
-    "step1Body": "Nutzen Sie Schnell teilen, um einen Betrag sofort aufzuteilen, ohne eine Reise zu erstellen. Betrag eingeben, Personenzahl wählen und den Anteil pro Person ablesen.",
-    "step2Title": "2. Reise erstellen",
-    "step2Body": "Tippen Sie auf +, um eine neue Reise zu erstellen. Geben Sie einen Namen an, fügen Sie Teilnehmer hinzu und wählen Sie eine Basiswährung.",
-    "step3Title": "3. Rechnungen hinzufügen",
-    "step3Body": "Innerhalb einer Reise tippen Sie auf +, um eine Rechnung hinzuzufügen. Wählen Sie, wer bezahlt hat, geben Sie den Betrag ein und wählen Sie die Aufteilungsmethode: gleichmäßig, individuell oder prozentual.",
-    "step4Title": "4. Aufteilungsmethoden",
-    "step4Body": "Gleichmäßig teilt die Rechnung in gleiche Teile. Individuell ermöglicht eigene Beträge pro Person. Prozentual gibt Ihnen volle Kontrolle über die Aufteilung.",
-    "step5Title": "5. Abrechnen",
-    "step5Body": "Tippen Sie in einer Reise auf Abrechnen, um zu sehen, wer wem wie viel schuldet. Überweisungen können als erledigt markiert und die Zusammenfassung mit den Teilnehmern geteilt werden."
+    "intro": "Kurzanleitung für die schnelle Rechnungsaufteilung.",
+    "step1Title": "1. Land wählen und Betrag eingeben",
+    "step1Body": "Wählen Sie Ihr Land, um die Währung automatisch festzulegen. Geben Sie den Gesamtbetrag ein oder scannen Sie einen Bon.",
+    "step2Title": "2. Personen und Aufteilungsmethode",
+    "step2Body": "Wählen Sie die Anzahl der Personen, dann die Methode: gleichmäßig, prozentual oder individuelle Beträge.",
+    "step3Title": "3. In Reise speichern",
+    "step3Body": "Tippen Sie auf Speichern (Premium erforderlich), um der Rechnung einen Namen zu geben und sie einer Reise hinzuzufügen."
+  },
+  "helpTrips": {
+    "title": "Anleitung: Reisen",
+    "intro": "Anleitung zur Verwaltung und Abrechnung gemeinsamer Ausgaben.",
+    "step1Title": "1. Reise erstellen",
+    "step1Body": "Tippen Sie auf '+ Neue Reise', geben Sie einen Namen ein und fügen Sie mindestens 2 Teilnehmer hinzu.",
+    "step2Title": "2. Rechnungen hinzufügen",
+    "step2Body": "Innerhalb einer Reise tippen Sie auf '+ Rechnung hinzufügen'. Geben Sie Beschreibung, Betrag und Zahler ein.",
+    "step3Title": "3. Abrechnen",
+    "step3Body": "Tippen Sie auf 'Abrechnen', um die nötigen Überweisungen zu sehen. Beträge werden automatisch umgerechnet.",
+    "step4Title": "4. Abrechnung teilen",
+    "step4Body": "Tippen Sie auf den Teilen-Button, um eine Zusammenfassung an die Gruppe oder einzelne Teilnehmer zu senden."
+  },
+  "tip": {
+    "tipsTab": "Wählen Sie ein Land, um den richtigen Trinkgeldprozentsatz zu sehen. Tippen Sie auf 'Rechnung teilen', um Kosten aufzuteilen.",
+    "splitTab": "Fügen Sie Teilnehmer und Rechnungen hinzu, um Kosten automatisch aufzuteilen.",
+    "archiveTab": "Gespeicherte Berechnungen erscheinen hier. Tippen Sie auf eine, um sie einer Reise hinzuzufügen."
+  },
+  "ocrReview": {
+    "title": "Beleg prüfen",
+    "selectLines": "Zeilen auswählen",
+    "confirm": "{{count}} Einträge bestätigen",
+    "badgeTotal": "TOTAL",
+    "badgeInfo": "INFO",
+    "noLines": "Keine Zeilen im Bild gefunden"
   }
 }

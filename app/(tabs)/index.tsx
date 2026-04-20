@@ -11,6 +11,7 @@ import {
   Image,
   Modal,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import TippingCultureModal from '../../components/TippingCultureModal';
 import { useTranslation } from 'react-i18next';
 import { router, useFocusEffect } from 'expo-router';
@@ -31,6 +32,8 @@ import ContinentCountryPicker from '../../components/ContinentCountryPicker';
 import ServiceTypeSelector from '../../components/ServiceTypeSelector';
 import SatisfactionSelector from '../../components/SatisfactionSelector';
 import ResultCard from '../../components/ResultCard';
+import TripPickerDropdown from '../../components/TripPickerDropdown';
+import TipBanner from '../../components/TipBanner';
 
 export default function CalculatorScreen() {
   const { t } = useTranslation();
@@ -192,8 +195,9 @@ export default function CalculatorScreen() {
   }, [result, countryData, continent, country, homeAmount, homeCurrency, saveName, addEntry, isPremium, selectedTripId, addBill, userName]);
 
   return (
+    <SafeAreaView style={[styles.flex, { backgroundColor: C.cream }]}>
     <KeyboardAvoidingView
-      style={[styles.flex, { backgroundColor: C.cream }]}
+      style={styles.flex}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ScrollView
@@ -208,7 +212,7 @@ export default function CalculatorScreen() {
             style={styles.logo}
             resizeMode="contain"
           />
-          <Text style={[styles.subtitle, { color: C.sage }]}>{t('app.subtitle')}</Text>
+          <Text style={[styles.title, { color: C.rust }]}>{t('app.title')}</Text>
           <TouchableOpacity
             style={styles.helpBtn}
             onPress={() => router.push('/help')}
@@ -217,6 +221,8 @@ export default function CalculatorScreen() {
             <Text style={[styles.helpBtnText, { color: C.rust }]}>?</Text>
           </TouchableOpacity>
         </View>
+
+        <TipBanner tipKey="tips" text={t('tip.tipsTab')} />
 
         {/* Location row: picker + culture icon on same line */}
         <View style={styles.locationRow}>
@@ -318,27 +324,15 @@ export default function CalculatorScreen() {
               onSave={handleSave}
               roundUpOption={cappedRoundUpOption}
               onRoundUp={handleRoundUp}
+              onSplitBill={countryData ? () => router.push({ pathname: '/(tabs)/split', params: { prefillAmount: result.total.toFixed(2), prefillCurrency: countryData.currency, prefillContinent: continent, prefillCountry: country } }) : undefined}
             />
-            {/* Splitt regning */}
-            {countryData && (
-              <TouchableOpacity
-                style={[styles.splitBtn, { backgroundColor: C.white, borderColor: C.lightBorder }]}
-                onPress={() =>
-                  router.push({
-                    pathname: '/(tabs)/split',
-                    params: {
-                      prefillAmount: result.total.toFixed(2),
-                      prefillCurrency: countryData.currency,
-                    },
-                  })
-                }
-                activeOpacity={0.8}
-              >
-                <Text style={[styles.splitBtnText, { color: C.darkSlate }]}>
-                  ✂️ {t('result.splitBill')}
-                </Text>
-              </TouchableOpacity>
-            )}
+            <TouchableOpacity
+              style={[styles.archiveBtn, { borderColor: C.lightBorder }]}
+              onPress={() => router.push('/(tabs)/two' as any)}
+              activeOpacity={0.7}
+            >
+              <Text style={[styles.archiveBtnText, { color: C.sage }]}>🗃️  {t('settings.archiveLink')}</Text>
+            </TouchableOpacity>
           </>
         )}
 
@@ -369,46 +363,12 @@ export default function CalculatorScreen() {
 
             {/* Add to trip — active for premium, locked for free */}
             {isPremium ? (
-              <View style={[styles.modalTripSection, { borderColor: C.lightBorder }]}>
-                <Text style={[styles.modalTripLabel, { color: C.sage }]}>
-                  {t('result.addToTrip')}
-                </Text>
-                {trips.filter(tr => !tr.archived).length === 0 ? (
-                  <Text style={[styles.modalTripEmpty, { color: C.sage }]}>
-                    {t('result.noTrips')}
-                  </Text>
-                ) : (
-                  <View style={styles.modalTripChips}>
-                    {trips.filter(tr => !tr.archived).map(tr => {
-                      const selected = selectedTripId === tr.id;
-                      return (
-                        <TouchableOpacity
-                          key={tr.id}
-                          style={[
-                            styles.modalTripChip,
-                            {
-                              backgroundColor: selected ? C.sage : C.cream,
-                              borderColor: selected ? C.sage : C.lightBorder,
-                            },
-                          ]}
-                          onPress={() => setSelectedTripId(selected ? null : tr.id)}
-                          activeOpacity={0.75}
-                        >
-                          <Text
-                            style={[
-                              styles.modalTripChipText,
-                              { color: selected ? '#fff' : C.darkSlate },
-                            ]}
-                            numberOfLines={1}
-                          >
-                            {selected ? '✓ ' : ''}{tr.name}
-                          </Text>
-                        </TouchableOpacity>
-                      );
-                    })}
-                  </View>
-                )}
-              </View>
+              <TripPickerDropdown
+                value={selectedTripId}
+                onChange={setSelectedTripId}
+                trips={trips.filter(tr => !tr.archived)}
+                label={t('result.addToTrip')}
+              />
             ) : (
               <View style={[styles.modalPremiumRow, { borderColor: C.lightBorder, opacity: 0.35 }]}>
                 <Text style={[styles.modalPremiumText, { color: C.darkSlate }]}>🔒  {t('result.addToTrip')}</Text>
@@ -439,10 +399,11 @@ export default function CalculatorScreen() {
       {/* Saved confirmation toast */}
       {savedVisible && (
         <View style={[styles.savedToast, { backgroundColor: C.darkSlate }]} pointerEvents="none">
-          <Text style={styles.savedToastText}>✓  {t('result.savedConfirm')}</Text>
+          <Text style={styles.savedToastText}>✓  {t('result.saved')}</Text>
         </View>
       )}
     </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
@@ -451,21 +412,22 @@ const styles = StyleSheet.create({
   scroll: { flex: 1 },
   container: { padding: 16, paddingBottom: 16 },
   header: {
+    flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
     paddingBottom: 10,
     borderBottomWidth: 2,
+    gap: 8,
   },
   logo: {
-    width: 200,
-    height: 48,
-    marginBottom: 4,
+    width: 32,
+    height: 32,
   },
-  subtitle: {
-    fontFamily: Typography.mono,
-    fontSize: 11,
-    textTransform: 'uppercase',
-    letterSpacing: 2,
+  title: {
+    fontFamily: Typography.serif,
+    fontSize: 22,
+    fontWeight: '700',
+    flex: 1,
   },
   locationRow: {
     flexDirection: 'row',
@@ -516,41 +478,19 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     paddingHorizontal: 4,
   },
-  splitBtn: {
+  archiveBtn: {
     borderWidth: 1.5,
     borderRadius: Radius.sm,
     paddingVertical: 10,
     alignItems: 'center',
     marginBottom: 8,
   },
-  splitBtnText: {
+  archiveBtnText: {
     fontFamily: Typography.mono,
     fontSize: 13,
     fontWeight: '600',
     letterSpacing: 0.5,
   },
-  // Trip section in save modal
-  modalTripSection: {
-    borderWidth: 1,
-    borderRadius: Radius.sm,
-    padding: 10,
-  },
-  modalTripLabel: {
-    fontFamily: Typography.mono,
-    fontSize: 10,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    marginBottom: 8,
-  },
-  modalTripEmpty: { fontFamily: Typography.mono, fontSize: 13 },
-  modalTripChips: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
-  modalTripChip: {
-    borderWidth: 1.5,
-    borderRadius: Radius.sm,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-  },
-  modalTripChipText: { fontFamily: Typography.mono, fontSize: 12, maxWidth: 120 },
   // Save modal
   modalOverlay: {
     flex: 1,
@@ -632,9 +572,6 @@ const styles = StyleSheet.create({
   },
   savedToastText: { fontFamily: Typography.mono, fontSize: 13, color: '#fff', fontWeight: '600' },
   helpBtn: {
-    position: 'absolute',
-    right: 0,
-    top: 0,
     width: 36,
     height: 36,
     borderRadius: 18,

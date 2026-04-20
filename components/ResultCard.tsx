@@ -13,9 +13,10 @@ interface Props {
   onSave: () => void;
   roundUpOption?: number | null;
   onRoundUp?: (value: number) => void;
+  onSplitBill?: () => void;
 }
 
-export default function ResultCard({ result, homeAmount, homeCurrency, onSave, roundUpOption, onRoundUp }: Props) {
+export default function ResultCard({ result, homeAmount, homeCurrency, onSave, roundUpOption, onRoundUp, onSplitBill }: Props) {
   const { t } = useTranslation();
   const C = useColors();
   const { amount, tipPercent, tipAmount, total, currency } = result;
@@ -38,17 +39,25 @@ export default function ResultCard({ result, homeAmount, homeCurrency, onSave, r
       <View style={styles.actionRow}>
         {roundUpOption != null && onRoundUp && (
           <TouchableOpacity
-            style={[styles.roundUpBtn, { borderColor: C.gold, backgroundColor: 'rgba(255,255,255,0.12)' }]}
+            style={[styles.actionBtn, { flex: 1, borderWidth: 1.5, borderColor: C.gold, backgroundColor: 'rgba(255,255,255,0.12)' }]}
             onPress={() => onRoundUp(roundUpOption)}
             activeOpacity={0.75}
           >
-            <Text style={[styles.roundUpText, { color: '#fff' }]}>
+            <Text style={[styles.actionBtnIcon, { color: '#fff' }]}>
               ↑ {formatAmount(roundUpOption, roundUpOption % 1 === 0 ? 0 : 2)}
             </Text>
+            <Text style={[styles.actionBtnLabel, { color: 'rgba(255,255,255,0.8)' }]}>{t('result.roundUp')}</Text>
           </TouchableOpacity>
         )}
-        <TouchableOpacity style={[styles.saveBtn, { flex: 1 }]} onPress={onSave}>
-          <Text style={styles.saveBtnText}>{t('result.save')}</Text>
+        {onSplitBill && (
+          <TouchableOpacity style={[styles.actionBtn, { flex: 1, backgroundColor: 'rgba(255,255,255,0.15)' }]} onPress={onSplitBill}>
+            <Text style={styles.actionBtnIcon}>✂️</Text>
+            <Text style={[styles.actionBtnLabel, { color: 'rgba(255,255,255,0.8)' }]}>{t('result.splitBill')}</Text>
+          </TouchableOpacity>
+        )}
+        <TouchableOpacity style={[styles.actionBtn, { flex: 1, backgroundColor: 'rgba(255,255,255,0.15)' }]} onPress={onSave}>
+          <Text style={styles.actionBtnIcon}>💾</Text>
+          <Text style={[styles.actionBtnLabel, { color: 'rgba(255,255,255,0.8)' }]}>{t('result.save')}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -110,29 +119,24 @@ const styles = StyleSheet.create({
     gap: 8,
     marginTop: 10,
   },
-  roundUpBtn: {
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderWidth: 1.5,
+  actionBtn: {
+    paddingVertical: 10,
+    paddingHorizontal: 6,
     borderRadius: Radius.sm,
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 4,
   },
-  roundUpText: {
-    fontFamily: Typography.mono,
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  saveBtn: {
-    paddingVertical: 8,
-    backgroundColor: 'rgba(255,255,255,0.15)',
-    borderRadius: Radius.sm,
-    alignItems: 'center',
-  },
-  saveBtnText: {
-    fontFamily: Typography.mono,
-    fontSize: 13,
+  actionBtnIcon: {
+    fontSize: 22,
     color: '#fff',
-    letterSpacing: 1,
+    fontFamily: Typography.mono,
+    fontWeight: '700',
+  },
+  actionBtnLabel: {
+    fontFamily: Typography.mono,
+    fontSize: 10,
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
 });

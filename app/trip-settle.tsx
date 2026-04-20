@@ -181,7 +181,7 @@ export default function SettleScreen() {
             onPress={handleShare}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Text style={[styles.shareBtnText, { color: C.rust }]}>⬆️</Text>
+            <Text style={[styles.shareBtnText, { color: C.rust }]}>↗</Text>
           </TouchableOpacity>
         )}
         {transfers.length === 0 && <View style={styles.backBtn} />}
@@ -263,7 +263,7 @@ export default function SettleScreen() {
                   activeOpacity={0.7}
                   hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
                 >
-                  <Text style={[styles.sharePersonBtnText, { color: C.sage }]}>⬆</Text>
+                  <Text style={[styles.sharePersonBtnText, { color: C.sage }]}>↗</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[
@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   shareBtn: { width: 36, alignItems: 'center' },
-  shareBtnText: { fontSize: 18 },
+  shareBtnText: { fontSize: 24, fontWeight: '700' },
   content: { padding: 16, paddingBottom: 40 },
   tripName: {
     fontFamily: Typography.mono,
@@ -405,7 +405,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  sharePersonBtnText: { fontSize: 14, fontWeight: '600' },
+  sharePersonBtnText: { fontSize: 18, fontWeight: '700' },
   settleCheckBtn: {
     width: 36,
     height: 36,
