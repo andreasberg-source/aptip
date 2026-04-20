@@ -295,7 +295,7 @@ export default function CalculatorScreen() {
               onPress={() =>
                 router.push({
                   pathname: '/scan',
-                  params: { currency: countryData?.currency ?? '' },
+                  params: { currency: countryData?.currency ?? '', country: country ?? '' },
                 })
               }
               accessibilityLabel={t('amount.scan')}

@@ -599,7 +599,11 @@
     "permissionBtn": "Zugriff erlauben",
     "manualEntry": "Oder Betrag manuell eingeben",
     "manualPlaceholder": "0,00",
-    "manualUse": "Verwenden"
+    "manualUse": "Verwenden",
+    "selectTotal": "Betrag antippen, um als Trinkgeld-Basis zu verwenden",
+    "preTax": "Netto (exkl. MwSt.)",
+    "postTax": "Gesamt (inkl. MwSt.)",
+    "taxLine": "MwSt."
   },
   "splitTab": {
     "title": "Teilen",

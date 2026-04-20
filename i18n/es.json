@@ -599,7 +599,11 @@
     "permissionBtn": "Conceder acceso",
     "manualEntry": "O introducir el importe manualmente",
     "manualPlaceholder": "0,00",
-    "manualUse": "Usar"
+    "manualUse": "Usar",
+    "selectTotal": "Toca un total para usarlo como base de propina",
+    "preTax": "Subtotal (sin impuesto)",
+    "postTax": "Total (con IVA)",
+    "taxLine": "IVA"
   },
   "splitTab": {
     "title": "Dividir",

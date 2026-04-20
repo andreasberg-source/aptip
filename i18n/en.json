@@ -599,7 +599,11 @@
     "permissionBtn": "Grant access",
     "manualEntry": "Or enter amount manually",
     "manualPlaceholder": "0.00",
-    "manualUse": "Use"
+    "manualUse": "Use",
+    "selectTotal": "Tap a total to use as tip base",
+    "preTax": "Pre-tax subtotal",
+    "postTax": "Total (incl. tax)",
+    "taxLine": "Tax"
   },
   "splitTab": {
     "title": "Split",

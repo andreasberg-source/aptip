@@ -599,7 +599,11 @@
     "permissionBtn": "Gi tilgang",
     "manualEntry": "Eller skriv inn beløp manuelt",
     "manualPlaceholder": "0,00",
-    "manualUse": "Bruk"
+    "manualUse": "Bruk",
+    "selectTotal": "Trykk på et beløp for å bruke som grunnlag",
+    "preTax": "Eks. skatt",
+    "postTax": "Totalt (inkl. mva)",
+    "taxLine": "Mva"
   },
   "splitTab": {
     "title": "Del regning",

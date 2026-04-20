@@ -134,6 +134,264 @@ export function parseItemsFromText(text: string): Array<{ label: string; value: 
   return results;
 }
 
+// ─── Spatial parsing using ML Kit block/element structure ────────────────────
+
+interface MlFrame { left: number; top: number; width: number; height: number }
+interface MlElement { text: string; frame?: MlFrame }
+interface MlLine { text: string; frame?: MlFrame; elements?: MlElement[] }
+interface MlBlock { lines?: MlLine[] }
+
+function getReceiptBounds(blocks: MlBlock[]) {
+  let minLeft = Infinity, maxRight = -Infinity, minTop = Infinity, maxBottom = -Infinity;
+  for (const block of blocks) {
+    for (const line of (block.lines ?? [])) {
+      if (!line.frame) continue;
+      const { left, top, width, height } = line.frame;
+      if (left < minLeft) minLeft = left;
+      if (left + width > maxRight) maxRight = left + width;
+      if (top < minTop) minTop = top;
+      if (top + height > maxBottom) maxBottom = top + height;
+    }
+  }
+  return { minLeft, maxRight, minTop, maxBottom };
+}
+
+/**
+ * Classify OCR lines using ML Kit's spatial element data.
+ * Uses bounding boxes to separate left-column labels from right-column prices.
+ * Falls back gracefully if frame data is missing.
+ */
+export function classifyOcrLinesFromBlocks(blocks: MlBlock[]): OcrLine[] {
+  const { minLeft, maxRight, minTop, maxBottom } = getReceiptBounds(blocks);
+  const receiptWidth = maxRight - minLeft;
+  const receiptHeight = maxBottom - minTop;
+  const hasBounds = receiptWidth > 0 && receiptHeight > 0;
+
+  // Price column starts at 55% of receipt width from left edge
+  const priceXThreshold = minLeft + receiptWidth * 0.55;
+
+  const result: OcrLine[] = [];
+  let idx = 0;
+
+  // Collect all lines in order
+  const allLines: MlLine[] = blocks.flatMap(b => b.lines ?? []);
+
+  for (let i = 0; i < allLines.length; i++) {
+    const line = allLines[i];
+    const trimmed = line.text?.trim();
+    if (!trimmed) continue;
+
+    // Filter header/footer by vertical position (top 12% and bottom 8%)
+    if (hasBounds && line.frame) {
+      const lineCenter = line.frame.top + line.frame.height / 2;
+      const relY = (lineCenter - minTop) / receiptHeight;
+      if (relY < 0.12 || relY > 0.92) continue;
+    }
+
+    const lower = trimmed.toLowerCase();
+    const isTotal = TOTAL_KEYWORDS.some(k => lower.includes(k));
+    const isSkip = SKIP_KEYWORDS.some(k => lower.includes(k));
+
+    let label = '';
+    let amount: number | null = null;
+
+    if (hasBounds && line.elements && line.elements.length > 0) {
+      // Split elements by x-position into label (left) and price (right)
+      const labelWords: string[] = [];
+      let rightmostPrice: number | null = null;
+      let rightmostX = -Infinity;
+
+      for (const el of line.elements) {
+        const elLeft = el.frame?.left ?? (line.frame?.left ?? 0);
+        const elText = el.text.trim();
+        if (!elText) continue;
+
+        const vals = extractValues(elText);
+        const isRightCol = elLeft >= priceXThreshold;
+
+        if (isRightCol && vals.length > 0) {
+          // Rightmost numeric element in the price column wins
+          if (elLeft > rightmostX) {
+            rightmostX = elLeft;
+            rightmostPrice = vals[0];
+          }
+        } else if (!isRightCol) {
+          labelWords.push(elText);
+        }
+      }
+
+      label = labelWords.join(' ').trim().slice(0, 40);
+      amount = rightmostPrice;
+
+      // If no price found via spatial split, try full-line extraction as fallback
+      if (amount === null) {
+        const vals = extractValues(trimmed);
+        if (vals.length > 0) amount = vals[0];
+        if (!label) label = extractLabel(trimmed);
+      }
+
+      // Handle amount-only lines: pair with preceding label-only line
+      if (amount !== null && !label && i > 0) {
+        const prev = result[result.length - 1];
+        if (prev && prev.amount === null && prev.kind === 'header') {
+          prev.amount = amount;
+          prev.kind = isSkip ? 'skip' : isTotal ? 'total' : 'item';
+          continue;
+        }
+      }
+    } else {
+      // No spatial data — fall back to text-only extraction
+      label = extractLabel(trimmed) || trimmed.slice(0, 40);
+      const vals = extractValues(trimmed);
+      if (vals.length > 0) amount = vals[0];
+    }
+
+    if (!label && amount === null) continue;
+
+    let kind: OcrLine['kind'];
+    if (isTotal) kind = 'total';
+    else if (isSkip) kind = 'skip';
+    else if (amount !== null) kind = 'item';
+    else kind = 'header';
+
+    result.push({ id: String(idx++), text: trimmed, label: label || trimmed.slice(0, 40), amount, kind });
+  }
+
+  return result;
+}
+
+// ─── Country-aware receipt totals detection ───────────────────────────────────
+
+const COUNTRY_LANG: Record<string, string> = {
+  Norway: 'no', Sweden: 'sv', Denmark: 'da', Finland: 'fi',
+  Germany: 'de', Austria: 'de', Switzerland: 'de',
+  France: 'fr', Belgium: 'fr',
+  Spain: 'es', Mexico: 'es', Argentina: 'es', Colombia: 'es', Chile: 'es', Peru: 'es',
+  Netherlands: 'nl', Portugal: 'pt', Brazil: 'pt',
+  Italy: 'it', Thailand: 'th',
+};
+
+const LANG_PRETAX_KW: Record<string, string[]> = {
+  en: ['subtotal', 'sub-total', 'sub total', 'net total', 'excl. tax', 'excl. vat', 'before tax'],
+  no: ['eks. mva', 'ekskl. mva', 'beløp eks', 'netto', 'subtotal'],
+  sv: ['exkl. moms', 'netto', 'delsumma', 'ex moms'],
+  da: ['ekskl. moms', 'netto', 'subtotal', 'ex moms'],
+  fi: ['ilman alv', 'veroton', 'subtotal'],
+  de: ['netto', 'zwischensumme', 'exkl. mwst', 'nettobetrag', 'zzgl. mwst'],
+  fr: ['total ht', 'hors taxe', 'hors tva', 'sous-total', 'montant ht'],
+  es: ['subtotal', 'base imponible', 'neto', 'antes de impuestos'],
+  nl: ['subtotaal', 'excl. btw', 'netto'],
+  pt: ['subtotal', 'sem iva', 'liquido'],
+  it: ['subtotale', 'imponibile', 'escluso iva'],
+  th: ['subtotal', 'ยอดรวมก่อนภาษี'],
+};
+
+const LANG_POSTTAX_KW: Record<string, string[]> = {
+  en: ['grand total', 'total due', 'amount due', 'balance due', 'total amount', 'to pay', 'total'],
+  no: ['totalt', 'å betale', 'til betaling', 'inkl. mva', 'total inkl', 'total'],
+  sv: ['totalt', 'att betala', 'inkl. moms', 'summa att betala', 'total'],
+  da: ['total', 'i alt', 'betales', 'inkl. moms'],
+  fi: ['yhteensä', 'maksettava', 'loppusumma', 'total'],
+  de: ['gesamt', 'gesamtbetrag', 'zu zahlen', 'inkl. mwst', 'bruttobetrag', 'endbetrag'],
+  fr: ['total ttc', 'total à payer', 'montant total', 'à régler', 'montant ttc'],
+  es: ['total a pagar', 'importe total', 'total con iva', 'a pagar', 'total'],
+  nl: ['totaal', 'te betalen', 'incl. btw', 'eindtotaal'],
+  pt: ['total', 'total a pagar', 'com iva'],
+  it: ['totale', 'da pagare', 'totale complessivo'],
+  th: ['total', 'ยอดรวม', 'ราคารวม'],
+};
+
+const LANG_TAX_KW: Record<string, string[]> = {
+  en: ['tax', 'vat', 'gst', 'hst', 'sales tax'],
+  no: ['mva', 'merverdiavgift'],
+  sv: ['moms'], da: ['moms'], fi: ['alv'],
+  de: ['mwst', 'mehrwertsteuer', 'ust'],
+  fr: ['tva'], es: ['iva'], nl: ['btw'], pt: ['iva'], it: ['iva'],
+  th: ['vat', 'ภาษีมูลค่าเพิ่ม'],
+};
+
+function getKws(map: Record<string, string[]>, lang: string): string[] {
+  const specific = map[lang] ?? [];
+  const english = map['en'] ?? [];
+  return lang === 'en' ? english : [...new Set([...specific, ...english])];
+}
+
+export interface ReceiptTotals {
+  preTax: ParsedAmount | null;
+  postTax: ParsedAmount | null;
+  tax: ParsedAmount | null;
+}
+
+function extractTotalsFromLines(
+  lines: Array<{ text: string; elements?: MlElement[]; frame?: MlFrame }>,
+  country: string | undefined,
+  minLeft: number,
+  maxRight: number,
+  hasSpatial: boolean,
+): ReceiptTotals {
+  const lang = COUNTRY_LANG[country ?? ''] ?? 'en';
+  const preTaxKws = getKws(LANG_PRETAX_KW, lang);
+  const postTaxKws = getKws(LANG_POSTTAX_KW, lang);
+  const taxKws = getKws(LANG_TAX_KW, lang);
+  const priceXThreshold = minLeft + (maxRight - minLeft) * 0.45;
+
+  let preTax: ParsedAmount | null = null;
+  let postTax: ParsedAmount | null = null;
+  let tax: ParsedAmount | null = null;
+
+  for (const line of lines) {
+    const trimmed = line.text?.trim();
+    if (!trimmed) continue;
+    const lower = trimmed.toLowerCase();
+
+    const isPreTax = preTaxKws.some(k => lower.includes(k));
+    const isPostTax = postTaxKws.some(k => lower.includes(k));
+    const isTax = !isPreTax && !isPostTax && taxKws.some(k => lower.includes(k));
+    if (!isPreTax && !isPostTax && !isTax) continue;
+
+    let amount: number | null = null;
+    if (hasSpatial && line.elements && line.elements.length > 0) {
+      let rightmostX = -Infinity;
+      for (const el of line.elements) {
+        const elLeft = el.frame?.left ?? (line.frame?.left ?? 0);
+        const vals = extractValues(el.text ?? '');
+        if (vals.length > 0 && elLeft >= priceXThreshold && elLeft > rightmostX) {
+          rightmostX = elLeft;
+          amount = vals[0];
+        }
+      }
+    }
+    if (amount === null) {
+      const vals = extractValues(trimmed);
+      if (vals.length > 0) amount = vals[0];
+    }
+    if (amount === null) continue;
+
+    const label = extractLabel(trimmed) || trimmed.slice(0, 40);
+    const parsed: ParsedAmount = { value: amount, label, isTotal: isPostTax };
+
+    if (isPreTax && !preTax) preTax = parsed;
+    else if (isPostTax && !postTax) postTax = parsed;
+    else if (isTax && !tax) tax = parsed;
+  }
+
+  return { preTax, postTax, tax };
+}
+
+/** Parse pre-tax / post-tax totals from ML Kit blocks using spatial data. */
+export function parseReceiptTotals(blocks: any[], country?: string): ReceiptTotals {
+  const { minLeft, maxRight, minTop, maxBottom } = getReceiptBounds(blocks);
+  const hasSpatial = maxRight > minLeft && blocks[0]?.lines?.[0]?.frame;
+  const allLines: MlLine[] = blocks.flatMap((b: MlBlock) => b.lines ?? []);
+  return extractTotalsFromLines(allLines, country, minLeft, maxRight, !!hasSpatial);
+}
+
+/** Text-only fallback when block/frame data is unavailable. */
+export function parseReceiptTotalsFromText(text: string, country?: string): ReceiptTotals {
+  const lines = text.split('\n').map(t => ({ text: t }));
+  return extractTotalsFromLines(lines, country, 0, 1, false);
+}
+
 /**
  * Classify raw OCR text lines for the assisted review modal.
  * Every non-empty line is returned; `kind` determines pre-check state.

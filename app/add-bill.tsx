@@ -31,7 +31,7 @@ import {
   computePercentageSplits,
   computeItemizedSplits,
 } from '../utils/settlement';
-import { classifyOcrLines, OcrLine } from '../utils/parseAmounts';
+import { classifyOcrLines, classifyOcrLinesFromBlocks, OcrLine } from '../utils/parseAmounts';
 import ContinentCountryPicker from '../components/ContinentCountryPicker';
 import ServiceTypeSelector from '../components/ServiceTypeSelector';
 import { tippingData, ContinentKey, ServiceType } from '../data/tippingData';
@@ -246,11 +246,10 @@ export default function AddBillScreen() {
     try {
       if (!TextRecognition) throw new Error('OCR not available');
       const result = await TextRecognition.recognize(uri);
-      const rawLines: string[] =
-        result.blocks.length > 0
-          ? result.blocks.flatMap(b => b.lines.map((l: any) => l.text))
-          : result.text.split('\n');
-      const classified = classifyOcrLines(rawLines);
+      const useSpatial = result.blocks.length > 0 && result.blocks[0]?.lines?.[0]?.frame;
+      const classified = useSpatial
+        ? classifyOcrLinesFromBlocks(result.blocks)
+        : classifyOcrLines(result.text.split('\n'));
       if (classified.length === 0) {
         Alert.alert('No text found', 'Could not detect any text in the image. Try a clearer photo.');
         return;

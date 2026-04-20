@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Colors, Typography, Radius } from '../constants/Theme';
 import { useScanStore } from '../store/scanStore';
-import { ParsedAmount, parseAmountsFromText } from '../utils/parseAmounts';
+import { ReceiptTotals, parseReceiptTotals, parseReceiptTotalsFromText } from '../utils/parseAmounts';
 
 // Lazy-load ML Kit — not available in Expo Go
 let TextRecognition: typeof import('@react-native-ml-kit/text-recognition').default | null = null;
@@ -40,13 +40,12 @@ const FRAME_H = 400;
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function ScanScreen() {
   const { t } = useTranslation();
-  const { currency } = useLocalSearchParams<{ currency?: string }>();
+  const { currency, country } = useLocalSearchParams<{ currency?: string; country?: string }>();
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
 
   const [isProcessing, setIsProcessing] = useState(false);
-  const [amounts, setAmounts] = useState<ParsedAmount[]>([]);
-  const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set());
+  const [totals, setTotals] = useState<ReceiptTotals | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [mode, setMode] = useState<'camera' | 'results'>('camera');
   const [torchOn, setTorchOn] = useState(false);
@@ -61,24 +60,24 @@ export default function ScanScreen() {
         throw new Error('OCR not available in Expo Go – use a development build');
       }
       const result = await TextRecognition.recognize(uri);
-      const found = parseAmountsFromText(result.text);
-      setAmounts(found);
-      if (found.length === 0) {
+      const hasSpatial = result.blocks.length > 0 && result.blocks[0]?.lines?.[0]?.frame;
+      const found: ReceiptTotals = hasSpatial
+        ? parseReceiptTotals(result.blocks, country ?? undefined)
+        : parseReceiptTotalsFromText(result.text, country ?? undefined);
+
+      setTotals(found);
+      if (!found.preTax && !found.postTax) {
         setError(t('scan.noAmount'));
-      } else {
-        // Pre-select detected total; fall back to first (largest) item
-        const totalIdx = found.findIndex(a => a.isTotal);
-        setSelectedItems(new Set([totalIdx >= 0 ? totalIdx : 0]));
       }
-      // Always navigate to results so manual entry is accessible
       setTorchOn(false);
       setMode('results');
     } catch (e: any) {
       setError(e.message ?? t('scan.error'));
+      setMode('results');
     } finally {
       setIsProcessing(false);
     }
-  }, [t]);
+  }, [t, country]);
 
   const handleCapture = useCallback(async () => {
     if (!cameraRef.current) return;
@@ -117,27 +116,12 @@ export default function ScanScreen() {
     }
   }, [processImageUri]);
 
-  const toggleItem = useCallback((idx: number) => {
-    setSelectedItems(prev => {
-      const next = new Set(prev);
-      next.has(idx) ? next.delete(idx) : next.add(idx);
-      return next;
-    });
-  }, []);
-
   const setPendingAmount = useScanStore(s => s.setPendingAmount);
 
   const handleUseAmount = useCallback((value: number) => {
     setPendingAmount(value.toFixed(2));
     router.back();
   }, [setPendingAmount]);
-
-  const handleUseSelected = useCallback(() => {
-    const sum = Array.from(selectedItems).reduce(
-      (acc, idx) => acc + (amounts[idx]?.value ?? 0), 0,
-    );
-    handleUseAmount(sum);
-  }, [selectedItems, amounts, handleUseAmount]);
 
   const handleUseManual = useCallback(() => {
     const val = parseFloat(manualInput.replace(',', '.'));
@@ -146,15 +130,10 @@ export default function ScanScreen() {
 
   const handleRetake = useCallback(() => {
     setMode('camera');
-    setAmounts([]);
+    setTotals(null);
     setError(null);
     setManualInput('');
-    setSelectedItems(new Set());
   }, []);
-
-  const selectedSum = Array.from(selectedItems).reduce(
-    (acc, idx) => acc + (amounts[idx]?.value ?? 0), 0,
-  );
 
   // ── Not available in Expo Go ──────────────────────────────────────────────
   if (!TextRecognition) {
@@ -235,56 +214,68 @@ export default function ScanScreen() {
   }
 
   // ── Results view ──────────────────────────────────────────────────────────
+  const hasResults = totals && (totals.preTax || totals.postTax);
+
   return (
     <View style={styles.flex}>
       <ScrollView style={styles.flex} contentContainerStyle={styles.resultsContainer}>
-        <Text style={styles.resultsTitle}>{t('scan.itemized')}</Text>
-        {amounts.length > 0 && (
-          <Text style={styles.resultsHint}>{t('scan.itemizedHint')}</Text>
-        )}
+        <Text style={styles.resultsTitle}>{t('scan.title')}</Text>
+        <Text style={styles.resultsHint}>{t('scan.selectTotal')}</Text>
 
-        {error && amounts.length === 0 && (
+        {error && !hasResults && (
           <Text style={styles.noAmountText}>{error}</Text>
         )}
 
-        {amounts.map((item, idx) => (
+        {/* Pre-tax card */}
+        {totals?.preTax && (
           <TouchableOpacity
-            key={idx}
-            style={[
-              styles.amountRow,
-              selectedItems.has(idx) && styles.amountRowSelected,
-              item.isTotal && styles.amountRowTotal,
-            ]}
-            onPress={() => toggleItem(idx)}
+            style={styles.totalCard}
+            onPress={() => handleUseAmount(totals.preTax!.value)}
+            activeOpacity={0.75}
           >
-            <Text style={styles.amountCheck}>{selectedItems.has(idx) ? '☑' : '☐'}</Text>
-            <View style={styles.amountInfo}>
-              {!!item.label && (
-                <Text style={styles.amountLabel} numberOfLines={1}>{item.label}</Text>
+            <View style={styles.totalCardLeft}>
+              <Text style={styles.totalCardBadge}>{t('scan.preTax')}</Text>
+              {!!totals.preTax.label && (
+                <Text style={styles.totalCardLabel} numberOfLines={1}>{totals.preTax.label}</Text>
               )}
-              <Text style={styles.amountText}>
-                {item.value.toFixed(2)} {currency}
-              </Text>
             </View>
-            {item.isTotal && (
-              <View style={styles.totalBadge}>
-                <Text style={styles.totalBadgeText}>TOTAL</Text>
-              </View>
-            )}
+            <View style={styles.totalCardRight}>
+              <Text style={styles.totalCardAmount}>
+                {totals.preTax.value.toFixed(2)}
+              </Text>
+              <Text style={styles.totalCardCurrency}>{currency}</Text>
+            </View>
           </TouchableOpacity>
-        ))}
+        )}
 
-        {amounts.length > 0 && (
+        {/* Post-tax card */}
+        {totals?.postTax && (
           <TouchableOpacity
-            style={[styles.useBtn, selectedItems.size === 0 && styles.useBtnDisabled]}
-            onPress={handleUseSelected}
-            disabled={selectedItems.size === 0}
+            style={[styles.totalCard, styles.totalCardHighlight]}
+            onPress={() => handleUseAmount(totals.postTax!.value)}
+            activeOpacity={0.75}
           >
-            <Text style={styles.useBtnText}>
-              {t('scan.useSelected', {
-                sum: `${selectedSum.toFixed(2)} ${currency ?? ''}`,
-              })}
-            </Text>
+            <View style={styles.totalCardLeft}>
+              <Text style={[styles.totalCardBadge, styles.totalCardBadgeHighlight]}>
+                {t('scan.postTax')}
+              </Text>
+              {!!totals.postTax.label && (
+                <Text style={[styles.totalCardLabel, { color: Colors.white }]} numberOfLines={1}>
+                  {totals.postTax.label}
+                </Text>
+              )}
+              {totals.tax && (
+                <Text style={styles.totalCardTaxLine}>
+                  {t('scan.taxLine')}: {totals.tax.value.toFixed(2)} {currency}
+                </Text>
+              )}
+            </View>
+            <View style={styles.totalCardRight}>
+              <Text style={[styles.totalCardAmount, { color: Colors.white }]}>
+                {totals.postTax.value.toFixed(2)}
+              </Text>
+              <Text style={[styles.totalCardCurrency, { color: Colors.sage }]}>{currency}</Text>
+            </View>
           </TouchableOpacity>
         )}
 
@@ -432,7 +423,7 @@ const styles = StyleSheet.create({
   },
   permBtnText: { fontFamily: Typography.mono, fontSize: 14, color: Colors.white },
 
-  // Results list
+  // Results
   resultsContainer: { padding: 20, paddingBottom: 40 },
   resultsTitle: {
     fontFamily: Typography.serif,
@@ -445,72 +436,62 @@ const styles = StyleSheet.create({
     fontFamily: Typography.mono,
     fontSize: 12,
     color: Colors.sage,
-    marginBottom: 16,
+    marginBottom: 20,
   },
-  amountRow: {
+
+  // Total cards
+  totalCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
+    justifyContent: 'space-between',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.1)',
-    borderRadius: Radius.sm,
-    marginBottom: 8,
-    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderColor: 'rgba(255,255,255,0.15)',
+    borderRadius: Radius.md,
+    paddingVertical: 16,
+    paddingHorizontal: 18,
+    marginBottom: 12,
+    backgroundColor: 'rgba(255,255,255,0.06)',
   },
-  amountRowSelected: {
-    borderColor: Colors.gold,
-    backgroundColor: 'rgba(212, 165, 116, 0.15)',
+  totalCardHighlight: {
+    borderColor: Colors.rust,
+    backgroundColor: 'rgba(176, 70, 50, 0.18)',
   },
-  amountRowTotal: {
-    borderColor: Colors.sage,
-    backgroundColor: 'rgba(134, 163, 151, 0.1)',
+  totalCardLeft: { flex: 1, gap: 4 },
+  totalCardBadge: {
+    fontFamily: Typography.mono,
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+    color: Colors.sage,
   },
-  amountCheck: { fontSize: 20, color: Colors.gold },
-  amountInfo: { flex: 1 },
-  amountLabel: {
+  totalCardBadgeHighlight: { color: Colors.rust },
+  totalCardLabel: {
+    fontFamily: Typography.mono,
+    fontSize: 12,
+    color: Colors.sage,
+  },
+  totalCardTaxLine: {
     fontFamily: Typography.mono,
     fontSize: 11,
     color: Colors.sage,
-    marginBottom: 2,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    opacity: 0.7,
   },
-  amountText: {
+  totalCardRight: { alignItems: 'flex-end', gap: 2 },
+  totalCardAmount: {
     fontFamily: Typography.mono,
-    fontSize: 18,
-    color: Colors.white,
-  },
-  totalBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    backgroundColor: Colors.sage,
-    borderRadius: 4,
-  },
-  totalBadgeText: {
-    fontFamily: Typography.mono,
-    fontSize: 10,
-    color: Colors.darkSlate,
+    fontSize: 26,
     fontWeight: '700',
-    letterSpacing: 0.5,
+    color: Colors.sage,
+  },
+  totalCardCurrency: {
+    fontFamily: Typography.mono,
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.4)',
   },
 
-  // Use selected button
-  useBtn: {
-    marginTop: 16,
-    paddingVertical: 14,
-    backgroundColor: Colors.rust,
-    borderRadius: Radius.sm,
-    alignItems: 'center',
-  },
+  // Use selected button (kept for compat, unused in new flow)
   useBtnDisabled: { opacity: 0.4 },
-  useBtnText: {
-    fontFamily: Typography.mono,
-    fontSize: 14,
-    color: Colors.white,
-    fontWeight: '500',
-  },
 
   // Manual entry
   manualSection: {

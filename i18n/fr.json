@@ -599,7 +599,11 @@
     "permissionBtn": "Autoriser",
     "manualEntry": "Ou saisir le montant manuellement",
     "manualPlaceholder": "0,00",
-    "manualUse": "Utiliser"
+    "manualUse": "Utiliser",
+    "selectTotal": "Appuyer sur un montant pour l'utiliser comme base",
+    "preTax": "Hors taxes",
+    "postTax": "Total (TTC)",
+    "taxLine": "TVA"
   },
   "splitTab": {
     "title": "Partager",
