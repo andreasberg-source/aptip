@@ -48,3 +48,7 @@ google-play-service-account.json
 
 # Root-level marketing images
 aptipfeature.png
+
+# Accidental nested clones
+*-build/
+aptip-build/
