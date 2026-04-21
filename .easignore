@@ -1,0 +1,12 @@
+# Files excluded from the EAS build archive (not needed to compile the app)
+
+# Store listing / marketing
+store/
+PRIVACY_POLICY.md
+*.code-workspace
+
+# Root-level images (feature graphics, etc. — not app assets)
+aptipfeature.png
+
+# Docs
+*.md

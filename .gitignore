@@ -45,3 +45,6 @@ yarn-error.*
 
 # Google Play credentials
 google-play-service-account.json
+
+# Root-level marketing images
+aptipfeature.png
