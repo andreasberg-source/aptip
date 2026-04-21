@@ -392,6 +392,84 @@ export function parseReceiptTotalsFromText(text: string, country?: string): Rece
   return extractTotalsFromLines(lines, country, 0, 1, false);
 }
 
+// ─── Tap-on-image amount overlay ─────────────────────────────────────────────
+
+export interface AmountLine {
+  id: string;
+  text: string;
+  label: string;
+  amount: number;
+  frame: { left: number; top: number; width: number; height: number };
+  kind: 'total' | 'subtotal' | 'tax' | 'item';
+}
+
+/**
+ * Extract every line that contains a numeric amount from ML Kit blocks.
+ * No keyword filtering — returns all amounts so the user can pick.
+ * Kind is used for visual styling only (border colour on overlay).
+ * Sorted: totals first, then subtotals, then items by value descending.
+ */
+export function extractAmountLines(blocks: any[], country?: string): AmountLine[] {
+  const lang = COUNTRY_LANG[country ?? ''] ?? 'en';
+  const totalKws  = getKws(LANG_POSTTAX_KW, lang);
+  const subKws    = getKws(LANG_PRETAX_KW,  lang);
+  const taxKws    = getKws(LANG_TAX_KW,     lang);
+
+  const { minLeft, maxRight } = getReceiptBounds(blocks);
+  const hasSpatial = maxRight > minLeft;
+  const priceXThreshold = minLeft + (maxRight - minLeft) * 0.45;
+
+  const result: AmountLine[] = [];
+  let idx = 0;
+
+  for (const block of (blocks ?? [])) {
+    for (const line of (block.lines ?? [])) {
+      const trimmed: string = line.text?.trim();
+      if (!trimmed) continue;
+
+      const frame = line.frame as { left: number; top: number; width: number; height: number } | undefined;
+      if (!frame) continue; // need frame for overlay
+
+      const lower = trimmed.toLowerCase();
+
+      // Extract amount: prefer rightmost element in price column
+      let amount: number | null = null;
+      if (hasSpatial && line.elements?.length > 0) {
+        let rightmostX = -Infinity;
+        for (const el of line.elements) {
+          const elLeft: number = el.frame?.left ?? frame.left;
+          const vals = extractValues(el.text ?? '');
+          if (vals.length > 0 && elLeft >= priceXThreshold && elLeft > rightmostX) {
+            rightmostX = elLeft;
+            amount = vals[0];
+          }
+        }
+      }
+      if (amount === null) {
+        const vals = extractValues(trimmed);
+        if (vals.length > 0) amount = vals[vals.length - 1]; // last number on line = price
+      }
+      if (amount === null || amount <= 0) continue;
+
+      const label = extractLabel(trimmed) || trimmed.slice(0, 40);
+
+      let kind: AmountLine['kind'];
+      if (totalKws.some(k => lower.includes(k))) kind = 'total';
+      else if (subKws.some(k => lower.includes(k))) kind = 'subtotal';
+      else if (taxKws.some(k => lower.includes(k))) kind = 'tax';
+      else kind = 'item';
+
+      result.push({ id: String(idx++), text: trimmed, label, amount, frame, kind });
+    }
+  }
+
+  return result.sort((a, b) => {
+    const kindOrder = { total: 0, subtotal: 1, tax: 2, item: 3 };
+    if (kindOrder[a.kind] !== kindOrder[b.kind]) return kindOrder[a.kind] - kindOrder[b.kind];
+    return b.amount - a.amount;
+  });
+}
+
 /**
  * Classify raw OCR text lines for the assisted review modal.
  * Every non-empty line is returned; `kind` determines pre-check state.
