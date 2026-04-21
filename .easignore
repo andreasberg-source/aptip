@@ -8,5 +8,6 @@ PRIVACY_POLICY.md
 # Root-level images (feature graphics, etc. — not app assets)
 aptipfeature.png
 
-# Docs
+# Docs and web hosting
 *.md
+index.html
