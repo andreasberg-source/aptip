@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,20 +7,31 @@ import {
   StyleSheet,
   Image,
   Linking,
+  Modal,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 import { useColors } from '../hooks/useColors';
-import { Typography, Radius } from '../constants/Theme';
+import { Typography, Radius, Spacing } from '../constants/Theme';
 
 export default function AboutScreen() {
   const { t } = useTranslation();
   const C = useColors();
+  const [feedbackVisible, setFeedbackVisible] = useState(false);
+  const [feedbackText, setFeedbackText] = useState('');
 
-  const handleFeedback = () => {
-    Linking.openURL('mailto:feedback@adjustthetip.app?subject=Feedback');
+  const handleSendFeedback = () => {
+    const body = encodeURIComponent(feedbackText.trim());
+    Linking.openURL(
+      `mailto:andreas.berg@gmail.com?subject=Aptip%20Feedback&body=${body}`
+    );
+    setFeedbackVisible(false);
+    setFeedbackText('');
   };
 
   return (
@@ -59,13 +70,68 @@ export default function AboutScreen() {
           <Text style={[styles.cardText, { color: C.sage }]}>{t('about.feedbackBody')}</Text>
           <TouchableOpacity
             style={[styles.feedbackBtn, { backgroundColor: C.rust }]}
-            onPress={handleFeedback}
+            onPress={() => setFeedbackVisible(true)}
             activeOpacity={0.8}
           >
             <Text style={styles.feedbackBtnText}>{t('about.feedbackBtn')}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      {/* Feedback modal */}
+      <Modal
+        visible={feedbackVisible}
+        animationType="slide"
+        transparent
+        onRequestClose={() => setFeedbackVisible(false)}
+      >
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.modalOverlay}
+        >
+          <View style={[styles.modalSheet, { backgroundColor: C.white }]}>
+            <Text style={[styles.modalTitle, { color: C.darkSlate }]}>
+              {t('about.feedbackFormTitle')}
+            </Text>
+            <TextInput
+              style={[
+                styles.feedbackInput,
+                { backgroundColor: C.cream, borderColor: C.lightBorder, color: C.darkSlate },
+              ]}
+              placeholder={t('about.feedbackPlaceholder')}
+              placeholderTextColor={C.sage}
+              multiline
+              numberOfLines={6}
+              textAlignVertical="top"
+              value={feedbackText}
+              onChangeText={setFeedbackText}
+              autoFocus
+            />
+            <View style={styles.modalActions}>
+              <TouchableOpacity
+                style={[styles.modalBtn, styles.cancelBtn, { borderColor: C.lightBorder }]}
+                onPress={() => {
+                  setFeedbackVisible(false);
+                  setFeedbackText('');
+                }}
+              >
+                <Text style={[styles.cancelBtnText, { color: C.darkSlate }]}>{t('cancel')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.modalBtn,
+                  styles.sendBtn,
+                  { backgroundColor: feedbackText.trim() ? C.rust : C.sage },
+                ]}
+                onPress={handleSendFeedback}
+                disabled={!feedbackText.trim()}
+              >
+                <Text style={styles.sendBtnText}>{t('about.feedbackSend')}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -120,5 +186,58 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '600',
     letterSpacing: 0.5,
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0,0,0,0.4)',
+  },
+  modalSheet: {
+    borderTopLeftRadius: Radius.lg,
+    borderTopRightRadius: Radius.lg,
+    padding: Spacing.lg,
+    gap: Spacing.md,
+    paddingBottom: 32,
+  },
+  modalTitle: {
+    fontFamily: Typography.serif,
+    fontSize: 17,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginBottom: 4,
+  },
+  feedbackInput: {
+    borderWidth: 1.5,
+    borderRadius: Radius.sm,
+    padding: 12,
+    fontFamily: Typography.mono,
+    fontSize: 14,
+    lineHeight: 22,
+    minHeight: 140,
+  },
+  modalActions: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+  },
+  modalBtn: {
+    flex: 1,
+    paddingVertical: 14,
+    borderRadius: Radius.md,
+    alignItems: 'center',
+  },
+  cancelBtn: {
+    borderWidth: 1.5,
+  },
+  cancelBtnText: {
+    fontFamily: Typography.mono,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  sendBtn: {},
+  sendBtnText: {
+    fontFamily: Typography.mono,
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#fff',
   },
 });

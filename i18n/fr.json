@@ -1,10 +1,10 @@
 {
   "app": {
-    "title": "Adjust the tip",
+    "title": "Aptip",
     "subtitle": "Calculateur de pourboire"
   },
   "onboarding": {
-    "welcome": "Bienvenue dans Adjust the tip",
+    "welcome": "Bienvenue dans Aptip",
     "subtitle": "Configurons vos préférences",
     "nameLabel": "Votre nom (facultatif)",
     "namePlaceholder": "Ex. Alex",
@@ -669,7 +669,7 @@
     "fromHistory": "Depuis l'archive",
     "shareGroupHeader": "Règlement du voyage «{{trip}}»",
     "sharePersonHeader": "Bonjour {{name}} ! Voici ta part du règlement pour «{{trip}}»",
-    "shareAppCredit": "Calculé avec l'application Adjust the Tip 📱",
+    "shareAppCredit": "Calculé avec l'application Aptip 📱",
     "removedBillsSection": "Factures des voyages",
     "scanAmount": "Scanner le reçu",
     "removeSavedName": "Supprimer ce nom des suggestions?",
@@ -734,14 +734,17 @@
   },
   "about": {
     "title": "À propos",
-    "description": "Adjust the tip est une calculatrice de pourboires pour les voyageurs. Elle fournit des recommandations culturellement adaptées pour plus de 60 pays — restaurants, taxis, boutiques et services.",
+    "description": "Aptip est une calculatrice de pourboires pour les voyageurs — le nom dit tout. Des recommandations culturellement adaptées pour plus de 60 pays — restaurants, taxis, boutiques et services — pour toujours laisser le pourboire juste.",
     "feedbackTitle": "Retour d'expérience",
     "feedbackBody": "Une suggestion ou un bug ? Nous serions ravis de vous lire.",
-    "feedbackBtn": "Envoyer un retour par e-mail"
+    "feedbackBtn": "Envoyer un retour",
+    "feedbackFormTitle": "Envoyer un retour",
+    "feedbackPlaceholder": "Écrivez votre retour ici…",
+    "feedbackSend": "Envoyer"
   },
   "help": {
     "title": "Comment utiliser",
-    "intro": "Un guide rapide de toutes les fonctionnalités d'Adjust the tip.",
+    "intro": "Un guide rapide de toutes les fonctionnalités d'Aptip.",
     "step1Title": "1. Choisir votre lieu",
     "step1Body": "Appuyez sur le champ de lieu et choisissez le pays où vous vous trouvez. L'app peut aussi détecter votre position via GPS.",
     "step2Title": "2. Type de note",
@@ -795,18 +798,18 @@
     "noLines": "Aucune ligne trouvée dans l'image"
   },
   "donate": {
-    "title": "Support Et lite tips",
-    "subtitle": "Enjoying the app? Leave a tip for the developer!",
-    "notReally": "Not really",
-    "likeIt": "Like it",
-    "loveIt": "Love it!",
-    "custom": "Custom",
-    "keepAds": "Keep ads",
-    "donateCta": "Donate {{amount}}",
-    "continueAds": "Continue with ads",
-    "minimumNote": "Minimum $5.99",
-    "thankYou": "Thank you for your support!",
-    "removeAds": "Remove Ads",
-    "tagline": "Donations remove ads and support ongoing development."
+    "title": "Soutenir Aptip",
+    "subtitle": "Vous aimez l'application ? Laissez un pourboire au développeur !",
+    "notReally": "Pas vraiment",
+    "likeIt": "Je l'aime bien",
+    "loveIt": "Je l'adore !",
+    "custom": "Personnalisé",
+    "keepAds": "Garder les publicités",
+    "donateCta": "Donner {{amount}}",
+    "continueAds": "Continuer avec les publicités",
+    "minimumNote": "Minimum 5,99 $",
+    "thankYou": "Merci pour votre soutien !",
+    "removeAds": "Supprimer les publicités",
+    "tagline": "Les dons suppriment les publicités et soutiennent le développement continu."
   }
 }

@@ -430,7 +430,7 @@ export function extractItemLines(
 
   if (!hasSpatial) return { lines: [], hasSpatial: false };
 
-  const priceXThreshold = minLeft + receiptWidth * 0.55;
+  const priceXThreshold = minLeft + receiptWidth * 0.45;
   const allLines: MlLine[] = blocks.flatMap(b => b.lines ?? []);
   const result: ItemLine[] = [];
   let idx = 0;

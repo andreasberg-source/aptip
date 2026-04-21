@@ -1,10 +1,10 @@
 {
   "app": {
-    "title": "Adjust the tip",
+    "title": "Aptip",
     "subtitle": "Trinkgeldrechner"
   },
   "onboarding": {
-    "welcome": "Willkommen bei Adjust the tip",
+    "welcome": "Willkommen bei Aptip",
     "subtitle": "Richten wir deine Einstellungen ein",
     "nameLabel": "Dein Name (optional)",
     "namePlaceholder": "Z.B. Alex",
@@ -733,14 +733,17 @@
   },
   "about": {
     "title": "Über die App",
-    "description": "Adjust the tip ist ein Trinkgeldrechner für Reisende. Er bietet kulturell angepasste Trinkgeldempfehlungen für 60+ Länder — für Restaurants, Taxis, Geschäfte und Dienstleistungen.",
+    "description": "Aptip ist ein Trinkgeldrechner für Reisende — der Name sagt alles. Kulturell angepasste Trinkgeldempfehlungen für 60+ Länder — Restaurants, Taxis, Geschäfte und Dienstleistungen, damit Sie immer das passende Trinkgeld geben.",
     "feedbackTitle": "Feedback",
     "feedbackBody": "Einen Vorschlag oder einen Fehler gefunden? Wir freuen uns über Ihre Rückmeldung.",
-    "feedbackBtn": "Feedback per E-Mail senden"
+    "feedbackBtn": "Feedback senden",
+    "feedbackFormTitle": "Feedback senden",
+    "feedbackPlaceholder": "Schreib dein Feedback hier…",
+    "feedbackSend": "Senden"
   },
   "help": {
     "title": "So wird's benutzt",
-    "intro": "Eine kurze Übersicht aller Funktionen von Adjust the tip.",
+    "intro": "Eine kurze Übersicht aller Funktionen von Aptip.",
     "step1Title": "1. Standort wählen",
     "step1Body": "Tippen Sie auf das Standortfeld und wählen Sie das Land, in dem Sie sich befinden. Die App kann Ihren Standort auch automatisch per GPS erkennen.",
     "step2Title": "2. Rechnungstyp wählen",
@@ -794,7 +797,7 @@
     "noLines": "Keine Zeilen im Bild gefunden"
   },
   "donate": {
-    "title": "Support Et lite tips",
+    "title": "Aptip unterstützen",
     "subtitle": "Enjoying the app? Leave a tip for the developer!",
     "notReally": "Not really",
     "likeIt": "Like it",

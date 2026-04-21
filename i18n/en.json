@@ -1,10 +1,10 @@
 {
   "app": {
-    "title": "Adjust the tip",
+    "title": "Aptip",
     "subtitle": "Tip Calculator"
   },
   "onboarding": {
-    "welcome": "Welcome to Adjust the tip",
+    "welcome": "Welcome to Aptip",
     "subtitle": "Let's set up your preferences",
     "nameLabel": "Your name (optional)",
     "namePlaceholder": "E.g. Alex",
@@ -734,14 +734,17 @@
   },
   "about": {
     "title": "About the app",
-    "description": "Adjust the tip is a tip calculator for travellers. It provides culturally-aware tipping guidelines for 60+ countries across restaurants, taxis, shops, and services — so you always tip the right amount.",
+    "description": "Aptip is a tip calculator for travellers — the name says it all. Culturally-aware tipping guidelines for 60+ countries across restaurants, taxis, shops, and services, so you always leave the apt tip.",
     "feedbackTitle": "Feedback",
     "feedbackBody": "Have a suggestion or found a bug? We'd love to hear from you.",
-    "feedbackBtn": "Send feedback by email"
+    "feedbackBtn": "Send feedback",
+    "feedbackFormTitle": "Send feedback",
+    "feedbackPlaceholder": "Write your feedback here…",
+    "feedbackSend": "Send"
   },
   "help": {
     "title": "How to use",
-    "intro": "A quick guide to all the features in Adjust the tip.",
+    "intro": "A quick guide to all the features in Aptip.",
     "step1Title": "1. Select your location",
     "step1Body": "Choose the country you're in. The app can also detect your location automatically.",
     "step2Title": "2. Choose bill type",
@@ -795,7 +798,7 @@
     "noLines": "No lines found in image"
   },
   "donate": {
-    "title": "Support Et lite tips",
+    "title": "Support Aptip",
     "subtitle": "Enjoying the app? Leave a tip for the developer!",
     "notReally": "Not really",
     "likeIt": "Like it",

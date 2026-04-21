@@ -1,10 +1,10 @@
 {
   "app": {
-    "title": "Adjust the tip",
+    "title": "Aptip",
     "subtitle": "Tipskalkulator"
   },
   "onboarding": {
-    "welcome": "Velkommen til Adjust the tip",
+    "welcome": "Velkommen til Aptip",
     "subtitle": "La oss sette opp dine preferanser",
     "nameLabel": "Ditt navn (valgfritt)",
     "namePlaceholder": "F.eks. Alex",
@@ -734,14 +734,17 @@
   },
   "about": {
     "title": "Om appen",
-    "description": "Adjust the tip er en drikkepengekalkulator for reisende. Den gir kulturelt tilpassede retningslinjer for drikkepenger i 60+ land — for restauranter, taxi, butikker og tjenester.",
+    "description": "Aptip er en drikkepengekalkulator for reisende — navnet sier det hele. Kulturelt tilpassede retningslinjer for drikkepenger i 60+ land — for restauranter, taxi, butikker og tjenester, slik at du alltid gir riktig tips.",
     "feedbackTitle": "Tilbakemelding",
     "feedbackBody": "Har du et forslag eller funnet en feil? Vi vil gjerne høre fra deg.",
-    "feedbackBtn": "Send tilbakemelding på e-post"
+    "feedbackBtn": "Send tilbakemelding",
+    "feedbackFormTitle": "Send tilbakemelding",
+    "feedbackPlaceholder": "Skriv tilbakemeldingen din her…",
+    "feedbackSend": "Send"
   },
   "help": {
     "title": "Slik bruker du appen",
-    "intro": "En kort guide til alle funksjonene i Adjust the tip.",
+    "intro": "En kort guide til alle funksjonene i Aptip.",
     "step1Title": "1. Velg sted",
     "step1Body": "Velg landet du er i. Appen kan foreslå din posisjon automatisk.",
     "step2Title": "2. Velg type regning",
@@ -795,7 +798,7 @@
     "noLines": "Ingen linjer funnet i bildet"
   },
   "donate": {
-    "title": "Støtt Et lite tips",
+    "title": "Støtt Aptip",
     "subtitle": "Liker du appen? Legg igjen et tips til utvikleren!",
     "notReally": "Ikke egentlig",
     "likeIt": "Liker den",

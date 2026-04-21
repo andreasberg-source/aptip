@@ -28,7 +28,7 @@ function SelfPromoBanner() {
     >
       <View style={styles.rustStrip} />
       <Text style={styles.selfPromoText}>
-        🧮 Et lite tips — The best tip calculator on the market! ⭐
+        🧮 Aptip — The best tip calculator on the market! ⭐
       </Text>
       <Text style={styles.removeAdsText}>Remove ads →</Text>
     </TouchableOpacity>

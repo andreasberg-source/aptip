@@ -24,7 +24,7 @@ import { useHistoryStore } from '../../store/historyStore';
 import { useColors } from '../../hooks/useColors';
 import { Typography, Radius } from '../../constants/Theme';
 import { formatAmount } from '../../utils/tipCalculations';
-import { parseAmountsFromText, extractItemLines, ItemLine } from '../../utils/parseAmounts';
+import { parseAmountsFromText, extractItemLines, classifyOcrLinesFromBlocks, ItemLine } from '../../utils/parseAmounts';
 import OcrItemReview from '../../components/OcrItemReview';
 import ContinentCountryPicker from '../../components/ContinentCountryPicker';
 import TripPickerDropdown from '../../components/TripPickerDropdown';
@@ -214,10 +214,26 @@ export default function SplitScreen() {
         setOcrImageDims(dims);
         setShowOcrReview(true);
       } else {
-        // Fallback: extract a single total amount
-        const amounts = parseAmountsFromText(result.text);
-        if (amounts.length > 0) {
-          setQuickAmount(String(amounts[0].value));
+        // Fallback: show checklist with classified lines (no spatial data)
+        const ocrLines = classifyOcrLinesFromBlocks(result.blocks);
+        if (ocrLines.length > 0) {
+          const fallbackItems: ItemLine[] = ocrLines
+            .filter(l => l.amount != null && l.amount > 0 && l.kind !== 'skip' && l.kind !== 'header')
+            .map((l, i) => ({
+              id: `item-${i}`,
+              text: l.label,
+              label: l.label.slice(0, 40),
+              amount: l.amount as number,
+              frame: { left: 0, top: 0, width: 0, height: 0 },
+              kind: (l.kind === 'total' ? 'total' : 'item') as ItemLine['kind'],
+            }));
+          if (fallbackItems.length > 0) {
+            setOcrItems(fallbackItems);
+            setOcrImageDims(null);
+            setShowOcrReview(true);
+          } else {
+            Alert.alert('No amount found', 'Could not detect an amount. Enter manually.');
+          }
         } else {
           Alert.alert('No amount found', 'Could not detect an amount. Enter manually.');
         }
