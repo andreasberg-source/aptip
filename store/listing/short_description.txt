@@ -1,0 +1,1 @@
+Culturally-aware tip calculator for 60+ countries. Scanner included.

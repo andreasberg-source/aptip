@@ -20,7 +20,7 @@
         "NSPhotoLibraryUsageDescription": "Used to pick a receipt photo for tip calculation",
         "ITSAppUsesNonExemptEncryption": false
       },
-      "bundleIdentifier": "com.taouztex.tipapp"
+      "bundleIdentifier": "com.aptip.app"
     },
     "android": {
       "adaptiveIcon": {
@@ -31,11 +31,11 @@
       "predictiveBackGestureEnabled": false,
       "permissions": [
         "android.permission.CAMERA",
-        "android.permission.RECORD_AUDIO",
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION"
       ],
-      "package": "com.taouztex.tipapp"
+      "package": "com.aptip.app",
+      "versionCode": 1
     },
     "web": {
       "bundler": "metro",

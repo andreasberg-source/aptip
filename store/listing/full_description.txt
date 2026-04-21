@@ -1,0 +1,22 @@
+Aptip is a tip calculator built for travellers. It knows how tipping works in 60+ countries — from the 20% expectation in the US to the "please don't tip" culture in Japan — and gives you the right percentage for restaurants, taxis, shops, and services.
+
+Key features:
+
+• Country-specific tipping guidelines for 60+ countries
+• Receipt scanner — photograph your bill and Aptip reads the total automatically
+• Bill splitter — split equally, by percentage, or itemised per receipt line
+• Trip tracker — log shared expenses across multiple bills and calculate who owes what at the end
+• Home currency display — see tip and total amounts in your local currency
+• Works fully offline — no account, no sign-in, no subscription required
+• 5 languages: English, Norwegian, French, Spanish, German
+
+Tipping customs explained:
+Not sure whether to tip, and how much? Aptip shows you the local tipping culture for every country — what's expected at restaurants, in taxis, at shops, and for personal services. No more awkward guessing.
+
+Scan your receipt:
+Point your camera at any receipt and Aptip reads the total amount automatically. You can also select individual line items to split specific dishes between people.
+
+Split and track:
+Travelling with friends? Create a trip, add everyone's bills as you go, and let Aptip calculate the simplest way to settle up at the end. Supports itemised splits so each person only pays for what they had.
+
+Free to use. An optional one-time donation removes the banner ad and supports ongoing development.

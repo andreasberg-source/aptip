@@ -42,3 +42,6 @@ yarn-error.*
 
 # Claude Code
 .claude/
+
+# Google Play credentials
+google-play-service-account.json

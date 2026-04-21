@@ -1,0 +1,3 @@
+First release of Aptip.
+
+Tipping guidelines for 60+ countries, receipt scanner with automatic amount detection, bill splitter with equal/percentage/itemised modes, trip expense tracker with settlement calculator, and 5-language support (English, Norwegian, French, Spanish, German).
