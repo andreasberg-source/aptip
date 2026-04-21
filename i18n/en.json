@@ -733,6 +733,7 @@
     "clearSavedName": "Remove",
     "devSection": "Developer",
     "premiumToggle": "Premium mode (test)",
+    "donatedToggle": "Donated (test — hides ads)",
     "helpTips": "Help: Tip calculator",
     "helpSplit": "Help: Split bill",
     "helpTrips": "Help: Trips",
@@ -799,5 +800,20 @@
     "badgeTotal": "TOTAL",
     "badgeInfo": "INFO",
     "noLines": "No lines found in image"
+  },
+  "donate": {
+    "title": "Support Et lite tips",
+    "subtitle": "Enjoying the app? Leave a tip for the developer!",
+    "notReally": "Not really",
+    "likeIt": "Like it",
+    "loveIt": "Love it!",
+    "custom": "Custom",
+    "keepAds": "Keep ads",
+    "donateCta": "Donate {{amount}}",
+    "continueAds": "Continue with ads",
+    "minimumNote": "Minimum $5.99",
+    "thankYou": "Thank you for your support!",
+    "removeAds": "Remove Ads",
+    "tagline": "Donations remove ads and support ongoing development."
   }
 }

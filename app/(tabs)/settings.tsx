@@ -37,7 +37,7 @@ export default function SettingsScreen() {
   const { updateRates, isLoading, lastUpdated, error } = useExchangeRates();
   const {
     userName, homeCurrency, defaultPeople, defaultSatisfaction,
-    keepScreenAwake, darkMode, isPremium, patch, savedParticipantNames, removeSavedParticipantName,
+    keepScreenAwake, darkMode, hasDonated, patch, savedParticipantNames, removeSavedParticipantName,
   } = useSettingsStore();
   const clearNonTrip = useHistoryStore((s) => s.clearNonTrip);
   const { trips } = useTripStore();
@@ -253,6 +253,17 @@ export default function SettingsScreen() {
         )}
       </View>
 
+      {/* ── Remove Ads / Donate ──────────────────────────── */}
+      <TouchableOpacity
+        style={[s.donateRow, { backgroundColor: C.white, borderColor: C.lightBorder }]}
+        onPress={() => router.push('/donate')}
+        activeOpacity={0.7}
+      >
+        <Text style={[s.donateRowEmoji]}>🎁</Text>
+        <Text style={[s.donateRowLabel, { color: C.rust }]}>{t('donate.removeAds')}</Text>
+        <Text style={[s.donateRowArrow, { color: C.sage }]}>›</Text>
+      </TouchableOpacity>
+
       {/* ── Data ─────────────────────────────────────────── */}
       <SectionHeader label={t('settings.dangerSection')} C={C} />
 
@@ -269,12 +280,12 @@ export default function SettingsScreen() {
       {/* ── Developer ────────────────────────────────────── */}
       <SectionHeader label={t('settings.devSection')} C={C} />
       <View style={[s.compactRow, { borderBottomColor: C.lightBorder }]}>
-        <Text style={[s.rowLabel, { color: C.darkSlate }]}>{t('settings.premiumToggle')}</Text>
+        <Text style={[s.rowLabel, { color: C.darkSlate }]}>{t('settings.donatedToggle')}</Text>
         <Switch
-          value={isPremium}
-          onValueChange={(v) => patch({ isPremium: v })}
+          value={hasDonated}
+          onValueChange={(v) => patch({ hasDonated: v })}
           trackColor={{ false: C.lightBorder, true: C.gold }}
-          thumbColor={isPremium ? C.rust : C.sage}
+          thumbColor={hasDonated ? C.rust : C.sage}
         />
       </View>
 
@@ -491,6 +502,20 @@ const makeStyles = (C: any) => StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
+  // Donate row
+  donateRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderWidth: 1.5,
+    borderRadius: Radius.md,
+    marginBottom: 16,
+    gap: 10,
+  },
+  donateRowEmoji: { fontSize: 20 },
+  donateRowLabel: { flex: 1, fontFamily: Typography.serif, fontWeight: '700', fontSize: 15 },
+  donateRowArrow: { fontSize: 22, fontWeight: '300' },
   // Bottom links
   bottomLinks: {
     paddingHorizontal: 20,

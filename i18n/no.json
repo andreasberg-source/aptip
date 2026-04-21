@@ -733,6 +733,7 @@
     "clearSavedName": "Fjern",
     "devSection": "Utvikling",
     "premiumToggle": "Premiummodus (test)",
+    "donatedToggle": "Donert (test — skjuler annonser)",
     "helpTips": "Hjelp: Tipskalkulator",
     "helpSplit": "Hjelp: Del regning",
     "helpTrips": "Hjelp: Turer",
@@ -799,5 +800,20 @@
     "badgeTotal": "TOTAL",
     "badgeInfo": "INFO",
     "noLines": "Ingen linjer funnet i bildet"
+  },
+  "donate": {
+    "title": "Støtt Et lite tips",
+    "subtitle": "Liker du appen? Legg igjen et tips til utvikleren!",
+    "notReally": "Ikke egentlig",
+    "likeIt": "Liker den",
+    "loveIt": "Elsker den!",
+    "custom": "Egendefinert",
+    "keepAds": "Behold annonser",
+    "donateCta": "Doner {{amount}}",
+    "continueAds": "Fortsett med annonser",
+    "minimumNote": "Minimum $5.99",
+    "thankYou": "Tusen takk for støtten!",
+    "removeAds": "Fjern annonser",
+    "tagline": "Donasjoner fjerner annonser og støtter videre utvikling."
   }
 }

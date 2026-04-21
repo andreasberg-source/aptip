@@ -1,9 +1,11 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
+import { BottomTabBar } from '@react-navigation/bottom-tabs';
 
 import { useColors } from '../../hooks/useColors';
+import AdBanner from '../../components/AdBanner';
 
 function TabIcon({ emoji, focused }: { emoji: string; focused: boolean }) {
   return (
@@ -17,6 +19,12 @@ export default function TabLayout() {
 
   return (
     <Tabs
+      tabBar={props => (
+        <View>
+          <AdBanner />
+          <BottomTabBar {...props} />
+        </View>
+      )}
       screenOptions={{
         tabBarActiveTintColor: C.rust,
         tabBarInactiveTintColor: C.sage,
