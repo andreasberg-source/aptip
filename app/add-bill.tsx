@@ -13,7 +13,6 @@ import {
   Modal,
   FlatList,
   Image,
-  Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -31,7 +30,8 @@ import {
   computePercentageSplits,
   computeItemizedSplits,
 } from '../utils/settlement';
-import { classifyOcrLines, classifyOcrLinesFromBlocks, OcrLine } from '../utils/parseAmounts';
+import { classifyOcrLines, extractItemLines, ItemLine } from '../utils/parseAmounts';
+import OcrItemReview from '../components/OcrItemReview';
 import ContinentCountryPicker from '../components/ContinentCountryPicker';
 import ServiceTypeSelector from '../components/ServiceTypeSelector';
 import { tippingData, ContinentKey, ServiceType } from '../data/tippingData';
@@ -44,7 +44,7 @@ try {
   TextRecognition = null;
 }
 
-let manipulateAsync: ((uri: string, actions: any[], options?: any) => Promise<{ uri: string }>) | null = null;
+let manipulateAsync: ((uri: string, actions: any[], options?: any) => Promise<{ uri: string; width: number; height: number }>) | null = null;
 try {
   manipulateAsync = require('expo-image-manipulator').manipulateAsync;
 } catch {
@@ -138,11 +138,9 @@ export default function AddBillScreen() {
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
   const [cameraLayout, setCameraLayout] = useState({ width: 0, height: 0 });
-  const [ocrLines, setOcrLines] = useState<OcrLine[]>([]);
+  const [ocrItemLines, setOcrItemLines] = useState<ItemLine[]>([]);
+  const [ocrImageDims, setOcrImageDims] = useState<{ w: number; h: number } | null>(null);
   const [showOcrReview, setShowOcrReview] = useState(false);
-  const [ocrChecked, setOcrChecked] = useState<Set<string>>(new Set());
-  const [ocrEdits, setOcrEdits] = useState<Record<string, { label: string; amount: string }>>({});
-  const OCR_IMAGE_HEIGHT = Math.round(Dimensions.get('window').height * 0.35);
 
   const participants = trip?.participants ?? [];
   const includedParticipants = participants.filter(p => includedIds.includes(p.id));
@@ -246,17 +244,41 @@ export default function AddBillScreen() {
     try {
       if (!TextRecognition) throw new Error('OCR not available');
       const result = await TextRecognition.recognize(uri);
-      const useSpatial = result.blocks.length > 0 && result.blocks[0]?.lines?.[0]?.frame;
-      const classified = useSpatial
-        ? classifyOcrLinesFromBlocks(result.blocks)
-        : classifyOcrLines(result.text.split('\n'));
-      if (classified.length === 0) {
-        Alert.alert('No text found', 'Could not detect any text in the image. Try a clearer photo.');
-        return;
+
+      // Get image dims for overlay
+      let dims: { w: number; h: number } | null = null;
+      if (manipulateAsync) {
+        try {
+          const info = await manipulateAsync(uri, []);
+          dims = { w: info.width, h: info.height };
+        } catch { /* leave null */ }
       }
-      setOcrLines(classified);
-      setOcrChecked(new Set(classified.filter(l => l.kind === 'item').map(l => l.id)));
-      setOcrEdits({});
+
+      const { lines, hasSpatial } = extractItemLines(result.blocks, billCountry || undefined);
+
+      if (hasSpatial && lines.length > 0) {
+        setOcrItemLines(lines);
+        setOcrImageDims(dims);
+      } else {
+        // Fallback: text-only classification mapped to ItemLine shape
+        const classified = classifyOcrLines(result.text.split('\n'));
+        if (classified.length === 0) {
+          Alert.alert('No text found', 'Could not detect any text in the image. Try a clearer photo.');
+          return;
+        }
+        const mapped: ItemLine[] = classified
+          .filter(l => l.kind === 'item' && l.amount !== null)
+          .map(l => ({
+            id: l.id,
+            text: l.text,
+            label: l.label,
+            amount: l.amount!,
+            frame: { left: 0, top: 0, width: 0, height: 0 },
+            kind: 'item' as const,
+          }));
+        setOcrItemLines(mapped);
+        setOcrImageDims(null);
+      }
       setShowOcrReview(true);
     } catch (e: any) {
       Alert.alert('Scan error', e.message ?? 'Could not process image');
@@ -264,7 +286,7 @@ export default function AddBillScreen() {
       setScanning(false);
       setShowCamera(false);
     }
-  }, []);
+  }, [billCountry]);
 
   const handlePickImage = useCallback(async () => {
     const result = await ImagePicker.launchImageLibraryAsync({ quality: 0.9 });
@@ -273,19 +295,14 @@ export default function AddBillScreen() {
     }
   }, [processOcrUri]);
 
-  const handleOcrConfirm = useCallback(() => {
-    const newItems: BillItem[] = ocrLines
-      .filter(l => ocrChecked.has(l.id))
-      .map(l => {
-        const label = (ocrEdits[l.id]?.label ?? l.label) || l.text.slice(0, 40);
-        const value = parseFloat((ocrEdits[l.id]?.amount ?? String(l.amount ?? 0)).replace(',', '.')) || 0;
-        return { id: generateId(), label, amount: value, assignedTo: [] };
-      })
+  const handleOcrConfirm = useCallback((selected: ItemLine[]) => {
+    const newItems: BillItem[] = selected
+      .map(l => ({ id: generateId(), label: l.label || l.text.slice(0, 40), amount: l.amount, assignedTo: [] }))
       .filter(item => item.amount > 0);
     setItems(prev => [...prev, ...newItems]);
     setSplitMode('itemized');
     setShowOcrReview(false);
-  }, [ocrLines, ocrChecked, ocrEdits]);
+  }, []);
 
   // Auto-trigger camera/scan when opened via the "Scan & Split" shortcut button
   useEffect(() => {
@@ -769,98 +786,15 @@ export default function AddBillScreen() {
         </View>
       </Modal>
 
-      {/* OCR Review Modal */}
-      <Modal
+      <OcrItemReview
         visible={showOcrReview}
-        animationType="slide"
-        transparent
-        onRequestClose={() => setShowOcrReview(false)}
-      >
-        <View style={styles.ocrOverlay}>
-          <View style={[styles.ocrSheet, { backgroundColor: C.white }]}>
-            {/* Header */}
-            <View style={[styles.modalHeader, { borderBottomColor: C.lightBorder }]}>
-              <TouchableOpacity onPress={() => setShowOcrReview(false)}>
-                <Text style={[styles.modalClose, { color: C.sage }]}>✕</Text>
-              </TouchableOpacity>
-              <Text style={[styles.modalTitle, { color: C.darkSlate }]}>Review scan</Text>
-              <View style={{ width: 28 }} />
-            </View>
-
-            {/* Receipt image */}
-            {capturedImageUri && (
-              <Image
-                source={{ uri: capturedImageUri }}
-                style={[styles.ocrImage, { height: OCR_IMAGE_HEIGHT }]}
-                resizeMode="contain"
-              />
-            )}
-
-            {/* Checklist */}
-            <Text style={[styles.ocrSectionLabel, { color: C.sage, borderBottomColor: C.lightBorder }]}>
-              Select items to add ({ocrLines.filter(l => ocrChecked.has(l.id)).length} selected)
-            </Text>
-            <FlatList
-              data={ocrLines}
-              keyExtractor={l => l.id}
-              style={{ flex: 1 }}
-              renderItem={({ item: line }) => {
-                const checked = ocrChecked.has(line.id);
-                const editLabel = ocrEdits[line.id]?.label ?? line.label;
-                const editAmount = ocrEdits[line.id]?.amount ?? (line.amount != null ? String(line.amount) : '');
-                return (
-                  <TouchableOpacity
-                    style={[styles.ocrRow, { borderBottomColor: C.lightBorder, opacity: line.kind === 'header' ? 0.45 : 1 }]}
-                    onPress={() => {
-                      setOcrChecked(prev => {
-                        const next = new Set(prev);
-                        if (next.has(line.id)) next.delete(line.id); else next.add(line.id);
-                        return next;
-                      });
-                    }}
-                    activeOpacity={0.7}
-                  >
-                    <View style={[styles.ocrCheckbox, { borderColor: checked ? C.rust : C.lightBorder, backgroundColor: checked ? C.rust : C.white }]}>
-                      {checked && <Text style={styles.ocrCheckMark}>✓</Text>}
-                    </View>
-                    <View style={styles.ocrRowContent}>
-                      <TextInput
-                        style={[styles.ocrLabelInput, { color: C.darkSlate, borderColor: C.lightBorder }]}
-                        value={editLabel}
-                        onChangeText={v => setOcrEdits(prev => ({ ...prev, [line.id]: { label: v, amount: prev[line.id]?.amount ?? editAmount } }))}
-                        placeholderTextColor={C.sage}
-                        returnKeyType="done"
-                      />
-                      {line.amount != null && (
-                        <TextInput
-                          style={[styles.ocrAmountInput, { color: C.rust, borderColor: C.lightBorder }]}
-                          value={editAmount}
-                          onChangeText={v => setOcrEdits(prev => ({ ...prev, [line.id]: { label: prev[line.id]?.label ?? editLabel, amount: v } }))}
-                          keyboardType="decimal-pad"
-                          returnKeyType="done"
-                        />
-                      )}
-                    </View>
-                  </TouchableOpacity>
-                );
-              }}
-            />
-
-            {/* Confirm button */}
-            <View style={[styles.ocrFooter, { borderTopColor: C.lightBorder, backgroundColor: C.white }]}>
-              <TouchableOpacity
-                style={[styles.ocrConfirmBtn, { backgroundColor: C.rust }]}
-                onPress={handleOcrConfirm}
-                activeOpacity={0.85}
-              >
-                <Text style={styles.ocrConfirmBtnText}>
-                  Add {ocrLines.filter(l => ocrChecked.has(l.id)).length} items
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
+        imageUri={capturedImageUri ?? null}
+        imageDims={ocrImageDims}
+        items={ocrItemLines}
+        currency={currency}
+        onConfirm={handleOcrConfirm}
+        onCancel={() => setShowOcrReview(false)}
+      />
 
       {/* From History Modal */}
       <Modal
@@ -1226,88 +1160,4 @@ const styles = StyleSheet.create({
   historyRowCountry: { fontFamily: Typography.serif, fontWeight: '400', fontSize: 12 },
   historyRowDate: { fontFamily: Typography.mono, fontSize: 11 },
   historyRowAmount: { fontFamily: Typography.mono, fontSize: 15, fontWeight: '700' },
-  // OCR Review Modal
-  ocrOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'flex-end',
-  },
-  ocrSheet: {
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    maxHeight: '92%',
-    flex: 1,
-    marginTop: 60,
-  },
-  ocrImage: {
-    width: '100%',
-    backgroundColor: '#000',
-  },
-  ocrSectionLabel: {
-    fontFamily: Typography.mono,
-    fontSize: 11,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderBottomWidth: 0.5,
-  },
-  ocrRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderBottomWidth: 0.5,
-    gap: 10,
-  },
-  ocrCheckbox: {
-    width: 22,
-    height: 22,
-    borderRadius: 5,
-    borderWidth: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  ocrCheckMark: { color: '#fff', fontSize: 13, fontWeight: '700' },
-  ocrRowContent: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  ocrLabelInput: {
-    flex: 1,
-    fontFamily: Typography.mono,
-    fontSize: 13,
-    paddingVertical: 3,
-    paddingHorizontal: 6,
-    borderWidth: 1,
-    borderRadius: Radius.sm,
-  },
-  ocrAmountInput: {
-    width: 72,
-    fontFamily: Typography.mono,
-    fontSize: 13,
-    fontWeight: '700',
-    textAlign: 'right',
-    paddingVertical: 3,
-    paddingHorizontal: 6,
-    borderWidth: 1,
-    borderRadius: Radius.sm,
-  },
-  ocrFooter: {
-    padding: 16,
-    borderTopWidth: 1,
-  },
-  ocrConfirmBtn: {
-    borderRadius: Radius.md,
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
-  ocrConfirmBtnText: {
-    fontFamily: Typography.mono,
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#fff',
-  },
 });

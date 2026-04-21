@@ -22,10 +22,10 @@ import { useTripStore } from '../../store/tripStore';
 import { useSettingsStore } from '../../store/settingsStore';
 import { useHistoryStore } from '../../store/historyStore';
 import { useColors } from '../../hooks/useColors';
-import { usePremium } from '../../hooks/usePremium';
 import { Typography, Radius } from '../../constants/Theme';
 import { formatAmount } from '../../utils/tipCalculations';
-import { parseAmountsFromText } from '../../utils/parseAmounts';
+import { parseAmountsFromText, extractItemLines, ItemLine } from '../../utils/parseAmounts';
+import OcrItemReview from '../../components/OcrItemReview';
 import ContinentCountryPicker from '../../components/ContinentCountryPicker';
 import TripPickerDropdown from '../../components/TripPickerDropdown';
 import TipBanner from '../../components/TipBanner';
@@ -38,6 +38,13 @@ try {
   TextRecognition = require('@react-native-ml-kit/text-recognition').default;
 } catch {
   TextRecognition = null;
+}
+
+let manipulateAsync: ((uri: string, actions: any[], options?: any) => Promise<{ uri: string; width: number; height: number }>) | null = null;
+try {
+  manipulateAsync = require('expo-image-manipulator').manipulateAsync;
+} catch {
+  manipulateAsync = null;
 }
 
 type QuickMode = 'equal' | 'percentage' | 'custom';
@@ -60,7 +67,6 @@ export default function SplitScreen() {
   const { trips, addBill } = useTripStore();
   const { userName, homeCurrency, favouriteCountries, patch, savedParticipantNames, addSavedParticipantName } = useSettingsStore();
   const { entries: historyEntries, addEntry } = useHistoryStore();
-  const isPremium = usePremium();
   const { prefillAmount, prefillCurrency: _prefillCurrency, prefillContinent, prefillCountry } = useLocalSearchParams<{
     prefillAmount?: string;
     prefillCurrency?: string;
@@ -99,6 +105,10 @@ export default function SplitScreen() {
   ]);
   const [scanning, setScanning] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
+  const [ocrImageUri, setOcrImageUri] = useState<string | null>(null);
+  const [ocrImageDims, setOcrImageDims] = useState<{ w: number; h: number } | null>(null);
+  const [ocrItems, setOcrItems] = useState<ItemLine[]>([]);
+  const [showOcrReview, setShowOcrReview] = useState(false);
 
   // Save modal state
   const [showSaveModal, setShowSaveModal] = useState(false);
@@ -184,14 +194,33 @@ export default function SplitScreen() {
 
   const processOcrUri = useCallback(async (uri: string) => {
     setScanning(true);
+    setOcrImageUri(uri);
     try {
       if (!TextRecognition) throw new Error('unavailable');
       const result = await TextRecognition.recognize(uri);
-      const amounts = parseAmountsFromText(result.text);
-      if (amounts.length > 0) {
-        setQuickAmount(String(amounts[0].value));
+
+      // Get image dims for overlay
+      let dims: { w: number; h: number } | null = null;
+      if (manipulateAsync) {
+        try {
+          const info = await manipulateAsync(uri, []);
+          dims = { w: info.width, h: info.height };
+        } catch { /* leave null */ }
+      }
+
+      const { lines, hasSpatial } = extractItemLines(result.blocks);
+      if (hasSpatial && lines.length > 0) {
+        setOcrItems(lines);
+        setOcrImageDims(dims);
+        setShowOcrReview(true);
       } else {
-        Alert.alert('No amount found', 'Could not detect an amount. Enter manually.');
+        // Fallback: extract a single total amount
+        const amounts = parseAmountsFromText(result.text);
+        if (amounts.length > 0) {
+          setQuickAmount(String(amounts[0].value));
+        } else {
+          Alert.alert('No amount found', 'Could not detect an amount. Enter manually.');
+        }
       }
     } catch {
       Alert.alert('Scan', 'Not available in Expo Go. Enter amount manually.');
@@ -358,10 +387,6 @@ export default function SplitScreen() {
               <TouchableOpacity
                 style={[styles.scanIconBtn, { borderColor: C.lightBorder, backgroundColor: C.cream }]}
                 onPress={async () => {
-                  if (!isPremium) {
-                    Alert.alert(t('premium.title'), t('premium.upgradeMsg'));
-                    return;
-                  }
                   if (TextRecognition) {
                     if (!permission?.granted) {
                       const { granted } = await requestPermission();
@@ -611,8 +636,8 @@ export default function SplitScreen() {
               </View>
             )}
 
-            {/* Save button (Premium only) */}
-            {isPremium && totalAmount > 0 && (
+            {/* Save button */}
+            {totalAmount > 0 && (
               <View style={[styles.saveSection, { borderTopColor: C.lightBorder }]}>
                 <TouchableOpacity
                   style={[styles.saveBtn, { backgroundColor: C.rust }]}
@@ -695,6 +720,20 @@ export default function SplitScreen() {
           <Text style={styles.savedToastText}>✓  {t('result.saved')}</Text>
         </View>
       )}
+
+      <OcrItemReview
+        visible={showOcrReview}
+        imageUri={ocrImageUri}
+        imageDims={ocrImageDims}
+        items={ocrItems}
+        currency={quickCurrency}
+        onConfirm={(selected) => {
+          const total = selected.reduce((s, l) => s + l.amount, 0);
+          if (total > 0) setQuickAmount(total.toFixed(2));
+          setShowOcrReview(false);
+        }}
+        onCancel={() => setShowOcrReview(false)}
+      />
     </SafeAreaView>
   );
 }

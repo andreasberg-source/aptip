@@ -403,6 +403,105 @@ export interface AmountLine {
   kind: 'total' | 'subtotal' | 'tax' | 'item';
 }
 
+/** Item line for the itemized OCR picker — includes frame data for overlay rendering. */
+export interface ItemLine {
+  id: string;
+  text: string;
+  label: string;
+  amount: number;
+  quantity?: number;
+  frame: { left: number; top: number; width: number; height: number };
+  kind: 'item' | 'total' | 'subtotal' | 'tax';
+}
+
+/**
+ * Extract item lines from ML Kit blocks with frame data for tap-on-image overlay.
+ * Returns { lines, hasSpatial } — callers should fall back to classifyOcrLines when
+ * hasSpatial is false or lines is empty.
+ */
+export function extractItemLines(
+  blocks: MlBlock[],
+  _country?: string,
+): { lines: ItemLine[]; hasSpatial: boolean } {
+  const { minLeft, maxRight, minTop, maxBottom } = getReceiptBounds(blocks);
+  const receiptWidth = maxRight - minLeft;
+  const receiptHeight = maxBottom - minTop;
+  const hasSpatial = receiptWidth > 0 && receiptHeight > 0 && !!blocks[0]?.lines?.[0]?.frame;
+
+  if (!hasSpatial) return { lines: [], hasSpatial: false };
+
+  const priceXThreshold = minLeft + receiptWidth * 0.55;
+  const allLines: MlLine[] = blocks.flatMap(b => b.lines ?? []);
+  const result: ItemLine[] = [];
+  let idx = 0;
+
+  for (const line of allLines) {
+    const trimmed = line.text?.trim();
+    if (!trimmed || !line.frame) continue;
+
+    // Filter header/footer
+    const lineCenter = line.frame.top + line.frame.height / 2;
+    const relY = (lineCenter - minTop) / receiptHeight;
+    if (relY < 0.12 || relY > 0.92) continue;
+
+    const lower = trimmed.toLowerCase();
+    let kind: ItemLine['kind'] = 'item';
+    if (TOTAL_KEYWORDS.some(k => lower.includes(k))) kind = 'total';
+    else if (SKIP_KEYWORDS.some(k => lower.includes(k))) kind = 'tax';
+
+    // Spatial label/price split
+    const labelWords: string[] = [];
+    let rightmostPrice: number | null = null;
+    let rightmostX = -Infinity;
+    for (const el of (line.elements ?? [])) {
+      const elLeft = el.frame?.left ?? line.frame.left;
+      const elText = el.text.trim();
+      if (!elText) continue;
+      const vals = extractValues(elText);
+      if (elLeft >= priceXThreshold && vals.length > 0 && elLeft > rightmostX) {
+        rightmostX = elLeft;
+        rightmostPrice = vals[0];
+      } else if (elLeft < priceXThreshold) {
+        labelWords.push(elText);
+      }
+    }
+    let label = labelWords.join(' ').trim().slice(0, 40);
+    let amount = rightmostPrice;
+
+    // Full-line fallback
+    if (amount === null) {
+      const vals = extractValues(trimmed);
+      if (vals.length > 0) amount = vals[vals.length - 1];
+      if (!label) label = extractLabel(trimmed);
+    }
+
+    if (!amount || amount <= 0) continue;
+    if (!label && kind === 'item') continue;
+
+    // Quantity from label prefix/suffix (e.g. "2x Burger" or "Burger x2")
+    let quantity: number | undefined;
+    const prefixMatch = label.match(/^(\d+)\s*[x×]\s*/i);
+    const suffixMatch = !prefixMatch ? label.match(/\s*[x×]\s*(\d+)$/i) : null;
+    if (prefixMatch && +prefixMatch[1] <= 99) {
+      quantity = +prefixMatch[1];
+      label = label.slice(prefixMatch[0].length).trim();
+    } else if (suffixMatch && +suffixMatch[1] <= 99) {
+      quantity = +suffixMatch[1];
+      label = label.slice(0, label.length - suffixMatch[0].length).trim();
+    }
+
+    result.push({ id: `il-${idx++}`, text: trimmed, label, amount, quantity, frame: line.frame, kind });
+  }
+
+  result.sort((a, b) => {
+    const rank = (k: string) => k === 'total' ? 0 : (k === 'subtotal' || k === 'tax') ? 1 : 2;
+    if (rank(a.kind) !== rank(b.kind)) return rank(a.kind) - rank(b.kind);
+    return b.amount - a.amount;
+  });
+
+  return { lines: result, hasSpatial: true };
+}
+
 /**
  * Extract every line that contains a numeric amount from ML Kit blocks.
  * No keyword filtering — returns all amounts so the user can pick.

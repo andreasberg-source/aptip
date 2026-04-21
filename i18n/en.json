@@ -62,7 +62,6 @@
     "saveModalTitle": "Save bill",
     "saveNamePlaceholder": "Restaurant, café…",
     "addToTrip": "Add to a trip",
-    "premiumLabel": "Premium",
     "savedConfirm": "Saved",
     "saved": "Saved",
     "splitBill": "Split bill",
@@ -696,12 +695,6 @@
     "people": "{{n}} ppl.",
     "delete": "Delete",
     "removedBills": "Bills from trips"
-  },
-  "premium": {
-    "title": "Premium feature",
-    "upgradeMsg": "This feature requires premium. Toggle Premium mode in Settings.",
-    "tripsLocked": "Trips is a premium feature",
-    "tripsLockedHint": "Enable Premium mode in Settings to manage trips"
   },
   "settings": {
     "title": "Settings",

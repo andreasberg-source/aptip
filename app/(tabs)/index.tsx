@@ -26,7 +26,6 @@ import { useTripStore } from '../../store/tripStore';
 import { useExchangeRateStore } from '../../store/exchangeRateStore';
 import { Typography, Radius } from '../../constants/Theme';
 import { useColors } from '../../hooks/useColors';
-import { usePremium } from '../../hooks/usePremium';
 import { useCountryFromLocation } from '../../hooks/useCountryFromLocation';
 import ContinentCountryPicker from '../../components/ContinentCountryPicker';
 import ServiceTypeSelector from '../../components/ServiceTypeSelector';
@@ -48,7 +47,6 @@ export default function CalculatorScreen() {
   const { homeCurrency, defaultSatisfaction, favouriteCountries, userName, patch } =
     useSettingsStore();
   const getHomeAmount = useExchangeRateStore((s) => s.getHomeAmount);
-  const isPremium = usePremium();
   const { trips, addBill } = useTripStore();
 
   const [continent, setContinent] = useState<ContinentKey | ''>('');
@@ -176,7 +174,7 @@ export default function CalculatorScreen() {
       homeCurrency,
       name: descriptionName,
     });
-    if (isPremium && selectedTripId) {
+    if (selectedTripId) {
       addBill({
         tripId: selectedTripId,
         description: descriptionName || country,
@@ -192,7 +190,7 @@ export default function CalculatorScreen() {
     setShowSaveModal(false);
     setSavedVisible(true);
     setTimeout(() => setSavedVisible(false), 2000);
-  }, [result, countryData, continent, country, homeAmount, homeCurrency, saveName, addEntry, isPremium, selectedTripId, addBill, userName]);
+  }, [result, countryData, continent, country, homeAmount, homeCurrency, saveName, addEntry, selectedTripId, addBill, userName]);
 
   return (
     <SafeAreaView style={[styles.flex, { backgroundColor: C.cream }]}>
@@ -361,20 +359,12 @@ export default function CalculatorScreen() {
               autoFocus
             />
 
-            {/* Add to trip — active for premium, locked for free */}
-            {isPremium ? (
-              <TripPickerDropdown
-                value={selectedTripId}
-                onChange={setSelectedTripId}
-                trips={trips.filter(tr => !tr.archived)}
-                label={t('result.addToTrip')}
-              />
-            ) : (
-              <View style={[styles.modalPremiumRow, { borderColor: C.lightBorder, opacity: 0.35 }]}>
-                <Text style={[styles.modalPremiumText, { color: C.darkSlate }]}>🔒  {t('result.addToTrip')}</Text>
-                <Text style={[styles.modalPremiumBadge, { backgroundColor: C.gold, color: '#fff' }]}>{t('result.premiumLabel')}</Text>
-              </View>
-            )}
+            <TripPickerDropdown
+              value={selectedTripId}
+              onChange={setSelectedTripId}
+              trips={trips.filter(tr => !tr.archived)}
+              label={t('result.addToTrip')}
+            />
 
             <View style={styles.modalBtns}>
               <TouchableOpacity
@@ -517,30 +507,6 @@ const styles = StyleSheet.create({
     paddingVertical: 11,
     fontFamily: Typography.mono,
     fontSize: 15,
-  },
-  modalPremiumRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderWidth: 1,
-    borderRadius: Radius.sm,
-    paddingVertical: 12,
-    paddingHorizontal: 14,
-  },
-  modalPremiumText: {
-    fontFamily: Typography.serif,
-    fontSize: 14,
-    flex: 1,
-  },
-  modalPremiumBadge: {
-    fontFamily: Typography.mono,
-    fontSize: 10,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    borderRadius: Radius.sm,
-    paddingVertical: 3,
-    paddingHorizontal: 7,
   },
   modalBtns: {
     flexDirection: 'row',

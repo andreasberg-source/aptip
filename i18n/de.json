@@ -62,7 +62,6 @@
     "saveModalTitle": "Rechnung speichern",
     "saveNamePlaceholder": "Restaurant, Café…",
     "addToTrip": "Zu einer Reise hinzufügen",
-    "premiumLabel": "Premium",
     "savedConfirm": "Gespeichert",
     "saved": "Gespeichert",
     "splitBill": "Rechnung aufteilen",
@@ -687,12 +686,6 @@
     "emptyHint": "Berechnen Sie ein Trinkgeld, um es hier zu sehen",
     "addToTrip": "Zur Reise hinzufügen",
     "addedToTrip": "Zur Reise hinzugefügt"
-  },
-  "premium": {
-    "title": "Premium-Funktion",
-    "upgradeMsg": "Diese Funktion erfordert den Premium-Modus. Aktivieren Sie ihn in den Einstellungen.",
-    "tripsLocked": "Reisen ist eine Premium-Funktion",
-    "tripsLockedHint": "Premium-Modus in den Einstellungen aktivieren"
   },
   "history": {
     "title": "Verlauf",

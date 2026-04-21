@@ -62,7 +62,6 @@
     "saveModalTitle": "Lagre regning",
     "saveNamePlaceholder": "Restaurant, kafé…",
     "addToTrip": "Legg til en tur",
-    "premiumLabel": "Premium",
     "savedConfirm": "Lagret",
     "saved": "Lagret",
     "splitBill": "Splitt regning",
@@ -696,12 +695,6 @@
     "people": "{{n}} pers.",
     "delete": "Slett",
     "removedBills": "Regninger fra turer"
-  },
-  "premium": {
-    "title": "Premiumfunksjon",
-    "upgradeMsg": "Denne funksjonen krever premium. Slå på premiummodus i Innstillinger.",
-    "tripsLocked": "Turer er en premiumfunksjon",
-    "tripsLockedHint": "Aktiver premiummodus i Innstillinger for å administrere turer"
   },
   "settings": {
     "title": "Innstillinger",

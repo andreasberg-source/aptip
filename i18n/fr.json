@@ -62,7 +62,6 @@
     "saveModalTitle": "Enregistrer la note",
     "saveNamePlaceholder": "Restaurant, café…",
     "addToTrip": "Ajouter à un voyage",
-    "premiumLabel": "Premium",
     "savedConfirm": "Enregistré",
     "saved": "Enregistré",
     "splitBill": "Partager la note",
@@ -688,12 +687,6 @@
     "emptyHint": "Calculez un pourboire pour le voir ici",
     "addToTrip": "Ajouter au voyage",
     "addedToTrip": "Ajouté au voyage"
-  },
-  "premium": {
-    "title": "Fonctionnalité premium",
-    "upgradeMsg": "Cette fonctionnalité nécessite le mode premium. Activez-le dans les Paramètres.",
-    "tripsLocked": "Les voyages sont une fonctionnalité premium",
-    "tripsLockedHint": "Activez le mode premium dans les Paramètres"
   },
   "history": {
     "title": "Historique",

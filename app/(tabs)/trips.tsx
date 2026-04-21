@@ -12,14 +12,12 @@ import { useTranslation } from 'react-i18next';
 
 import { useTripStore, Trip } from '../../store/tripStore';
 import { useColors } from '../../hooks/useColors';
-import { usePremium } from '../../hooks/usePremium';
 import { Typography, Radius } from '../../constants/Theme';
 
 export default function TripsScreen() {
   const { t } = useTranslation();
   const C = useColors();
   const { trips } = useTripStore();
-  const isPremium = usePremium();
 
   const activeTrips = trips.filter(tr => !tr.archived);
 
@@ -78,46 +76,36 @@ export default function TripsScreen() {
         </TouchableOpacity>
       </View>
 
-      {isPremium ? (
-        <FlatList
-          data={activeTrips}
-          keyExtractor={item => item.id}
-          renderItem={renderTrip}
-          ListHeaderComponent={
-            <View style={styles.listHeader}>
-              <TouchableOpacity
-                style={[styles.newTripBtn, { backgroundColor: C.rust }]}
-                onPress={() => router.push('/new-trip')}
-                activeOpacity={0.8}
-              >
-                <Text style={styles.newTripBtnText}>+ {t('splitTab.newTrip')}</Text>
-              </TouchableOpacity>
-            </View>
-          }
-          ListEmptyComponent={
-            <View style={styles.emptyState}>
-              <Text style={styles.emptyIcon}>🗺️</Text>
-              <Text style={[styles.emptyText, { color: C.darkSlate }]}>{t('tripsTab.noTrips')}</Text>
-              <Text style={[styles.emptyHint, { color: C.sage }]}>{t('tripsTab.noTripsHint')}</Text>
-            </View>
-          }
-          contentContainerStyle={styles.listContent}
-        />
-      ) : (
-        <View style={styles.flex}>
-          <View style={[styles.premiumLock, { backgroundColor: C.white, borderColor: C.lightBorder }]}>
-            <Text style={[styles.premiumLockText, { color: C.darkSlate }]}>🔒 {t('premium.tripsLocked')}</Text>
-            <Text style={[styles.premiumLockHint, { color: C.sage }]}>{t('premium.tripsLockedHint')}</Text>
+      <FlatList
+        data={activeTrips}
+        keyExtractor={item => item.id}
+        renderItem={renderTrip}
+        ListHeaderComponent={
+          <View style={styles.listHeader}>
+            <TouchableOpacity
+              style={[styles.newTripBtn, { backgroundColor: C.rust }]}
+              onPress={() => router.push('/new-trip')}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.newTripBtnText}>+ {t('splitTab.newTrip')}</Text>
+            </TouchableOpacity>
           </View>
-        </View>
-      )}
+        }
+        ListEmptyComponent={
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyIcon}>🗺️</Text>
+            <Text style={[styles.emptyText, { color: C.darkSlate }]}>{t('tripsTab.noTrips')}</Text>
+            <Text style={[styles.emptyHint, { color: C.sage }]}>{t('tripsTab.noTripsHint')}</Text>
+          </View>
+        }
+        contentContainerStyle={styles.listContent}
+      />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   safe: { flex: 1 },
-  flex: { flex: 1, padding: 16 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -213,13 +201,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 18,
   },
-  premiumLock: {
-    borderWidth: 1.5,
-    borderRadius: Radius.md,
-    padding: 16,
-    alignItems: 'center',
-    marginTop: 16,
-  },
-  premiumLockText: { fontFamily: Typography.serif, fontWeight: '700', fontSize: 15, marginBottom: 4 },
-  premiumLockHint: { fontFamily: Typography.mono, fontSize: 12, textAlign: 'center' },
 });
