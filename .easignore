@@ -1,7 +1,7 @@
 # Files excluded from the EAS build archive (not needed to compile the app)
 
-# Store listing / marketing
-store/
+# Store listing / marketing (only the Play Store text files, NOT the Zustand store source)
+store/listing/
 PRIVACY_POLICY.md
 *.code-workspace
 
