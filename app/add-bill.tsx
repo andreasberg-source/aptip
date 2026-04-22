@@ -20,7 +20,8 @@ import { useTranslation } from 'react-i18next';
 import * as ImagePicker from 'expo-image-picker';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 
-import { useTripStore, Bill, BillItem, SplitMode } from '../store/tripStore';
+import { useTripStore } from '../store/tripStore';
+import type { Bill, BillItem, SplitMode } from '../store/tripStore';
 import { useSettingsStore } from '../store/settingsStore';
 import { useHistoryStore } from '../store/historyStore';
 import { useColors } from '../hooks/useColors';
@@ -30,7 +31,8 @@ import {
   computePercentageSplits,
   computeItemizedSplits,
 } from '../utils/settlement';
-import { classifyOcrLines, extractItemLines, ItemLine } from '../utils/parseAmounts';
+import { classifyOcrLines, extractItemLines } from '../utils/parseAmounts';
+import type { ItemLine } from '../utils/parseAmounts';
 import OcrItemReview from '../components/OcrItemReview';
 import ContinentCountryPicker from '../components/ContinentCountryPicker';
 import ServiceTypeSelector from '../components/ServiceTypeSelector';

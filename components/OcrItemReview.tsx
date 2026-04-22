@@ -11,7 +11,7 @@ import {
   LayoutChangeEvent,
 } from 'react-native';
 import { Colors, Typography, Radius } from '../constants/Theme';
-import { ItemLine } from '../utils/parseAmounts';
+import type { ItemLine } from '../utils/parseAmounts';
 
 // ─── Coordinate helpers (same math as scan.tsx — inlined to avoid importing a route file) ────
 
