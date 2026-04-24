@@ -3,6 +3,7 @@ import { Stack, router } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { I18nextProvider } from 'react-i18next';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 
 import { registerWidgetTaskHandler } from 'react-native-android-widget';
@@ -73,6 +74,7 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
+      <StatusBar style="dark" />
       <I18nextProvider i18n={i18n}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

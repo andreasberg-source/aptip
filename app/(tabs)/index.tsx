@@ -465,8 +465,8 @@ const styles = StyleSheet.create({
   bottomPad: { height: 20 },
   tipRateHint: {
     fontFamily: Typography.mono,
-    fontSize: 12,
-    marginTop: -4,
+    fontSize: 13,
+    marginTop: -12,
     marginBottom: 8,
     lineHeight: 18,
     paddingHorizontal: 4,
