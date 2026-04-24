@@ -59,6 +59,91 @@ export const CURRENCY_NAMES: Record<string, string> = {
   RON: 'Romanian Leu',
   BGN: 'Bulgarian Lev',
   RUB: 'Russian Ruble',
+  // New currencies
+  ALL: 'Albanian Lek',
+  AMD: 'Armenian Dram',
+  AZN: 'Azerbaijani Manat',
+  BAM: 'Bosnia-Herzegovina Convertible Mark',
+  BND: 'Brunei Dollar',
+  BOB: 'Bolivian Boliviano',
+  BSD: 'Bahamian Dollar',
+  BTN: 'Bhutanese Ngultrum',
+  BWP: 'Botswanan Pula',
+  BYN: 'Belarusian Ruble',
+  BZD: 'Belize Dollar',
+  CDF: 'Congolese Franc',
+  CRC: 'Costa Rican Colón',
+  CUP: 'Cuban Peso',
+  CVE: 'Cape Verdean Escudo',
+  DJF: 'Djiboutian Franc',
+  DOP: 'Dominican Peso',
+  DZD: 'Algerian Dinar',
+  ERN: 'Eritrean Nakfa',
+  ETB: 'Ethiopian Birr',
+  GEL: 'Georgian Lari',
+  GMD: 'Gambian Dalasi',
+  GNF: 'Guinean Franc',
+  GTQ: 'Guatemalan Quetzal',
+  GYD: 'Guyanese Dollar',
+  HNL: 'Honduran Lempira',
+  HTG: 'Haitian Gourde',
+  IQD: 'Iraqi Dinar',
+  IRR: 'Iranian Rial',
+  JMD: 'Jamaican Dollar',
+  KGS: 'Kyrgyzstani Som',
+  KHR: 'Cambodian Riel',
+  KMF: 'Comorian Franc',
+  KPW: 'North Korean Won',
+  KZT: 'Kazakhstani Tenge',
+  LAK: 'Laotian Kip',
+  LRD: 'Liberian Dollar',
+  LSL: 'Lesotho Loti',
+  LYD: 'Libyan Dinar',
+  MDL: 'Moldovan Leu',
+  MGA: 'Malagasy Ariary',
+  MKD: 'Macedonian Denar',
+  MMK: 'Myanmar Kyat',
+  MNT: 'Mongolian Tögrög',
+  MRU: 'Mauritanian Ouguiya',
+  MUR: 'Mauritian Rupee',
+  MVR: 'Maldivian Rufiyaa',
+  MWK: 'Malawian Kwacha',
+  MZN: 'Mozambican Metical',
+  NAD: 'Namibian Dollar',
+  NIO: 'Nicaraguan Córdoba',
+  PGK: 'Papua New Guinean Kina',
+  PYG: 'Paraguayan Guaraní',
+  RSD: 'Serbian Dinar',
+  RWF: 'Rwandan Franc',
+  SBD: 'Solomon Islands Dollar',
+  SCR: 'Seychellois Rupee',
+  SDG: 'Sudanese Pound',
+  SLE: 'Sierra Leonean Leone',
+  SOS: 'Somali Shilling',
+  SRD: 'Surinamese Dollar',
+  SSP: 'South Sudanese Pound',
+  STN: 'São Tomé and Príncipe Dobra',
+  SYP: 'Syrian Pound',
+  SZL: 'Swazi Lilangeni',
+  TJS: 'Tajikistani Somoni',
+  TMT: 'Turkmenistani Manat',
+  TOP: 'Tongan Paʻanga',
+  TTD: 'Trinidad and Tobago Dollar',
+  UAH: 'Ukrainian Hryvnia',
+  UGX: 'Ugandan Shilling',
+  UZS: 'Uzbekistani Som',
+  VES: 'Venezuelan Bolívar',
+  VUV: 'Vanuatu Vatu',
+  WST: 'Samoan Tālā',
+  XAF: 'Central African CFA Franc',
+  XCD: 'East Caribbean Dollar',
+  XOF: 'West African CFA Franc',
+  YER: 'Yemeni Rial',
+  ZMW: 'Zambian Kwacha',
+  AFN: 'Afghan Afghani',
+  AOA: 'Angolan Kwanza',
+  BIF: 'Burundian Franc',
+  BBD: 'Barbadian Dollar',
 };
 
 /** Sorted list of [code, name] pairs for display in pickers. */
@@ -66,11 +151,16 @@ export const SORTED_CURRENCIES: { code: string; name: string }[] = Object.entrie
   .map(([code, name]) => ({ code, name }))
   .sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
 
+const LOCALE_MAP: Record<string, string> = {
+  no: 'nb', en: 'en-US', fr: 'fr-FR', es: 'es-ES', de: 'de-DE',
+};
+
 /** Return a locale-appropriate display name for a currency code.
  *  Uses Intl.DisplayNames when available (modern Hermes/V8), falls back to CURRENCY_NAMES. */
 export function getLocalizedCurrencyName(code: string, locale: string): string {
+  const bcp47 = LOCALE_MAP[locale] ?? locale;
   try {
-    const dn = new Intl.DisplayNames([locale], { type: 'currency' });
+    const dn = new Intl.DisplayNames([bcp47], { type: 'currency' });
     return dn.of(code) ?? CURRENCY_NAMES[code] ?? code;
   } catch {
     return CURRENCY_NAMES[code] ?? code;

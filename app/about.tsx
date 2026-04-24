@@ -64,6 +64,23 @@ export default function AboutScreen() {
           <Text style={[styles.cardText, { color: C.darkSlate }]}>{t('about.description')}</Text>
         </View>
 
+        {/* Release notes */}
+        <View style={[styles.card, { backgroundColor: C.white, borderColor: C.lightBorder }]}>
+          <View style={styles.releaseHeader}>
+            <Text style={[styles.cardTitle, { color: C.darkSlate }]}>{t('about.releaseTitle')}</Text>
+            <View style={[styles.versionBadge, { backgroundColor: C.rust }]}>
+              <Text style={styles.versionBadgeText}>{t('about.releaseVersion')}</Text>
+            </View>
+          </View>
+          <Text style={[styles.releaseDate, { color: C.sage }]}>{t('about.releaseDate')}</Text>
+          {(['releaseItem1','releaseItem2','releaseItem3','releaseItem4','releaseItem5','releaseItem6'] as const).map((key) => (
+            <View key={key} style={styles.releaseRow}>
+              <Text style={[styles.releaseBullet, { color: C.rust }]}>•</Text>
+              <Text style={[styles.releaseItemText, { color: C.darkSlate }]}>{t(`about.${key}`)}</Text>
+            </View>
+          ))}
+        </View>
+
         {/* Feedback */}
         <View style={[styles.card, { backgroundColor: C.white, borderColor: C.lightBorder }]}>
           <Text style={[styles.cardTitle, { color: C.darkSlate }]}>{t('about.feedbackTitle')}</Text>
@@ -173,6 +190,46 @@ const styles = StyleSheet.create({
     fontFamily: Typography.mono,
     fontSize: 14,
     lineHeight: 22,
+  },
+  releaseHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 4,
+  },
+  versionBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    borderRadius: Radius.sm,
+  },
+  versionBadgeText: {
+    fontFamily: Typography.mono,
+    fontSize: 12,
+    color: '#fff',
+    fontWeight: '600',
+    letterSpacing: 0.4,
+  },
+  releaseDate: {
+    fontFamily: Typography.mono,
+    fontSize: 12,
+    marginBottom: 8,
+  },
+  releaseRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+    paddingVertical: 2,
+  },
+  releaseBullet: {
+    fontFamily: Typography.mono,
+    fontSize: 14,
+    lineHeight: 22,
+  },
+  releaseItemText: {
+    fontFamily: Typography.mono,
+    fontSize: 13,
+    lineHeight: 20,
+    flex: 1,
   },
   feedbackBtn: {
     marginTop: 8,

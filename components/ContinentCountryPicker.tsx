@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import { tippingData, ContinentKey } from '../data/tippingData';
+import { tippingData, ContinentKey, getLocalizedCountryName } from '../data/tippingData';
+import i18n from '../i18n';
 import { useColors } from '../hooks/useColors';
 import { Typography, Radius } from '../constants/Theme';
 import LocationPickerModal from './LocationPickerModal';
@@ -57,7 +58,7 @@ export default function ContinentCountryPicker({
           ]}
           numberOfLines={1}
         >
-          {hasSelection ? country : t('location.button')}
+          {hasSelection ? getLocalizedCountryName(country, i18n.language) : t('location.button')}
         </Text>
         {hasSelection && currency ? (
           <View style={[styles.currencyBadge, { borderColor: C.rust }]}>

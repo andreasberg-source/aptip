@@ -56,7 +56,26 @@
           "photosPermission": "Used to pick a receipt photo for tip calculation"
         }
       ],
-      "expo-localization"
+      "expo-localization",
+      [
+        "react-native-android-widget",
+        {
+          "widgets": [
+            {
+              "name": "TipWidget",
+              "label": "Aptip — Tip Calculator",
+              "description": "Quick tip calculator with GPS currency detection",
+              "previewImage": "./assets/images/widget-preview.png",
+              "minWidth": "250dp",
+              "minHeight": "110dp",
+              "maxResizeWidth": "400dp",
+              "maxResizeHeight": "250dp",
+              "resizeMode": "horizontal|vertical",
+              "updatePeriodMillis": 0
+            }
+          ]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

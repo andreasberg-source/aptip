@@ -31,8 +31,8 @@ import {
   computePercentageSplits,
   computeItemizedSplits,
 } from '../utils/settlement';
-import { classifyOcrLines, extractItemLines } from '../utils/parseAmounts';
-import type { ItemLine } from '../utils/parseAmounts';
+import { extractRawLines } from '../utils/parseAmounts';
+import type { RawLine } from '../utils/parseAmounts';
 import OcrItemReview from '../components/OcrItemReview';
 import ContinentCountryPicker from '../components/ContinentCountryPicker';
 import ServiceTypeSelector from '../components/ServiceTypeSelector';
@@ -140,8 +140,7 @@ export default function AddBillScreen() {
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
   const [cameraLayout, setCameraLayout] = useState({ width: 0, height: 0 });
-  const [ocrItemLines, setOcrItemLines] = useState<ItemLine[]>([]);
-  const [ocrImageDims, setOcrImageDims] = useState<{ w: number; h: number } | null>(null);
+  const [ocrItemLines, setOcrItemLines] = useState<RawLine[]>([]);
   const [showOcrReview, setShowOcrReview] = useState(false);
 
   const participants = trip?.participants ?? [];
@@ -246,41 +245,12 @@ export default function AddBillScreen() {
     try {
       if (!TextRecognition) throw new Error('OCR not available');
       const result = await TextRecognition.recognize(uri);
-
-      // Get image dims for overlay
-      let dims: { w: number; h: number } | null = null;
-      if (manipulateAsync) {
-        try {
-          const info = await manipulateAsync(uri, []);
-          dims = { w: info.width, h: info.height };
-        } catch { /* leave null */ }
+      const lines = extractRawLines(result.blocks);
+      if (lines.length === 0) {
+        Alert.alert('No text found', 'Could not detect any text in the image. Try a clearer photo.');
+        return;
       }
-
-      const { lines, hasSpatial } = extractItemLines(result.blocks, billCountry || undefined);
-
-      if (hasSpatial && lines.length > 0) {
-        setOcrItemLines(lines);
-        setOcrImageDims(dims);
-      } else {
-        // Fallback: text-only classification mapped to ItemLine shape
-        const classified = classifyOcrLines(result.text.split('\n'));
-        if (classified.length === 0) {
-          Alert.alert('No text found', 'Could not detect any text in the image. Try a clearer photo.');
-          return;
-        }
-        const mapped: ItemLine[] = classified
-          .filter(l => l.kind === 'item' && l.amount !== null)
-          .map(l => ({
-            id: l.id,
-            text: l.text,
-            label: l.label,
-            amount: l.amount!,
-            frame: { left: 0, top: 0, width: 0, height: 0 },
-            kind: 'item' as const,
-          }));
-        setOcrItemLines(mapped);
-        setOcrImageDims(null);
-      }
+      setOcrItemLines(lines);
       setShowOcrReview(true);
     } catch (e: any) {
       Alert.alert('Scan error', e.message ?? 'Could not process image');
@@ -288,7 +258,7 @@ export default function AddBillScreen() {
       setScanning(false);
       setShowCamera(false);
     }
-  }, [billCountry]);
+  }, []);
 
   const handlePickImage = useCallback(async () => {
     const result = await ImagePicker.launchImageLibraryAsync({ quality: 0.9 });
@@ -297,9 +267,9 @@ export default function AddBillScreen() {
     }
   }, [processOcrUri]);
 
-  const handleOcrConfirm = useCallback((selected: ItemLine[]) => {
+  const handleOcrConfirm = useCallback((selected: RawLine[]) => {
     const newItems: BillItem[] = selected
-      .map(l => ({ id: generateId(), label: l.label || l.text.slice(0, 40), amount: l.amount, assignedTo: [] }))
+      .map(l => ({ id: generateId(), label: l.label || 'Item', amount: l.amount || 0, assignedTo: [] }))
       .filter(item => item.amount > 0);
     setItems(prev => [...prev, ...newItems]);
     setSplitMode('itemized');
@@ -790,8 +760,6 @@ export default function AddBillScreen() {
 
       <OcrItemReview
         visible={showOcrReview}
-        imageUri={capturedImageUri ?? null}
-        imageDims={ocrImageDims}
         items={ocrItemLines}
         currency={currency}
         onConfirm={handleOcrConfirm}

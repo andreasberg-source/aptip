@@ -5,12 +5,17 @@ import { I18nextProvider } from 'react-i18next';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 
+import { registerWidgetTaskHandler } from 'react-native-android-widget';
+
 import i18n, { initI18n } from '../i18n';
 import { useSettingsStore } from '../store/settingsStore';
 import { useExchangeRateStore } from '../store/exchangeRateStore';
 import { useTripStore } from '../store/tripStore';
+import { widgetTaskHandler } from '../widgets/widgetTaskHandler';
 
 export { ErrorBoundary } from 'expo-router';
+
+registerWidgetTaskHandler(widgetTaskHandler);
 
 export const unstable_settings = {
   initialRouteName: '(tabs)',
@@ -88,6 +93,7 @@ export default function RootLayout() {
           <Stack.Screen name="trip-detail"         options={{ headerShown: false }} />
           <Stack.Screen name="trip-settle"  options={{ headerShown: false }} />
           <Stack.Screen name="donate" options={{ presentation: 'modal', headerShown: false }} />
+          <Stack.Screen name="widget-input" options={{ presentation: 'transparentModal', headerShown: false, animation: 'fade' }} />
         </Stack>
       </I18nextProvider>
     </SafeAreaProvider>

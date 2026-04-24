@@ -1,438 +1,266 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
-  Image,
   Modal,
   TouchableOpacity,
   FlatList,
   TextInput,
   StyleSheet,
-  LayoutChangeEvent,
 } from 'react-native';
-import { Colors, Typography, Radius } from '../constants/Theme';
-import type { ItemLine } from '../utils/parseAmounts';
-
-// ─── Coordinate helpers (same math as scan.tsx — inlined to avoid importing a route file) ────
-
-function getContainLayout(
-  cropW: number, cropH: number,
-  containerW: number, containerH: number,
-) {
-  const imgAspect = cropW / cropH;
-  const boxAspect = containerW / containerH;
-  const displayW = imgAspect > boxAspect ? containerW : containerH * imgAspect;
-  const displayH = imgAspect > boxAspect ? containerW / imgAspect : containerH;
-  return {
-    displayW,
-    displayH,
-    offsetX: (containerW - displayW) / 2,
-    offsetY: (containerH - displayH) / 2,
-  };
-}
-
-function frameToScreen(
-  frame: { left: number; top: number; width: number; height: number },
-  cropW: number, cropH: number,
-  layout: { displayW: number; displayH: number; offsetX: number; offsetY: number },
-) {
-  const sx = layout.displayW / cropW;
-  const sy = layout.displayH / cropH;
-  return {
-    left:   layout.offsetX + frame.left   * sx,
-    top:    layout.offsetY + frame.top    * sy,
-    width:  Math.max(frame.width  * sx, 60),
-    height: Math.max(frame.height * sy, 26),
-  };
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
+import { useColors } from '../hooks/useColors';
+import { Typography, Radius, Spacing } from '../constants/Theme';
+import type { RawLine } from '../utils/parseAmounts';
 
 interface OcrItemReviewProps {
   visible: boolean;
-  imageUri: string | null;
-  imageDims: { w: number; h: number } | null;
-  items: ItemLine[];
-  onConfirm: (selected: ItemLine[]) => void;
-  onCancel: () => void;
+  items: RawLine[];
   currency?: string;
+  onConfirm: (selected: RawLine[]) => void;
+  onCancel: () => void;
 }
 
 export default function OcrItemReview({
   visible,
-  imageUri,
-  imageDims,
   items,
+  currency,
   onConfirm,
   onCancel,
-  currency,
 }: OcrItemReviewProps) {
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const [containerLayout, setContainerLayout] = useState<{ width: number; height: number } | null>(null);
-  const [fallbackEdits, setFallbackEdits] = useState<Record<string, { label: string; amount: string }>>({});
+  const { t } = useTranslation();
+  const C = useColors();
 
-  // Pre-select all item-kind lines when the modal opens
+  const [checkedIds, setCheckedIds] = useState<Set<string>>(new Set());
+  const [edits, setEdits] = useState<Record<string, { label: string; amount: string }>>({});
+  const [localItems, setLocalItems] = useState<RawLine[]>([]);
+
   useEffect(() => {
-    if (visible && items.length > 0) {
-      setSelectedIds(new Set(items.filter(l => l.kind === 'item').map(l => l.id)));
-      setFallbackEdits({});
+    if (visible) {
+      setLocalItems(items);
+      setCheckedIds(new Set(items.filter(l => l.kind === 'item' && l.amount !== null).map(l => l.id)));
+      setEdits({});
     }
   }, [visible, items]);
 
-  const selectedCount = items.filter(l => l.kind === 'item' && selectedIds.has(l.id)).length;
-
-  const handleToggle = (id: string) => {
-    setSelectedIds(prev => {
+  const toggleCheck = useCallback((id: string) => {
+    setCheckedIds(prev => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id); else next.add(id);
       return next;
     });
-  };
+  }, []);
 
-  const handleConfirm = () => {
-    if (imageDims) {
-      onConfirm(items.filter(l => l.kind === 'item' && selectedIds.has(l.id)));
-    } else {
-      // Checklist fallback — use edited values
-      const selected: ItemLine[] = items
-        .filter(l => l.kind === 'item' && selectedIds.has(l.id))
-        .map(l => {
-          const edit = fallbackEdits[l.id];
-          return {
-            ...l,
-            label: edit?.label ?? l.label,
-            amount: parseFloat((edit?.amount ?? String(l.amount)).replace(',', '.')) || l.amount,
-          };
-        });
-      onConfirm(selected);
-    }
-  };
+  const setEditLabel = useCallback((id: string, label: string) => {
+    setEdits(prev => ({ ...prev, [id]: { ...prev[id], label } }));
+  }, []);
 
-  const handleContainerLayout = (e: LayoutChangeEvent) => {
-    const { width, height } = e.nativeEvent.layout;
-    setContainerLayout({ width, height });
-  };
+  const setEditAmount = useCallback((id: string, amount: string) => {
+    setEdits(prev => ({ ...prev, [id]: { ...prev[id], amount } }));
+  }, []);
 
-  // ── Overlay mode (spatial frame data available) ───────────────────────────
+  const handleAddLine = useCallback(() => {
+    const newId = `manual-${Date.now()}`;
+    const newLine: RawLine = { id: newId, label: '', amount: null, kind: 'item' };
+    setLocalItems(prev => [...prev, newLine]);
+    setCheckedIds(prev => new Set([...prev, newId]));
+  }, []);
 
-  if (imageDims) {
-    const layout = containerLayout
-      ? getContainLayout(imageDims.w, imageDims.h, containerLayout.width, containerLayout.height)
-      : null;
+  const handleConfirm = useCallback(() => {
+    const selected: RawLine[] = localItems
+      .filter(l => checkedIds.has(l.id))
+      .map(l => {
+        const edit = edits[l.id];
+        const label = edit?.label !== undefined ? edit.label : l.label;
+        const amountStr = edit?.amount !== undefined ? edit.amount : String(l.amount ?? '');
+        const amount = parseFloat(amountStr.replace(',', '.')) || null;
+        return { ...l, label, amount };
+      })
+      .filter(l => l.amount !== null && l.amount > 0);
+    onConfirm(selected);
+  }, [localItems, checkedIds, edits, onConfirm]);
+
+  const checkedTotal = localItems
+    .filter(l => checkedIds.has(l.id))
+    .reduce((sum, l) => {
+      const edit = edits[l.id];
+      const amountStr = edit?.amount !== undefined ? edit.amount : String(l.amount ?? '0');
+      return sum + (parseFloat(amountStr.replace(',', '.')) || 0);
+    }, 0);
+
+  const checkedCount = checkedIds.size;
+
+  const renderItem = ({ item: line }: { item: RawLine }) => {
+    const checked = checkedIds.has(line.id);
+    const isActive = line.kind === 'item';
+    const editLabel = edits[line.id]?.label !== undefined ? edits[line.id].label : line.label;
+    const editAmount = edits[line.id]?.amount !== undefined ? edits[line.id].amount : (line.amount !== null ? String(line.amount) : '');
 
     return (
-      <Modal visible={visible} animationType="slide" onRequestClose={onCancel}>
-        <View style={styles.overlayRoot}>
-          {/* Header */}
-          <View style={styles.overlayHeader}>
-            <Text style={styles.overlayHeaderCount}>
-              {selectedCount} item{selectedCount !== 1 ? 's' : ''} selected
-            </Text>
-            <TouchableOpacity onPress={onCancel} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-              <Text style={styles.overlayClose}>✕</Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* Image + overlays */}
-          <View style={styles.overlayImageContainer} onLayout={handleContainerLayout}>
-            {imageUri && (
-              <Image
-                source={{ uri: imageUri }}
-                style={StyleSheet.absoluteFill}
-                resizeMode="contain"
-              />
-            )}
-            {layout && containerLayout && items.map(item => {
-              const rect = frameToScreen(item.frame, imageDims.w, imageDims.h, layout);
-              const isItem = item.kind === 'item';
-              const isSelected = isItem && selectedIds.has(item.id);
-              const boxLabel = (item.quantity ? `${item.quantity}× ` : '') + item.label;
-
-              if (!isItem) {
-                return (
-                  <View
-                    key={item.id}
-                    style={[styles.overlayBox, styles.overlayBoxInfo, {
-                      left: rect.left, top: rect.top,
-                      width: rect.width, height: rect.height,
-                    }]}
-                    pointerEvents="none"
-                  >
-                    <Text style={styles.overlayBoxLabel} numberOfLines={1}>{item.label}</Text>
-                    <Text style={styles.overlayBoxAmount}>{item.amount.toFixed(2)}</Text>
-                  </View>
-                );
-              }
-
-              return (
-                <TouchableOpacity
-                  key={item.id}
-                  style={[styles.overlayBox, isSelected ? styles.overlayBoxSelected : styles.overlayBoxUnselected, {
-                    left: rect.left, top: rect.top,
-                    width: rect.width, height: rect.height,
-                  }]}
-                  onPress={() => handleToggle(item.id)}
-                  activeOpacity={0.7}
-                >
-                  <Text style={styles.overlayBoxLabel} numberOfLines={1}>{boxLabel}</Text>
-                  <Text style={styles.overlayBoxAmount}>{item.amount.toFixed(2)}{currency ? ` ${currency}` : ''}</Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-
-          {/* Footer */}
-          <View style={styles.overlayFooter}>
-            <TouchableOpacity
-              style={[styles.overlayConfirmBtn, { opacity: selectedCount === 0 ? 0.5 : 1 }]}
-              onPress={handleConfirm}
-              disabled={selectedCount === 0}
-              activeOpacity={0.85}
-            >
-              <Text style={styles.overlayConfirmBtnText}>
-                Add {selectedCount} item{selectedCount !== 1 ? 's' : ''}
-              </Text>
-            </TouchableOpacity>
-          </View>
+      <TouchableOpacity
+        style={[
+          styles.row,
+          { borderBottomColor: C.lightBorder, backgroundColor: C.white },
+          !checked && { opacity: 0.45 },
+        ]}
+        onPress={() => toggleCheck(line.id)}
+        activeOpacity={0.7}
+      >
+        <View style={[
+          styles.checkbox,
+          {
+            borderColor: checked ? C.rust : C.lightBorder,
+            backgroundColor: checked ? C.rust : C.white,
+          },
+        ]}>
+          {checked && <Text style={styles.checkmark}>✓</Text>}
         </View>
-      </Modal>
+
+        <TextInput
+          style={[styles.labelInput, { color: checked ? C.darkSlate : C.sage }]}
+          value={editLabel}
+          onChangeText={v => setEditLabel(line.id, v)}
+          placeholder={isActive ? 'Item name' : line.kind}
+          placeholderTextColor={C.sage}
+          returnKeyType="done"
+          onPress={(e) => e.stopPropagation?.()}
+        />
+
+        <TextInput
+          style={[
+            styles.amountInput,
+            {
+              borderColor: C.lightBorder,
+              color: checked ? C.rust : C.sage,
+            },
+          ]}
+          value={editAmount}
+          onChangeText={v => setEditAmount(line.id, v)}
+          placeholder="—"
+          placeholderTextColor={C.sage}
+          keyboardType="decimal-pad"
+          returnKeyType="done"
+          onPress={(e) => e.stopPropagation?.()}
+        />
+      </TouchableOpacity>
     );
-  }
-
-  // ── Checklist fallback mode (no spatial data) ─────────────────────────────
-
-  const itemLines = items.filter(l => l.kind === 'item');
+  };
 
   return (
-    <Modal visible={visible} animationType="slide" transparent onRequestClose={onCancel}>
-      <View style={styles.checklistOverlay}>
-        <View style={styles.checklistSheet}>
-          {/* Header */}
-          <View style={styles.checklistHeader}>
-            <TouchableOpacity onPress={onCancel}>
-              <Text style={styles.checklistClose}>✕</Text>
-            </TouchableOpacity>
-            <Text style={styles.checklistTitle}>Review scan</Text>
-            <View style={{ width: 28 }} />
-          </View>
-
-          {/* Receipt image */}
-          {imageUri && (
-            <Image
-              source={{ uri: imageUri }}
-              style={styles.checklistImage}
-              resizeMode="contain"
-            />
-          )}
-
-          <Text style={styles.checklistSectionLabel}>
-            Select items to add ({selectedCount} selected)
-          </Text>
-
-          <FlatList
-            data={itemLines}
-            keyExtractor={l => l.id}
-            style={{ flex: 1 }}
-            renderItem={({ item: line }) => {
-              const checked = selectedIds.has(line.id);
-              const editLabel = fallbackEdits[line.id]?.label ?? line.label;
-              const editAmount = fallbackEdits[line.id]?.amount ?? String(line.amount);
-              return (
-                <TouchableOpacity
-                  style={styles.checklistRow}
-                  onPress={() => handleToggle(line.id)}
-                  activeOpacity={0.7}
-                >
-                  <View style={[styles.checklistCheckbox, {
-                    borderColor: checked ? Colors.rust : Colors.lightBorder,
-                    backgroundColor: checked ? Colors.rust : Colors.white,
-                  }]}>
-                    {checked && <Text style={styles.checklistCheckMark}>✓</Text>}
-                  </View>
-                  <View style={styles.checklistRowContent}>
-                    <TextInput
-                      style={styles.checklistLabelInput}
-                      value={editLabel}
-                      onChangeText={v => setFallbackEdits(prev => ({
-                        ...prev,
-                        [line.id]: { label: v, amount: prev[line.id]?.amount ?? editAmount },
-                      }))}
-                      returnKeyType="done"
-                    />
-                    <TextInput
-                      style={styles.checklistAmountInput}
-                      value={editAmount}
-                      onChangeText={v => setFallbackEdits(prev => ({
-                        ...prev,
-                        [line.id]: { label: prev[line.id]?.label ?? editLabel, amount: v },
-                      }))}
-                      keyboardType="decimal-pad"
-                      returnKeyType="done"
-                    />
-                  </View>
-                </TouchableOpacity>
-              );
-            }}
-          />
-
-          <View style={styles.checklistFooter}>
-            <TouchableOpacity
-              style={[styles.checklistConfirmBtn, { opacity: selectedCount === 0 ? 0.5 : 1 }]}
-              onPress={handleConfirm}
-              disabled={selectedCount === 0}
-              activeOpacity={0.85}
-            >
-              <Text style={styles.checklistConfirmBtnText}>
-                Add {selectedCount} item{selectedCount !== 1 ? 's' : ''}
-              </Text>
-            </TouchableOpacity>
-          </View>
+    <Modal
+      visible={visible}
+      animationType="slide"
+      presentationStyle="pageSheet"
+      onRequestClose={onCancel}
+    >
+      <SafeAreaView style={[styles.safe, { backgroundColor: C.cream }]}>
+        {/* Header */}
+        <View style={[styles.header, { borderBottomColor: C.lightBorder }]}>
+          <TouchableOpacity onPress={onCancel} hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
+            <Text style={[styles.closeBtn, { color: C.rust }]}>✕</Text>
+          </TouchableOpacity>
+          <Text style={[styles.title, { color: C.darkSlate }]}>Review receipt</Text>
+          <TouchableOpacity
+            onPress={handleAddLine}
+            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+          >
+            <Text style={[styles.addBtn, { color: C.rust }]}>＋ Add</Text>
+          </TouchableOpacity>
         </View>
-      </View>
+
+        {/* Subheader */}
+        <View style={[styles.subheader, { backgroundColor: C.white, borderBottomColor: C.lightBorder }]}>
+          <Text style={[styles.subheaderText, { color: C.sage }]}>
+            {checkedCount} item{checkedCount !== 1 ? 's' : ''} selected — tap row to toggle
+          </Text>
+        </View>
+
+        {/* List */}
+        <FlatList
+          data={localItems}
+          keyExtractor={l => l.id}
+          renderItem={renderItem}
+          contentContainerStyle={styles.listContent}
+          keyboardShouldPersistTaps="handled"
+        />
+
+        {/* Footer */}
+        <View style={[styles.footer, { borderTopColor: C.lightBorder, backgroundColor: C.white }]}>
+          <Text style={[styles.footerTotal, { color: C.darkSlate }]}>
+            Total:{' '}
+            <Text style={{ color: C.rust }}>
+              {checkedTotal.toFixed(2)}{currency ? ` ${currency}` : ''}
+            </Text>
+          </Text>
+          <TouchableOpacity
+            style={[
+              styles.confirmBtn,
+              { backgroundColor: C.rust, opacity: checkedCount === 0 ? 0.5 : 1 },
+            ]}
+            onPress={handleConfirm}
+            disabled={checkedCount === 0}
+            activeOpacity={0.85}
+          >
+            <Text style={styles.confirmBtnText}>
+              Add {checkedCount} item{checkedCount !== 1 ? 's' : ''}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-  // ── Overlay mode ──────────────────────────────────────────────────────────
-  overlayRoot: {
-    flex: 1,
-    backgroundColor: '#000',
-  },
-  overlayHeader: {
+  safe: { flex: 1 },
+  header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  overlayHeaderCount: {
-    fontFamily: Typography.mono,
-    fontSize: 13,
-    color: 'rgba(255,255,255,0.8)',
-  },
-  overlayClose: {
-    fontFamily: Typography.mono,
-    fontSize: 18,
-    color: 'rgba(255,255,255,0.7)',
-  },
-  overlayImageContainer: {
-    flex: 1,
-    backgroundColor: '#111',
-    overflow: 'hidden',
-  },
-  overlayBox: {
-    position: 'absolute',
-    borderRadius: 4,
-    padding: 3,
-    justifyContent: 'center',
-  },
-  overlayBoxSelected: {
-    backgroundColor: 'rgba(176,70,50,0.55)',
-    borderColor: Colors.rust,
-    borderWidth: 2,
-  },
-  overlayBoxUnselected: {
-    backgroundColor: 'rgba(255,255,255,0.15)',
-    borderColor: 'rgba(255,255,255,0.5)',
-    borderWidth: 1,
-  },
-  overlayBoxInfo: {
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    borderColor: Colors.gold,
-    borderWidth: 1,
-    opacity: 0.5,
-  },
-  overlayBoxLabel: {
-    fontFamily: Typography.mono,
-    fontSize: 9,
-    color: '#fff',
-    lineHeight: 12,
-  },
-  overlayBoxAmount: {
-    fontFamily: Typography.mono,
-    fontSize: 11,
-    fontWeight: '700',
-    color: '#fff',
-  },
-  overlayFooter: {
-    padding: 14,
-    backgroundColor: '#000',
-  },
-  overlayConfirmBtn: {
-    backgroundColor: Colors.rust,
-    borderRadius: Radius.md,
+    paddingHorizontal: Spacing.lg,
     paddingVertical: 14,
-    alignItems: 'center',
-  },
-  overlayConfirmBtnText: {
-    fontFamily: Typography.mono,
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#fff',
-  },
-
-  // ── Checklist fallback ────────────────────────────────────────────────────
-  checklistOverlay: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
-  checklistSheet: {
-    backgroundColor: Colors.white,
-    borderTopLeftRadius: Radius.md,
-    borderTopRightRadius: Radius.md,
-    maxHeight: '90%',
-    paddingBottom: 20,
-  },
-  checklistHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.lightBorder,
   },
-  checklistClose: {
+  title: {
+    fontFamily: Typography.serif,
+    fontSize: 17,
+    fontWeight: '700',
+  },
+  closeBtn: {
     fontFamily: Typography.mono,
     fontSize: 18,
-    color: Colors.sage,
-    width: 28,
-    textAlign: 'center',
+    fontWeight: '600',
+    width: 44,
   },
-  checklistTitle: {
-    fontFamily: Typography.serif,
-    fontSize: 16,
-    fontWeight: '700',
-    color: Colors.darkSlate,
-  },
-  checklistImage: {
-    width: '100%',
-    height: 200,
-    backgroundColor: '#f0f0f0',
-  },
-  checklistSectionLabel: {
+  addBtn: {
     fontFamily: Typography.mono,
-    fontSize: 11,
-    color: Colors.sage,
-    paddingHorizontal: 16,
+    fontSize: 14,
+    fontWeight: '700',
+    width: 60,
+    textAlign: 'right',
+  },
+  subheader: {
+    paddingHorizontal: Spacing.lg,
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.lightBorder,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
   },
-  checklistRow: {
+  subheaderText: {
+    fontFamily: Typography.mono,
+    fontSize: 11,
+    letterSpacing: 0.3,
+    textTransform: 'uppercase',
+  },
+  listContent: { paddingBottom: 16 },
+  row: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.lightBorder,
     gap: 10,
   },
-  checklistCheckbox: {
+  checkbox: {
     width: 22,
     height: 22,
     borderWidth: 1.5,
@@ -441,56 +269,50 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexShrink: 0,
   },
-  checklistCheckMark: {
+  checkmark: {
     color: '#fff',
     fontSize: 13,
     fontWeight: '700',
     lineHeight: 15,
   },
-  checklistRowContent: {
-    flex: 1,
-    flexDirection: 'row',
-    gap: 8,
-    alignItems: 'center',
-  },
-  checklistLabelInput: {
+  labelInput: {
     flex: 1,
     fontFamily: Typography.mono,
     fontSize: 13,
-    color: Colors.darkSlate,
-    borderWidth: 1,
-    borderColor: Colors.lightBorder,
-    borderRadius: Radius.sm,
-    paddingHorizontal: 8,
     paddingVertical: 4,
+    paddingHorizontal: 0,
   },
-  checklistAmountInput: {
-    width: 72,
+  amountInput: {
+    width: 80,
     fontFamily: Typography.mono,
     fontSize: 13,
-    color: Colors.rust,
+    fontWeight: '700',
     borderWidth: 1,
-    borderColor: Colors.lightBorder,
     borderRadius: Radius.sm,
     paddingHorizontal: 8,
     paddingVertical: 4,
     textAlign: 'right',
   },
-  checklistFooter: {
-    paddingHorizontal: 16,
+  footer: {
+    paddingHorizontal: Spacing.lg,
     paddingTop: 12,
+    paddingBottom: 8,
     borderTopWidth: 1,
-    borderTopColor: Colors.lightBorder,
+    gap: 10,
   },
-  checklistConfirmBtn: {
-    backgroundColor: Colors.rust,
-    borderRadius: Radius.md,
-    paddingVertical: 13,
-    alignItems: 'center',
-  },
-  checklistConfirmBtnText: {
+  footerTotal: {
     fontFamily: Typography.mono,
     fontSize: 14,
+    fontWeight: '700',
+  },
+  confirmBtn: {
+    borderRadius: Radius.md,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  confirmBtnText: {
+    fontFamily: Typography.mono,
+    fontSize: 15,
     fontWeight: '700',
     color: '#fff',
   },

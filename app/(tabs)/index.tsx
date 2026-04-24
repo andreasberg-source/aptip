@@ -185,6 +185,9 @@ export default function CalculatorScreen() {
         splitMode: 'equal',
         splits: {},
         items: [],
+        country,
+        continent,
+        serviceType,
       });
     }
     setShowSaveModal(false);

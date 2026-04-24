@@ -20,7 +20,7 @@ export default function TabLayout() {
   return (
     <Tabs
       tabBar={props => (
-        <View>
+        <View style={{ overflow: 'hidden' }}>
           <AdBanner />
           <BottomTabBar {...props} />
         </View>

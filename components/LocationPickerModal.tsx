@@ -11,12 +11,14 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 
-import { tippingData, continentKeys, ContinentKey } from '../data/tippingData';
+import { tippingData, continentKeys, ContinentKey, getLocalizedCountryName } from '../data/tippingData';
+import i18n from '../i18n';
 import { useColors } from '../hooks/useColors';
 import { Typography, Radius } from '../constants/Theme';
 
 interface CountryItem {
-  name: string;
+  name: string;          // internal key (Norwegian)
+  localizedName: string; // display name in current language
   currency: string;
   continent: ContinentKey;
 }
@@ -37,11 +39,16 @@ interface Props {
   onClose: () => void;
 }
 
-/** Find a country by name across all continents */
-function findCountry(name: string): CountryItem | null {
+/** Find a country by key across all continents */
+function findCountry(name: string, locale: string): CountryItem | null {
   for (const k of continentKeys) {
     if (tippingData[k][name]) {
-      return { name, currency: tippingData[k][name].currency, continent: k };
+      return {
+        name,
+        localizedName: getLocalizedCountryName(name, locale),
+        currency: tippingData[k][name].currency,
+        continent: k,
+      };
     }
   }
   return null;
@@ -59,6 +66,7 @@ export default function LocationPickerModal({
   const { t } = useTranslation();
   const C = useColors();
   const [search, setSearch] = useState('');
+  const locale = i18n.language;
 
   const sections: Section[] = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -68,9 +76,14 @@ export default function LocationPickerModal({
         key: k,
         title: t(`continent.${k}`),
         data: Object.entries(tippingData[k])
-          .filter(([name]) => !q || name.toLowerCase().includes(q))
-          .sort(([a], [b]) => a.localeCompare(b))
-          .map(([name, entry]) => ({ name, currency: entry.currency, continent: k })),
+          .map(([name, entry]) => ({
+            name,
+            localizedName: getLocalizedCountryName(name, locale),
+            currency: entry.currency,
+            continent: k,
+          }))
+          .filter(item => !q || item.localizedName.toLowerCase().includes(q) || item.name.toLowerCase().includes(q))
+          .sort((a, b) => a.localizedName.localeCompare(b.localizedName, locale)),
       }))
       .filter((s) => s.data.length > 0);
 
@@ -79,7 +92,7 @@ export default function LocationPickerModal({
 
     if (favourites.length > 0) {
       const favItems = favourites
-        .map(findCountry)
+        .map(n => findCountry(n, locale))
         .filter((item): item is CountryItem => item !== null);
       if (favItems.length > 0) {
         return [
@@ -89,7 +102,7 @@ export default function LocationPickerModal({
       }
     } else if (recentCountries.length > 0) {
       const recentItems = recentCountries
-        .map(findCountry)
+        .map(n => findCountry(n, locale))
         .filter((item): item is CountryItem => item !== null);
       if (recentItems.length > 0) {
         return [
@@ -100,7 +113,7 @@ export default function LocationPickerModal({
     }
 
     return continentSections;
-  }, [search, t, favourites, recentCountries]);
+  }, [search, t, locale, favourites, recentCountries]);
 
   const handleSelect = (continent: ContinentKey, country: string) => {
     onSelect(continent, country);
@@ -177,7 +190,7 @@ export default function LocationPickerModal({
                       active && { color: C.rust, fontWeight: '700' },
                     ]}
                   >
-                    {item.name}
+                    {item.localizedName}
                   </Text>
                   <View
                     style={[

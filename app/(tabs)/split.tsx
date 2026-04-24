@@ -24,8 +24,8 @@ import { useHistoryStore } from '../../store/historyStore';
 import { useColors } from '../../hooks/useColors';
 import { Typography, Radius } from '../../constants/Theme';
 import { formatAmount } from '../../utils/tipCalculations';
-import { parseAmountsFromText, extractItemLines, classifyOcrLinesFromBlocks } from '../../utils/parseAmounts';
-import type { ItemLine } from '../../utils/parseAmounts';
+import { parseAmountsFromText, extractRawLines } from '../../utils/parseAmounts';
+import type { RawLine } from '../../utils/parseAmounts';
 import OcrItemReview from '../../components/OcrItemReview';
 import ContinentCountryPicker from '../../components/ContinentCountryPicker';
 import TripPickerDropdown from '../../components/TripPickerDropdown';
@@ -41,12 +41,6 @@ try {
   TextRecognition = null;
 }
 
-let manipulateAsync: ((uri: string, actions: any[], options?: any) => Promise<{ uri: string; width: number; height: number }>) | null = null;
-try {
-  manipulateAsync = require('expo-image-manipulator').manipulateAsync;
-} catch {
-  manipulateAsync = null;
-}
 
 type QuickMode = 'equal' | 'percentage' | 'custom';
 
@@ -106,9 +100,7 @@ export default function SplitScreen() {
   ]);
   const [scanning, setScanning] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
-  const [ocrImageUri, setOcrImageUri] = useState<string | null>(null);
-  const [ocrImageDims, setOcrImageDims] = useState<{ w: number; h: number } | null>(null);
-  const [ocrItems, setOcrItems] = useState<ItemLine[]>([]);
+  const [ocrItems, setOcrItems] = useState<RawLine[]>([]);
   const [showOcrReview, setShowOcrReview] = useState(false);
 
   // Save modal state
@@ -195,50 +187,16 @@ export default function SplitScreen() {
 
   const processOcrUri = useCallback(async (uri: string) => {
     setScanning(true);
-    setOcrImageUri(uri);
     try {
       if (!TextRecognition) throw new Error('unavailable');
       const result = await TextRecognition.recognize(uri);
-
-      // Get image dims for overlay
-      let dims: { w: number; h: number } | null = null;
-      if (manipulateAsync) {
-        try {
-          const info = await manipulateAsync(uri, []);
-          dims = { w: info.width, h: info.height };
-        } catch { /* leave null */ }
+      const lines = extractRawLines(result.blocks);
+      if (lines.length === 0) {
+        Alert.alert('No text found', 'Could not detect text. Enter amount manually.');
+        return;
       }
-
-      const { lines, hasSpatial } = extractItemLines(result.blocks);
-      if (hasSpatial && lines.length > 0) {
-        setOcrItems(lines);
-        setOcrImageDims(dims);
-        setShowOcrReview(true);
-      } else {
-        // Fallback: show checklist with classified lines (no spatial data)
-        const ocrLines = classifyOcrLinesFromBlocks(result.blocks);
-        if (ocrLines.length > 0) {
-          const fallbackItems: ItemLine[] = ocrLines
-            .filter(l => l.amount != null && l.amount > 0 && l.kind !== 'skip' && l.kind !== 'header')
-            .map((l, i) => ({
-              id: `item-${i}`,
-              text: l.label,
-              label: l.label.slice(0, 40),
-              amount: l.amount as number,
-              frame: { left: 0, top: 0, width: 0, height: 0 },
-              kind: (l.kind === 'total' ? 'total' : 'item') as ItemLine['kind'],
-            }));
-          if (fallbackItems.length > 0) {
-            setOcrItems(fallbackItems);
-            setOcrImageDims(null);
-            setShowOcrReview(true);
-          } else {
-            Alert.alert('No amount found', 'Could not detect an amount. Enter manually.');
-          }
-        } else {
-          Alert.alert('No amount found', 'Could not detect an amount. Enter manually.');
-        }
-      }
+      setOcrItems(lines);
+      setShowOcrReview(true);
     } catch {
       Alert.alert('Scan', 'Not available in Expo Go. Enter amount manually.');
     } finally {
@@ -740,12 +698,10 @@ export default function SplitScreen() {
 
       <OcrItemReview
         visible={showOcrReview}
-        imageUri={ocrImageUri}
-        imageDims={ocrImageDims}
         items={ocrItems}
         currency={quickCurrency}
         onConfirm={(selected) => {
-          const total = selected.reduce((s, l) => s + l.amount, 0);
+          const total = selected.reduce((s, l) => s + (l.amount ?? 0), 0);
           if (total > 0) setQuickAmount(total.toFixed(2));
           setShowOcrReview(false);
         }}

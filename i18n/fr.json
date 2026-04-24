@@ -580,6 +580,888 @@
         "taxis": "Négociez le tarif avant le trajet ; le pourboire n'est pas attendu.",
         "shops": "Pas de pourboire en boutique.",
         "services": "10 % pour le personnel d'hôtel et les services personnels est apprécié."
+      },
+      "Albania": {
+        "general": "Le pourboire est apprécié mais pas obligatoire — 5–10 % au restaurant est un geste chaleureux.",
+        "restaurants": "5–10 % pour un bon service est apprécié ; ce n'est pas une pratique répandue.",
+        "taxis": "Arrondir à l'unité supérieure est une courtoisie courante.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "5–10 % pour les coiffeurs et services personnels est apprécié."
+      },
+      "Andorra": {
+        "general": "Le pourboire n'est pas vraiment attendu ; les prix incluent généralement le service.",
+        "restaurants": "Arrondir l'addition ou laisser de la monnaie est un geste poli.",
+        "taxis": "Pas de pourboire attendu ; arrondissez si vous le souhaitez.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Un petit pourboire pour les coiffeurs est apprécié mais non obligatoire."
+      },
+      "Armenia": {
+        "general": "Le pourboire est apprécié dans les restaurants et pour les services personnels, surtout à Erevan.",
+        "restaurants": "10 % est apprécié dans les restaurants haut de gamme et touristiques.",
+        "taxis": "Négociez le tarif à l'avance ; les pourboires ne sont pas attendus.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les coiffeurs et services personnels est un geste aimable."
+      },
+      "Bosnia-Hercegovina": {
+        "general": "Le pourboire est apprécié et courant dans les restaurants et cafés — arrondir est la norme.",
+        "restaurants": "5–10 % est apprécié ; arrondir est courant dans les endroits informels.",
+        "taxis": "Arrondissez à l'unité supérieure.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "5–10 % pour les coiffeurs et services personnels est apprécié."
+      },
+      "Hviterussland": {
+        "general": "Le pourboire n'est pas vraiment attendu, mais un petit geste au restaurant est apprécié.",
+        "restaurants": "5–10 % est apprécié dans les restaurants haut de gamme.",
+        "taxis": "Arrondissez si vous êtes satisfait.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Un petit pourboire pour les coiffeurs est apprécié mais pas standard."
+      },
+      "Georgia": {
+        "general": "Le pourboire est apprécié et de plus en plus courant, surtout à Tbilissi.",
+        "restaurants": "10 % est apprécié ; les établissements haut de gamme peuvent s'y attendre.",
+        "taxis": "Négociez le tarif à l'avance ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les coiffeurs et services personnels est un geste chaleureux."
+      },
+      "Kypros": {
+        "general": "Le pourboire est courant et apprécié ; 10 % est standard dans les restaurants et hôtels.",
+        "restaurants": "10 % est standard ; vérifiez l'addition car le service peut être inclus.",
+        "taxis": "Arrondissez ou ajoutez 10 %.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les coiffeurs et services personnels est apprécié."
+      },
+      "Estland": {
+        "general": "Le pourboire n'est pas vraiment attendu, mais 5–10 % pour un bon service est apprécié.",
+        "restaurants": "5–10 % est apprécié ; pas vraiment obligatoire.",
+        "taxis": "Arrondissez pour un bon service.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "5–10 % pour les coiffeurs et services personnels est un geste aimable."
+      },
+      "Kosovo": {
+        "general": "Le pourboire est apprécié et courant dans les restaurants et cafés.",
+        "restaurants": "5–10 % est apprécié ; arrondir est courant dans les endroits informels.",
+        "taxis": "Arrondissez à l'unité supérieure.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "5–10 % pour les coiffeurs et services personnels est apprécié."
+      },
+      "Latvia": {
+        "general": "Le pourboire n'est pas vraiment attendu, mais 5–10 % pour un bon service est apprécié.",
+        "restaurants": "5–10 % est apprécié ; pas vraiment obligatoire.",
+        "taxis": "Arrondissez par commodité.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "5–10 % pour les coiffeurs et services personnels est un geste aimable."
+      },
+      "Liechtenstein": {
+        "general": "Le pourboire n'est pas attendu car les prix sont élevés et le service est généralement inclus.",
+        "restaurants": "Arrondir l'addition est un geste poli ; pas de pourboire en pourcentage attendu.",
+        "taxis": "Pas de pourboire attendu ; arrondissez si vous le souhaitez.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Un petit pourboire pour les coiffeurs est apprécié mais non obligatoire."
+      },
+      "Litauen": {
+        "general": "Le pourboire n'est pas obligatoire mais 5–10 % pour un bon service est apprécié.",
+        "restaurants": "5–10 % est apprécié ; pas vraiment attendu dans les endroits informels.",
+        "taxis": "Arrondissez par commodité.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "5–10 % pour les coiffeurs et services personnels est apprécié."
+      },
+      "Luxembourg": {
+        "general": "Le pourboire n'est pas obligatoire car les prix sont élevés, mais arrondir est un geste poli.",
+        "restaurants": "Arrondir ou laisser 5–10 % est apprécié ; des frais de service peuvent être inclus.",
+        "taxis": "Arrondissez à l'euro ou ajoutez 10 %.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "5–10 % pour les coiffeurs et services personnels est apprécié."
+      },
+      "Malta": {
+        "general": "Le pourboire est apprécié et assez courant ; 10 % au restaurant est un geste chaleureux.",
+        "restaurants": "10 % est apprécié ; vérifiez si le service est déjà inclus.",
+        "taxis": "Arrondissez ou ajoutez 10 % pour un bon service.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les coiffeurs et services personnels est apprécié."
+      },
+      "Moldova": {
+        "general": "Le pourboire est apprécié mais modeste — 5–10 % au restaurant est la norme.",
+        "restaurants": "5–10 % est apprécié ; pas strictement attendu dans les endroits informels.",
+        "taxis": "Arrondissez.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "5–10 % pour les coiffeurs et services personnels est apprécié."
+      },
+      "Monaco": {
+        "general": "Le pourboire est attendu dans les établissements haut de gamme de Monaco — 10–15 % est la norme.",
+        "restaurants": "10–15 % est standard ; vérifiez si le service est inclus.",
+        "taxis": "10 % ou arrondissez à l'euro.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10–15 % pour le concierge, le spa et le coiffeur est attendu."
+      },
+      "Montenegro": {
+        "general": "Le pourboire est apprécié dans les zones touristiques ; 10 % au restaurant est courant.",
+        "restaurants": "10 % est apprécié ; arrondissez dans les endroits informels.",
+        "taxis": "Arrondissez ou ajoutez 10 %.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les coiffeurs et services personnels est un geste aimable."
+      },
+      "Nord-Makedonia": {
+        "general": "Le pourboire est apprécié et courant dans les restaurants et cafés.",
+        "restaurants": "5–10 % est apprécié ; arrondir est courant dans les endroits informels.",
+        "taxis": "Arrondissez à l'unité supérieure.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "5–10 % pour les coiffeurs et services personnels est apprécié."
+      },
+      "San Marino": {
+        "general": "Les habitudes de pourboire suivent les normes italiennes — arrondir est courant ; un pourboire formel n'est pas attendu.",
+        "restaurants": "Arrondir ou laisser €1–2 pour un bon service est apprécié.",
+        "taxis": "Arrondissez à l'euro.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Un petit pourboire pour les coiffeurs est apprécié mais non obligatoire."
+      },
+      "Serbia": {
+        "general": "Le pourboire est apprécié et courant — 5–10 % ou arrondir est standard au restaurant.",
+        "restaurants": "5–10 % est apprécié ; arrondir est courant dans les endroits informels.",
+        "taxis": "Arrondissez à l'unité supérieure.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "5–10 % pour les coiffeurs et services personnels est apprécié."
+      },
+      "Slovakia": {
+        "general": "Le pourboire est apprécié ; 5–10 % au restaurant est considéré comme poli.",
+        "restaurants": "5–10 % est apprécié ; il est courant de dire le total que vous souhaitez payer au serveur.",
+        "taxis": "Arrondissez pour un bon service.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "5–10 % pour les coiffeurs et services personnels est apprécié."
+      },
+      "Slovenia": {
+        "general": "Le pourboire n'est pas obligatoire mais 5–10 % pour un bon service est apprécié.",
+        "restaurants": "5–10 % est apprécié ; arrondir est courant dans les endroits informels.",
+        "taxis": "Arrondissez ou ajoutez 10 % pour un bon service.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "5–10 % pour les coiffeurs et services personnels est un geste aimable."
+      },
+      "Ukraina": {
+        "general": "Le pourboire est courant et apprécié — 10 % au restaurant est standard.",
+        "restaurants": "10 % est apprécié ; vérifiez si le service est inclus.",
+        "taxis": "Arrondissez ; les pourboires sont appréciés mais pas attendus.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les coiffeurs et services personnels est apprécié."
+      },
+      "Antigua og Barbuda": {
+        "general": "Le pourboire est apprécié et attendu dans les zones touristiques — 10–15 % au restaurant est standard.",
+        "restaurants": "10–15 % est attendu ; des frais de service peuvent être inclus.",
+        "taxis": "10 % est apprécié.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10–15 % pour les services hôteliers et personnels est standard."
+      },
+      "Bahamas": {
+        "general": "Le pourboire est attendu et courant — 15 % au restaurant est la pratique standard.",
+        "restaurants": "15 % est attendu ; des frais de service peuvent être inclus dans les établissements touristiques.",
+        "taxis": "10–15 % est apprécié.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "15 % pour le concierge et les services personnels est standard."
+      },
+      "Barbados": {
+        "general": "Le pourboire est apprécié et attendu — 10–15 % au restaurant est standard.",
+        "restaurants": "10–15 % est attendu ; des frais de service sont souvent inclus.",
+        "taxis": "10 % est apprécié.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10–15 % pour les services hôteliers et personnels est standard."
+      },
+      "Belize": {
+        "general": "Le pourboire est apprécié, surtout dans les zones touristiques — 10–15 % au restaurant est courant.",
+        "restaurants": "10–15 % est apprécié ; des frais de service peuvent être inclus.",
+        "taxis": "Négociez les tarifs ; les pourboires sont appréciés mais non obligatoires.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les services hôteliers et personnels est apprécié."
+      },
+      "Costa Rica": {
+        "general": "Des frais de service de 10 % sont légalement obligatoires dans les restaurants, donc un pourboire supplémentaire est optionnel.",
+        "restaurants": "10 % de frais de service est légalement inclus ; un pourboire supplémentaire est optionnel mais apprécié.",
+        "taxis": "Pas de pourboire attendu ; arrondissez si vous le souhaitez.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "5–10 % pour les services hôteliers et personnels est apprécié."
+      },
+      "Cuba": {
+        "general": "Le pourboire est important — il complète considérablement les salaires locaux et est chaleureusement apprécié.",
+        "restaurants": "10–15 % est apprécié et important pour le personnel de restaurant.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour le personnel d'hôtel et les coiffeurs sont chaleureusement reçus."
+      },
+      "Den dominikanske republikk": {
+        "general": "Le pourboire est attendu et apprécié — 10 % au restaurant est la norme.",
+        "restaurants": "10 % est apprécié ; des frais de service peuvent être inclus dans les restaurants de resort.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les services hôteliers et personnels est apprécié."
+      },
+      "Dominica": {
+        "general": "Le pourboire est apprécié, particulièrement dans les établissements touristiques — 10 % est courant.",
+        "restaurants": "10 % est apprécié au restaurant.",
+        "taxis": "10 % est apprécié.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les services personnels est apprécié."
+      },
+      "El Salvador": {
+        "general": "Le pourboire est apprécié ; 10 % au restaurant est un geste chaleureux.",
+        "restaurants": "10 % est apprécié ; des frais de service peuvent être inclus.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les coiffeurs et services personnels est apprécié."
+      },
+      "Grenada": {
+        "general": "Le pourboire est apprécié dans les zones touristiques — 10 % au restaurant est courant.",
+        "restaurants": "10 % est apprécié ; des frais de service peuvent être inclus.",
+        "taxis": "10 % est apprécié.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les services hôteliers et personnels est apprécié."
+      },
+      "Guatemala": {
+        "general": "Le pourboire est apprécié ; 10 % au restaurant est un geste chaleureux.",
+        "restaurants": "10 % est apprécié ; des frais de service peuvent être inclus dans les zones touristiques.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les coiffeurs et services personnels est apprécié."
+      },
+      "Haiti": {
+        "general": "Le pourboire est apprécié et complète considérablement les bas salaires.",
+        "restaurants": "5–10 % est apprécié ; le service est rarement inclus.",
+        "taxis": "Négociez les tarifs à l'avance ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour le personnel d'hôtel et les services personnels sont chaleureusement reçus."
+      },
+      "Honduras": {
+        "general": "Le pourboire est apprécié ; 10 % au restaurant est courant.",
+        "restaurants": "10 % est apprécié ; des frais de service peuvent être inclus.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les coiffeurs et services personnels est apprécié."
+      },
+      "Jamaica": {
+        "general": "Le pourboire est attendu et apprécié — 10–15 % au restaurant est standard.",
+        "restaurants": "10–15 % est attendu ; des frais de service peuvent être inclus.",
+        "taxis": "10 % est apprécié ; négociez les tarifs à l'avance.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10–15 % pour les services hôteliers et personnels est standard."
+      },
+      "Nicaragua": {
+        "general": "Le pourboire est apprécié ; 10 % au restaurant est un geste chaleureux.",
+        "restaurants": "10 % est apprécié ; des frais de service peuvent être inclus.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les coiffeurs et services personnels est apprécié."
+      },
+      "Panama": {
+        "general": "Le pourboire est attendu dans les zones touristiques et les établissements haut de gamme — 10 % au restaurant est standard.",
+        "restaurants": "10 % est apprécié ; des frais de service peuvent être inclus.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les services hôteliers et personnels est apprécié."
+      },
+      "Saint Kitts og Nevis": {
+        "general": "Le pourboire est apprécié dans les zones touristiques — 10 % au restaurant est courant.",
+        "restaurants": "10 % est apprécié ; des frais de service peuvent être inclus.",
+        "taxis": "10 % est apprécié.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les services hôteliers et personnels est apprécié."
+      },
+      "Saint Lucia": {
+        "general": "Le pourboire est apprécié et attendu — 10 % au restaurant est standard.",
+        "restaurants": "10 % est apprécié ; des frais de service sont souvent inclus.",
+        "taxis": "10 % est apprécié.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10–15 % pour les services hôteliers et personnels est standard."
+      },
+      "Saint Vincent og Grenadinene": {
+        "general": "Le pourboire est apprécié dans les zones touristiques — 10 % au restaurant est courant.",
+        "restaurants": "10 % est apprécié au restaurant.",
+        "taxis": "10 % est apprécié.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les services hôteliers et personnels est apprécié."
+      },
+      "Trinidad og Tobago": {
+        "general": "Le pourboire est apprécié et courant — 10 % au restaurant est standard.",
+        "restaurants": "10 % est apprécié ; des frais de service peuvent être inclus.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les services hôteliers et personnels est apprécié."
+      },
+      "Bolivia": {
+        "general": "Le pourboire est apprécié ; 10 % au restaurant est un geste chaleureux.",
+        "restaurants": "10 % est apprécié ; le service est rarement inclus.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les coiffeurs et services personnels est apprécié."
+      },
+      "Guyana": {
+        "general": "Le pourboire est apprécié et courant dans les restaurants et hôtels — 10 % est la norme.",
+        "restaurants": "10 % est apprécié ; des frais de service peuvent être inclus.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les services personnels est apprécié."
+      },
+      "Paraguay": {
+        "general": "Le pourboire est apprécié ; 10 % au restaurant est courant.",
+        "restaurants": "10 % est apprécié ; des frais de service peuvent être inclus.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les coiffeurs et services personnels est apprécié."
+      },
+      "Surinam": {
+        "general": "Le pourboire est apprécié dans les restaurants et hôtels — 10 % est courant.",
+        "restaurants": "10 % est apprécié ; des frais de service peuvent être inclus.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les services personnels est apprécié."
+      },
+      "Venezuela": {
+        "general": "Le pourboire est apprécié ; 10 % au restaurant est standard.",
+        "restaurants": "10 % est apprécié ; des frais de service sont parfois inclus.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les coiffeurs et services personnels est apprécié."
+      },
+      "Afghanistan": {
+        "general": "Le pourboire n'est pas coutumier et n'est pas attendu dans la plupart des situations.",
+        "restaurants": "Aucun pourboire attendu ; ce n'est pas dans la culture locale.",
+        "taxis": "Pas de pourboire attendu ; négociez les tarifs à l'avance.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Aucun pourboire attendu."
+      },
+      "Aserbajdsjan": {
+        "general": "Le pourboire est apprécié et de plus en plus courant à Bakou — 10 % au restaurant est un geste chaleureux.",
+        "restaurants": "10 % est apprécié dans les restaurants haut de gamme et touristiques.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les coiffeurs et services personnels est apprécié."
+      },
+      "Bhutan": {
+        "general": "Le pourboire ne fait pas partie de la culture locale mais est apprécié par le personnel du secteur touristique.",
+        "restaurants": "Les petits pourboires sont appréciés dans les restaurants touristiques.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les guides et le personnel d'hôtel sont appréciés."
+      },
+      "Brunei": {
+        "general": "Le pourboire n'est pas attendu et est parfois déconseillé — le service est inclus dans les établissements haut de gamme.",
+        "restaurants": "Aucun pourboire attendu ; des frais de service sont souvent inclus.",
+        "taxis": "Pas de pourboire attendu.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Aucun pourboire attendu."
+      },
+      "Kambodsja": {
+        "general": "Le pourboire est apprécié et courant parmi le personnel du secteur touristique ; il complète les bas salaires.",
+        "restaurants": "1–2 USD ou 10 % est apprécié dans les restaurants touristiques.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "1–2 USD pour le personnel d'hôtel et les services personnels est apprécié."
+      },
+      "Kasakhstan": {
+        "general": "Le pourboire est apprécié dans les restaurants et hôtels haut de gamme — 10 % est courant.",
+        "restaurants": "10 % est apprécié au restaurant.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les coiffeurs et services personnels est apprécié."
+      },
+      "Kirgisistan": {
+        "general": "Le pourboire n'est pas vraiment attendu mais les petits pourboires pour un bon service sont appréciés.",
+        "restaurants": "5–10 % est apprécié au restaurant.",
+        "taxis": "Arrondissez ; les pourboires ne sont pas attendus.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Laos": {
+        "general": "Le pourboire est apprécié parmi le personnel du secteur touristique et complète les bas salaires.",
+        "restaurants": "5–10 % ou arrondir est apprécié dans les restaurants touristiques.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour le personnel d'hôtel et les services personnels sont appréciés."
+      },
+      "Maldivene": {
+        "general": "Le pourboire est apprécié, surtout dans les resorts — 10 % pour un bon service est courant.",
+        "restaurants": "10 % est apprécié ; des frais de service peuvent être inclus dans les factures de resort.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les services de resort et spa est apprécié."
+      },
+      "Mongolia": {
+        "general": "Le pourboire n'est pas une tradition locale mais est apprécié par le personnel du secteur touristique.",
+        "restaurants": "Les petits pourboires sont appréciés dans les restaurants touristiques.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les guides et le personnel d'hôtel sont appréciés."
+      },
+      "Myanmar": {
+        "general": "Le pourboire est apprécié et complète les bas salaires — les petits pourboires sont chaleureusement reçus.",
+        "restaurants": "5–10 % est apprécié dans les restaurants touristiques.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour le personnel d'hôtel et les services personnels sont appréciés."
+      },
+      "Nord-Korea": {
+        "general": "Le pourboire n'est pas pratiqué et peut être refusé ou déconseillé.",
+        "restaurants": "Aucun pourboire pratiqué.",
+        "taxis": "Aucun pourboire pratiqué.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Aucun pourboire pratiqué."
+      },
+      "Tadsjikistan": {
+        "general": "Le pourboire n'est pas une forte tradition mais les petits pourboires sont appréciés.",
+        "restaurants": "5–10 % est apprécié au restaurant.",
+        "taxis": "Arrondissez ; les pourboires ne sont pas attendus.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Turkmenistan": {
+        "general": "Le pourboire n'est pas vraiment attendu mais apprécié pour un bon service.",
+        "restaurants": "5–10 % est apprécié au restaurant.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Usbekistan": {
+        "general": "Le pourboire est apprécié dans les zones touristiques et les restaurants haut de gamme — 10 % est courant.",
+        "restaurants": "10 % est apprécié au restaurant.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les services personnels est apprécié."
+      },
+      "Øst-Timor": {
+        "general": "Le pourboire n'est pas vraiment attendu mais apprécié pour un bon service.",
+        "restaurants": "Les petits pourboires sont appréciés au restaurant.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Kiribati": {
+        "general": "Le pourboire n'est pas coutumier et n'est pas attendu.",
+        "restaurants": "Aucun pourboire attendu.",
+        "taxis": "Aucun pourboire attendu.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Aucun pourboire attendu."
+      },
+      "Marshalløyene": {
+        "general": "Le pourboire n'est pas coutumier dans les contextes locaux.",
+        "restaurants": "Aucun pourboire attendu.",
+        "taxis": "Aucun pourboire attendu.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Aucun pourboire attendu."
+      },
+      "Mikronesiaføderasjonen": {
+        "general": "Le pourboire ne fait pas partie de la culture locale et n'est généralement pas attendu.",
+        "restaurants": "Aucun pourboire attendu.",
+        "taxis": "Aucun pourboire attendu.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Aucun pourboire attendu."
+      },
+      "Nauru": {
+        "general": "Le pourboire n'est pas coutumier et n'est pas attendu.",
+        "restaurants": "Aucun pourboire attendu.",
+        "taxis": "Aucun pourboire attendu.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Aucun pourboire attendu."
+      },
+      "Palau": {
+        "general": "Le pourboire est apprécié dans les établissements touristiques — les normes américaines s'appliquent.",
+        "restaurants": "10–15 % est apprécié dans les restaurants touristiques.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les guides de plongée et le personnel d'hôtel est apprécié."
+      },
+      "Papua Ny-Guinea": {
+        "general": "Le pourboire n'est pas une tradition locale mais est apprécié dans les établissements touristiques.",
+        "restaurants": "Les petits pourboires sont appréciés dans les restaurants touristiques.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour le personnel d'hôtel et les guides sont appréciés."
+      },
+      "Samoa": {
+        "general": "Le pourboire n'est pas coutumier et peut parfois causer de l'embarras.",
+        "restaurants": "Aucun pourboire attendu.",
+        "taxis": "Aucun pourboire attendu.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Aucun pourboire attendu."
+      },
+      "Salomonøyene": {
+        "general": "Le pourboire n'est pas coutumier et n'est généralement pas attendu.",
+        "restaurants": "Aucun pourboire attendu.",
+        "taxis": "Aucun pourboire attendu.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Aucun pourboire attendu."
+      },
+      "Tonga": {
+        "general": "Le pourboire ne fait pas partie de la culture locale et peut parfois être mal perçu.",
+        "restaurants": "Aucun pourboire attendu.",
+        "taxis": "Aucun pourboire attendu.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Aucun pourboire attendu."
+      },
+      "Tuvalu": {
+        "general": "Le pourboire n'est pas coutumier et n'est pas attendu.",
+        "restaurants": "Aucun pourboire attendu.",
+        "taxis": "Aucun pourboire attendu.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Aucun pourboire attendu."
+      },
+      "Vanuatu": {
+        "general": "Le pourboire n'est pas coutumier dans les contextes locaux, mais est apprécié dans les établissements touristiques.",
+        "restaurants": "Les petits pourboires sont appréciés dans les restaurants touristiques.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour le personnel d'hôtel et les guides sont appréciés."
+      },
+      "Algerie": {
+        "general": "Le pourboire est apprécié mais non obligatoire — 5–10 % au restaurant est un geste chaleureux.",
+        "restaurants": "5–10 % est apprécié ; le service est rarement inclus.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour le personnel d'hôtel et les coiffeurs sont appréciés."
+      },
+      "Angola": {
+        "general": "Le pourboire est apprécié, surtout dans les établissements haut de gamme de Luanda.",
+        "restaurants": "10 % est apprécié dans les restaurants haut de gamme.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les services personnels est apprécié."
+      },
+      "Benin": {
+        "general": "Le pourboire est apprécié et courant pour les services de restaurant et d'hôtel.",
+        "restaurants": "5–10 % est apprécié.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Botswana": {
+        "general": "Le pourboire est apprécié et courant — 10 % au restaurant est standard.",
+        "restaurants": "10 % est apprécié ; le service est rarement inclus.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les guides safari et services personnels est apprécié."
+      },
+      "Burkina Faso": {
+        "general": "Le pourboire est apprécié pour les services de restaurant et d'hôtel.",
+        "restaurants": "5–10 % est apprécié.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Burundi": {
+        "general": "Le pourboire est apprécié mais pas vraiment attendu.",
+        "restaurants": "5–10 % est apprécié au restaurant.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Kamerun": {
+        "general": "Le pourboire est apprécié et courant dans les restaurants et hôtels.",
+        "restaurants": "5–10 % est apprécié ; le service est rarement inclus.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour le personnel d'hôtel et les services personnels sont appréciés."
+      },
+      "Kapp Verde": {
+        "general": "Le pourboire est apprécié dans les zones touristiques — 10 % au restaurant est courant.",
+        "restaurants": "10 % est apprécié ; des frais de service peuvent être inclus.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les services personnels est apprécié."
+      },
+      "Den sentralafrikanske republikk": {
+        "general": "Le pourboire n'est pas vraiment attendu mais les petits pourboires sont appréciés.",
+        "restaurants": "Les petits pourboires sont appréciés.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Tsjad": {
+        "general": "Le pourboire n'est pas vraiment attendu mais les petits pourboires sont appréciés.",
+        "restaurants": "Les petits pourboires sont appréciés.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Komorene": {
+        "general": "Le pourboire est apprécié mais pas vraiment attendu.",
+        "restaurants": "Les petits pourboires sont appréciés au restaurant.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Kongo-Brazzaville": {
+        "general": "Le pourboire est apprécié dans les restaurants et hôtels.",
+        "restaurants": "5–10 % est apprécié.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Kongo-Kinshasa": {
+        "general": "Le pourboire est apprécié et complète considérablement les bas salaires.",
+        "restaurants": "5–10 % est apprécié au restaurant.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour le personnel d'hôtel et les services personnels sont appréciés."
+      },
+      "Djibouti": {
+        "general": "Le pourboire est apprécié dans les restaurants et hôtels.",
+        "restaurants": "10 % est apprécié ; des frais de service peuvent être inclus.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour le personnel d'hôtel et les services personnels sont appréciés."
+      },
+      "Ekvatorial-Guinea": {
+        "general": "Le pourboire est apprécié dans les restaurants et hôtels.",
+        "restaurants": "5–10 % est apprécié.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Eritrea": {
+        "general": "Le pourboire n'est pas vraiment attendu mais les petits pourboires sont appréciés.",
+        "restaurants": "Les petits pourboires sont appréciés.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Etiopia": {
+        "general": "Le pourboire est apprécié et courant — 10 % au restaurant est un geste chaleureux.",
+        "restaurants": "10 % est apprécié ; le service est rarement inclus.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour le personnel d'hôtel et les services personnels est apprécié."
+      },
+      "Gabon": {
+        "general": "Le pourboire est apprécié dans les restaurants et hôtels.",
+        "restaurants": "5–10 % est apprécié.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Gambia": {
+        "general": "Le pourboire est attendu et apprécié dans les zones touristiques — 10 % au restaurant est courant.",
+        "restaurants": "10 % est apprécié ; le service peut être inclus dans les restaurants touristiques.",
+        "taxis": "10 % est apprécié ; négociez les tarifs à l'avance.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour le personnel d'hôtel et les services personnels est apprécié."
+      },
+      "Guinea": {
+        "general": "Le pourboire est apprécié mais pas vraiment attendu.",
+        "restaurants": "5–10 % est apprécié au restaurant.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Guinea-Bissau": {
+        "general": "Le pourboire est apprécié mais pas vraiment attendu.",
+        "restaurants": "Les petits pourboires sont appréciés au restaurant.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Elfenbenskysten": {
+        "general": "Le pourboire est apprécié dans les restaurants et hôtels.",
+        "restaurants": "5–10 % est apprécié ; des frais de service peuvent être inclus.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour le personnel d'hôtel et les services personnels sont appréciés."
+      },
+      "Lesotho": {
+        "general": "Le pourboire est apprécié — 10 % au restaurant est un geste chaleureux.",
+        "restaurants": "10 % est apprécié.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les services personnels est apprécié."
+      },
+      "Liberia": {
+        "general": "Le pourboire est apprécié et complète les bas salaires.",
+        "restaurants": "5–10 % est apprécié au restaurant.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Libya": {
+        "general": "Le pourboire est modeste — les petits pourboires sont appréciés mais pas vraiment attendus.",
+        "restaurants": "5 % est apprécié ; le service est rarement inclus.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour le personnel d'hôtel et les services personnels sont appréciés."
+      },
+      "Madagaskar": {
+        "general": "Le pourboire est apprécié et complète considérablement les bas salaires.",
+        "restaurants": "5–10 % est apprécié ; le service est rarement inclus.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour le personnel d'hôtel et les services personnels sont appréciés."
+      },
+      "Malawi": {
+        "general": "Le pourboire est apprécié et courant dans les zones touristiques.",
+        "restaurants": "10 % est apprécié ; le service est rarement inclus.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les guides safari et services personnels est apprécié."
+      },
+      "Mali": {
+        "general": "Le pourboire est apprécié dans les restaurants et pour les services personnels.",
+        "restaurants": "5–10 % est apprécié.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Mauritania": {
+        "general": "Le pourboire n'est pas vraiment attendu mais les petits pourboires sont appréciés.",
+        "restaurants": "Les petits pourboires sont appréciés au restaurant.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Mauritius": {
+        "general": "Le pourboire est apprécié dans les zones touristiques — 10 % au restaurant est standard.",
+        "restaurants": "10 % est apprécié ; des frais de service peuvent être inclus.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les services hôteliers et personnels est apprécié."
+      },
+      "Mosambik": {
+        "general": "Le pourboire est apprécié dans les zones touristiques et complète les bas salaires.",
+        "restaurants": "10 % est apprécié ; le service est rarement inclus.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour le personnel d'hôtel et les services personnels est apprécié."
+      },
+      "Namibia": {
+        "general": "Le pourboire est attendu et apprécié — 10 % au restaurant est standard.",
+        "restaurants": "10 % est apprécié ; le service est rarement inclus.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les guides safari et services personnels est standard."
+      },
+      "Niger": {
+        "general": "Le pourboire est apprécié mais pas vraiment attendu.",
+        "restaurants": "Les petits pourboires sont appréciés au restaurant.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Rwanda": {
+        "general": "Le pourboire est apprécié dans les zones touristiques — 10 % au restaurant est un geste chaleureux.",
+        "restaurants": "10 % est apprécié ; le service est rarement inclus.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour le personnel d'hôtel et les services personnels est apprécié."
+      },
+      "São Tomé og Príncipe": {
+        "general": "Le pourboire est apprécié dans les établissements touristiques.",
+        "restaurants": "10 % est apprécié.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Senegal": {
+        "general": "Le pourboire est apprécié — 10 % dans les restaurants touristiques est un geste chaleureux.",
+        "restaurants": "10 % est apprécié ; le service est rarement inclus.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour le personnel d'hôtel et les services personnels est apprécié."
+      },
+      "Seychellene": {
+        "general": "Le pourboire est apprécié — 10 % au restaurant est standard dans les zones touristiques.",
+        "restaurants": "10 % est apprécié ; des frais de service peuvent être inclus.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les services hôteliers et personnels est apprécié."
+      },
+      "Sierra Leone": {
+        "general": "Le pourboire est apprécié et complète les bas salaires.",
+        "restaurants": "5–10 % est apprécié au restaurant.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Somalia": {
+        "general": "Le pourboire n'est pas vraiment attendu mais les petits pourboires sont appréciés dans les contextes touristiques.",
+        "restaurants": "Les petits pourboires sont appréciés.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Sør-Sudan": {
+        "general": "Le pourboire est apprécié mais pas vraiment attendu.",
+        "restaurants": "Les petits pourboires sont appréciés.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Sudan": {
+        "general": "Le pourboire est apprécié mais modeste — les petits pourboires au restaurant sont un geste aimable.",
+        "restaurants": "5 % est apprécié ; le service est rarement inclus.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Eswatini": {
+        "general": "Le pourboire est apprécié — 10 % au restaurant est un geste chaleureux.",
+        "restaurants": "10 % est apprécié ; le service est rarement inclus.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les services personnels est apprécié."
+      },
+      "Togo": {
+        "general": "Le pourboire est apprécié dans les restaurants et pour les services personnels.",
+        "restaurants": "5–10 % est apprécié.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Uganda": {
+        "general": "Le pourboire est apprécié et courant dans les zones touristiques — 10 % est standard.",
+        "restaurants": "10 % est apprécié ; le service est rarement inclus.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour le personnel d'hôtel et les services personnels est apprécié."
+      },
+      "Zambia": {
+        "general": "Le pourboire est attendu et apprécié dans les zones touristiques — 10 % est standard.",
+        "restaurants": "10 % est apprécié ; le service est rarement inclus.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour les guides safari et services personnels est standard."
+      },
+      "Zimbabwe": {
+        "general": "Le pourboire est attendu et apprécié — 10 % au restaurant est standard.",
+        "restaurants": "10 % est apprécié ; le service est rarement inclus.",
+        "taxis": "Les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "10 % pour le personnel d'hôtel et les services personnels est apprécié."
+      },
+      "Iran": {
+        "general": "Le pourboire n'est pas fortement coutumier mais un petit geste de reconnaissance pour un bon service est bien reçu.",
+        "restaurants": "5–10 % est apprécié mais pas attendu ; le service est généralement inclus.",
+        "taxis": "Pas de pourboire attendu ; négociez les tarifs à l'avance.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Irak": {
+        "general": "Le pourboire est apprécié dans les restaurants et hôtels — 10 % est un geste chaleureux.",
+        "restaurants": "10 % est apprécié ; des frais de service peuvent être inclus dans les établissements haut de gamme.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour le personnel d'hôtel et les services personnels sont appréciés."
+      },
+      "Palestina": {
+        "general": "Le pourboire est apprécié dans les restaurants et hôtels — 10 % est un geste chaleureux.",
+        "restaurants": "10 % est apprécié ; des frais de service peuvent être inclus.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
+      },
+      "Syria": {
+        "general": "Le pourboire est apprécié et courant — 10 % au restaurant est un geste chaleureux.",
+        "restaurants": "10 % est apprécié ; des frais de service peuvent être inclus.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour le personnel d'hôtel et les services personnels sont appréciés."
+      },
+      "Jemen": {
+        "general": "Le pourboire est apprécié mais pas vraiment attendu.",
+        "restaurants": "Les petits pourboires sont appréciés au restaurant.",
+        "taxis": "Négociez les tarifs ; les petits pourboires sont appréciés.",
+        "shops": "Pas de pourboire en boutique.",
+        "services": "Les petits pourboires pour les services personnels sont appréciés."
       }
     }
   },
@@ -672,8 +1554,7 @@
     "shareAppCredit": "Calculé avec l'application Aptip 📱",
     "removedBillsSection": "Factures des voyages",
     "scanAmount": "Scanner le reçu",
-    "removeSavedName": "Supprimer ce nom des suggestions?",
-    "currency": "Devise"
+    "removeSavedName": "Supprimer ce nom des suggestions?"
   },
   "tripsTab": {
     "title": "Voyages",
@@ -734,13 +1615,22 @@
   },
   "about": {
     "title": "À propos",
-    "description": "Aptip est une calculatrice de pourboires pour les voyageurs — le nom dit tout. Des recommandations culturellement adaptées pour plus de 60 pays — restaurants, taxis, boutiques et services — pour toujours laisser le pourboire juste.",
+    "description": "Aptip est une calculatrice de pourboires pour les voyageurs — le nom dit tout. Des recommandations culturellement adaptées pour 197 pays — restaurants, taxis, boutiques et services — pour toujours laisser le pourboire juste.",
     "feedbackTitle": "Retour d'expérience",
     "feedbackBody": "Une suggestion ou un bug ? Nous serions ravis de vous lire.",
     "feedbackBtn": "Envoyer un retour",
     "feedbackFormTitle": "Envoyer un retour",
     "feedbackPlaceholder": "Écrivez votre retour ici…",
-    "feedbackSend": "Envoyer"
+    "feedbackSend": "Envoyer",
+    "releaseTitle": "Notes de version",
+    "releaseVersion": "Version 1.0.0",
+    "releaseDate": "Avril 2025",
+    "releaseItem1": "Calculatrice de pourboires pour 197 pays — restaurants, taxis, boutiques et services",
+    "releaseItem2": "Descriptions culturelles des usages de pourboire pour chaque pays",
+    "releaseItem3": "Scanner de reçus OCR pour lecture automatique du montant",
+    "releaseItem4": "Partage de note avec suivi de voyage et règlement",
+    "releaseItem5": "Conversion en temps réel dans votre devise locale",
+    "releaseItem6": "5 langues : anglais, norvégien, français, espagnol, allemand"
   },
   "help": {
     "title": "Comment utiliser",

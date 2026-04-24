@@ -414,6 +414,81 @@ export interface ItemLine {
   kind: 'item' | 'total' | 'subtotal' | 'tax';
 }
 
+/** Simplified line type for the raw-lines checklist OCR review. */
+export interface RawLine {
+  id: string;
+  label: string;
+  amount: number | null;
+  kind: 'item' | 'total' | 'tax' | 'header';
+}
+
+/**
+ * Extract ALL lines from ML Kit blocks in natural top-to-bottom order.
+ * Uses the last numeric token on each line as the price.
+ * Applies orphan pairing: a label-only line followed by an amount-only line → merged.
+ * Falls back to plain text splitting when no block/frame data is available.
+ */
+export function extractRawLines(blocks: MlBlock[]): RawLine[] {
+  // Collect lines sorted by vertical position
+  const allLines: Array<{ text: string; top: number }> = [];
+  for (const block of blocks) {
+    for (const line of (block.lines ?? [])) {
+      const trimmed = line.text?.trim();
+      if (!trimmed) continue;
+      allLines.push({ text: trimmed, top: line.frame?.top ?? 0 });
+    }
+  }
+  allLines.sort((a, b) => a.top - b.top);
+
+  const raw = allLines.map(l => l.text);
+  return _buildRawLines(raw);
+}
+
+/** Shared core for both spatial and text-only paths. */
+function _buildRawLines(rawTexts: string[]): RawLine[] {
+  const result: RawLine[] = [];
+  let idx = 0;
+  let i = 0;
+
+  while (i < rawTexts.length) {
+    const trimmed = rawTexts[i].trim();
+    if (!trimmed) { i++; continue; }
+
+    const lower = trimmed.toLowerCase();
+    const vals = extractValues(trimmed);
+    // Use the LAST extracted value as the price (rightmost number = price column)
+    const amount = vals.length > 0 ? vals[vals.length - 1] : null;
+    const label = extractLabel(trimmed);
+
+    // Orphan pairing: current line has label but no amount, next has only a number
+    if (amount === null && label && i + 1 < rawTexts.length) {
+      const nextTrimmed = rawTexts[i + 1].trim();
+      const nextLabel = extractLabel(nextTrimmed);
+      const nextVals = extractValues(nextTrimmed);
+      if (!nextLabel && nextVals.length > 0) {
+        const pairedAmount = nextVals[nextVals.length - 1];
+        const kind = _classifyKind(lower, pairedAmount);
+        result.push({ id: String(idx++), label: label || trimmed.slice(0, 40), amount: pairedAmount, kind });
+        i += 2;
+        continue;
+      }
+    }
+
+    const kind = _classifyKind(lower, amount);
+    result.push({ id: String(idx++), label: label || trimmed.slice(0, 40), amount, kind });
+    i++;
+  }
+
+  return result;
+}
+
+function _classifyKind(lower: string, amount: number | null): RawLine['kind'] {
+  if (TOTAL_KEYWORDS.some(k => lower.includes(k))) return 'total';
+  if (SKIP_KEYWORDS.some(k => lower.includes(k))) return 'tax';
+  if (amount !== null) return 'item';
+  return 'header';
+}
+
 /**
  * Extract item lines from ML Kit blocks with frame data for tap-on-image overlay.
  * Returns { lines, hasSpatial } — callers should fall back to classifyOcrLines when

@@ -580,6 +580,888 @@
         "taxis": "Avtal pris før reisen; tips forventes ikke.",
         "shops": "Tips gis ikke i butikker.",
         "services": "10 % til hotellansatte og personlige tjenester settes pris på."
+      },
+      "Albania": {
+        "general": "Tips settes pris på, men er ikke obligatorisk — 5–10 % på restaurant er et varmt tegn.",
+        "restaurants": "5–10 % for god service settes pris på; det er ikke vanlig praksis.",
+        "taxis": "Rund opp til nærmeste hele tall er en vanlig høflighet.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Andorra": {
+        "general": "Tips forventes ikke sterkt; prisene inkluderer vanligvis service.",
+        "restaurants": "Rund opp regningen eller legg igjen småpenger er et høflig tegn.",
+        "taxis": "Ingen tips forventes; rund opp om du vil.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til frisør settes pris på, men er ikke obligatorisk."
+      },
+      "Armenia": {
+        "general": "Tips settes pris på på restauranter og for personlige tjenester, særlig i Jerevan.",
+        "restaurants": "10 % settes pris på på eksklusive og turistrestauranter.",
+        "taxis": "Avtal pris på forhånd; tips forventes ikke.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester er et vennlig tegn."
+      },
+      "Bosnia-Hercegovina": {
+        "general": "Tips settes pris på og er vanlig på restauranter og kafeer — å runde opp er normen.",
+        "restaurants": "5–10 % settes pris på; å runde opp er vanlig på uformelle steder.",
+        "taxis": "Rund opp til nærmeste hele tall.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Hviterussland": {
+        "general": "Tips forventes ikke sterkt, men små tips på restauranter settes pris på.",
+        "restaurants": "5–10 % settes pris på på eksklusive restauranter.",
+        "taxis": "Rund opp beløpet om du er fornøyd.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til frisør settes pris på, men er ikke standard."
+      },
+      "Georgia": {
+        "general": "Tips settes pris på og blir mer vanlig, særlig i Tbilisi.",
+        "restaurants": "10 % settes pris på; eksklusive steder kan forvente det.",
+        "taxis": "Avtal pris på forhånd; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester er et varmt tegn."
+      },
+      "Kypros": {
+        "general": "Tips er vanlig og satt pris på; 10 % er standard på restauranter og hoteller.",
+        "restaurants": "10 % er standard; sjekk regningen da service kan være inkludert.",
+        "taxis": "Rund opp til nærmeste hele tall eller legg til 10 %.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Estland": {
+        "general": "Tips forventes ikke sterkt, men 5–10 % for god service settes pris på.",
+        "restaurants": "5–10 % settes pris på; ikke vanlig obligatorisk.",
+        "taxis": "Rund opp beløpet for god service.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og personlige tjenester er et vennlig tegn."
+      },
+      "Kosovo": {
+        "general": "Tips settes pris på og er vanlig på restauranter og kafeer.",
+        "restaurants": "5–10 % settes pris på; å runde opp er vanlig på uformelle steder.",
+        "taxis": "Rund opp til nærmeste hele tall.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Latvia": {
+        "general": "Tips forventes ikke sterkt, men 5–10 % for god service settes pris på.",
+        "restaurants": "5–10 % settes pris på; ikke vanlig obligatorisk.",
+        "taxis": "Rund opp beløpet for bekvemmelighet.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og personlige tjenester er et vennlig tegn."
+      },
+      "Liechtenstein": {
+        "general": "Tips forventes ikke da prisene er høye og service generelt er inkludert.",
+        "restaurants": "Å runde opp regningen er et høflig tegn; ingen prosenttips forventes.",
+        "taxis": "Ingen tips forventes; rund opp om du vil.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til frisør settes pris på, men er ikke obligatorisk."
+      },
+      "Litauen": {
+        "general": "Tips er ikke obligatorisk, men 5–10 % for god service settes pris på.",
+        "restaurants": "5–10 % settes pris på; ikke vanlig forventet på uformelle steder.",
+        "taxis": "Rund opp beløpet for bekvemmelighet.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Luxembourg": {
+        "general": "Tips er ikke obligatorisk da prisene er høye, men å runde opp er et høflig tegn.",
+        "restaurants": "Å runde opp eller legge igjen 5–10 % settes pris på; servicegebyr kan være inkludert.",
+        "taxis": "Rund opp til nærmeste euro eller legg til 10 %.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Malta": {
+        "general": "Tips settes pris på og er ganske vanlig; 10 % på restauranter er et varmt tegn.",
+        "restaurants": "10 % settes pris på; sjekk om service allerede er inkludert.",
+        "taxis": "Rund opp beløpet eller legg til 10 % for god service.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Moldova": {
+        "general": "Tips settes pris på, men er beskjedent — 5–10 % på restauranter er normen.",
+        "restaurants": "5–10 % settes pris på; ikke strengt forventet på uformelle steder.",
+        "taxis": "Rund opp beløpet.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Monaco": {
+        "general": "Tips forventes på Monacos eksklusive steder — 10–15 % er standard.",
+        "restaurants": "10–15 % er standard; sjekk om service er inkludert i regningen.",
+        "taxis": "10 % eller rund opp til nærmeste euro.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10–15 % til hotellets concierge, spa og frisør forventes."
+      },
+      "Montenegro": {
+        "general": "Tips settes pris på i turistområder; 10 % på restauranter er vanlig.",
+        "restaurants": "10 % settes pris på; rund opp på uformelle steder.",
+        "taxis": "Rund opp beløpet eller legg til 10 %.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester er et vennlig tegn."
+      },
+      "Nord-Makedonia": {
+        "general": "Tips settes pris på og er vanlig på restauranter og kafeer.",
+        "restaurants": "5–10 % settes pris på; å runde opp er vanlig på uformelle steder.",
+        "taxis": "Rund opp til nærmeste hele tall.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og personlige tjenester settes pris på."
+      },
+      "San Marino": {
+        "general": "Tipskultur følger italienske normer — å runde opp er vanlig; formell prosenttips forventes ikke.",
+        "restaurants": "Å runde opp eller legge igjen €1–2 for god service settes pris på.",
+        "taxis": "Rund opp til nærmeste euro.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til frisør settes pris på, men er ikke obligatorisk."
+      },
+      "Serbia": {
+        "general": "Tips settes pris på og er vanlig — 5–10 % eller å runde opp er standard på restauranter.",
+        "restaurants": "5–10 % settes pris på; å runde opp er vanlig på uformelle steder.",
+        "taxis": "Rund opp beløpet til nærmeste hele tall.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Slovakia": {
+        "general": "Tips settes pris på; 5–10 % på restauranter anses som høflig.",
+        "restaurants": "5–10 % settes pris på; det er vanlig å si totalen du ønsker å betale til servitøren.",
+        "taxis": "Rund opp beløpet for god service.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Slovenia": {
+        "general": "Tips er ikke obligatorisk, men 5–10 % for god service settes pris på.",
+        "restaurants": "5–10 % settes pris på; å runde opp er vanlig på uformelle steder.",
+        "taxis": "Rund opp beløpet eller legg til 10 % for god service.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til frisør og personlige tjenester er et vennlig tegn."
+      },
+      "Ukraina": {
+        "general": "Tips er vanlig og satt pris på — 10 % på restauranter er standard.",
+        "restaurants": "10 % settes pris på; sjekk om service er inkludert i regningen.",
+        "taxis": "Rund opp beløpet; tips settes pris på, men forventes ikke.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Antigua og Barbuda": {
+        "general": "Tips settes pris på og forventes i turistområder — 10–15 % på restauranter er standard.",
+        "restaurants": "10–15 % forventes; servicegebyr kan være inkludert.",
+        "taxis": "10 % settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10–15 % til hotell og personlige tjenester er standard."
+      },
+      "Bahamas": {
+        "general": "Tips forventes og er vanlig — 15 % på restauranter er standard praksis.",
+        "restaurants": "15 % forventes; servicegebyr kan være inkludert på turiststeder.",
+        "taxis": "10–15 % settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "15 % til hotellets concierge og personlige tjenester er standard."
+      },
+      "Barbados": {
+        "general": "Tips settes pris på og forventes — 10–15 % på restauranter er standard.",
+        "restaurants": "10–15 % forventes; et servicegebyr er ofte inkludert.",
+        "taxis": "10 % settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10–15 % til hotell og personlige tjenester er standard."
+      },
+      "Belize": {
+        "general": "Tips settes pris på, særlig i turistområder — 10–15 % på restauranter er vanlig.",
+        "restaurants": "10–15 % settes pris på; servicegebyr kan være inkludert på turiststeder.",
+        "taxis": "Avtal pris; tips settes pris på, men forventes ikke.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til hotell og personlige tjenester settes pris på."
+      },
+      "Costa Rica": {
+        "general": "Et servicegebyr på 10 % er lovpålagt på restauranter, så ytterligere tips er valgfritt.",
+        "restaurants": "10 % servicegebyr er inkludert ved lov; ekstra tips er valgfritt, men settes pris på.",
+        "taxis": "Ingen tips forventes; rund opp om du vil.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "5–10 % til hotell og personlige tjenester settes pris på."
+      },
+      "Cuba": {
+        "general": "Tips er viktig — det supplerer lokale lønninger betydelig og mottas varmt.",
+        "restaurants": "10–15 % settes pris på og er viktig for restaurantansatte.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til hotellansatte og frisører mottas varmt."
+      },
+      "Den dominikanske republikk": {
+        "general": "Tips forventes og settes pris på — 10 % på restauranter er normen.",
+        "restaurants": "10 % settes pris på; servicegebyr kan være inkludert på resortrestauranter.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til hotell og personlige tjenester settes pris på."
+      },
+      "Dominica": {
+        "general": "Tips settes pris på, særlig på turiststeder — 10 % er vanlig.",
+        "restaurants": "10 % settes pris på på restauranter.",
+        "taxis": "10 % settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til personlige tjenester settes pris på."
+      },
+      "El Salvador": {
+        "general": "Tips settes pris på; 10 % på restauranter er et varmt tegn.",
+        "restaurants": "10 % settes pris på; servicegebyr kan være inkludert.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Grenada": {
+        "general": "Tips settes pris på i turistområder — 10 % på restauranter er vanlig.",
+        "restaurants": "10 % settes pris på; et servicegebyr kan være inkludert.",
+        "taxis": "10 % settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til hotell og personlige tjenester settes pris på."
+      },
+      "Guatemala": {
+        "general": "Tips settes pris på; 10 % på restauranter er et varmt tegn.",
+        "restaurants": "10 % settes pris på; servicegebyr kan være inkludert i turistområder.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Haiti": {
+        "general": "Tips settes pris på og supplerer lave lønninger betydelig.",
+        "restaurants": "5–10 % settes pris på; service er sjelden inkludert.",
+        "taxis": "Avtal pris på forhånd; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til hotellansatte og personlige tjenester mottas varmt."
+      },
+      "Honduras": {
+        "general": "Tips settes pris på; 10 % på restauranter er vanlig.",
+        "restaurants": "10 % settes pris på; servicegebyr kan være inkludert.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Jamaica": {
+        "general": "Tips forventes og settes pris på — 10–15 % på restauranter er standard.",
+        "restaurants": "10–15 % forventes; servicegebyr kan være inkludert.",
+        "taxis": "10 % settes pris på; avtal pris på forhånd.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10–15 % til hotell og personlige tjenester er standard."
+      },
+      "Nicaragua": {
+        "general": "Tips settes pris på; 10 % på restauranter er et varmt tegn.",
+        "restaurants": "10 % settes pris på; servicegebyr kan være inkludert.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Panama": {
+        "general": "Tips forventes i turistområder og eksklusive steder — 10 % på restauranter er standard.",
+        "restaurants": "10 % settes pris på; servicegebyr kan være inkludert.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til hotell og personlige tjenester settes pris på."
+      },
+      "Saint Kitts og Nevis": {
+        "general": "Tips settes pris på i turistområder — 10 % på restauranter er vanlig.",
+        "restaurants": "10 % settes pris på; et servicegebyr kan være inkludert.",
+        "taxis": "10 % settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til hotell og personlige tjenester settes pris på."
+      },
+      "Saint Lucia": {
+        "general": "Tips settes pris på og forventes — 10 % på restauranter er standard.",
+        "restaurants": "10 % settes pris på; servicegebyr er ofte inkludert.",
+        "taxis": "10 % settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10–15 % til hotell og personlige tjenester er standard."
+      },
+      "Saint Vincent og Grenadinene": {
+        "general": "Tips settes pris på i turistområder — 10 % på restauranter er vanlig.",
+        "restaurants": "10 % settes pris på på restauranter.",
+        "taxis": "10 % settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til hotell og personlige tjenester settes pris på."
+      },
+      "Trinidad og Tobago": {
+        "general": "Tips settes pris på og er vanlig — 10 % på restauranter er standard.",
+        "restaurants": "10 % settes pris på; servicegebyr kan være inkludert.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til hotell og personlige tjenester settes pris på."
+      },
+      "Bolivia": {
+        "general": "Tips settes pris på; 10 % på restauranter er et varmt tegn.",
+        "restaurants": "10 % settes pris på; service er sjelden inkludert.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Guyana": {
+        "general": "Tips settes pris på og er vanlig på restauranter og hoteller — 10 % er normen.",
+        "restaurants": "10 % settes pris på; servicegebyr kan være inkludert.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til personlige tjenester settes pris på."
+      },
+      "Paraguay": {
+        "general": "Tips settes pris på; 10 % på restauranter er vanlig.",
+        "restaurants": "10 % settes pris på; servicegebyr kan være inkludert.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Surinam": {
+        "general": "Tips settes pris på på restauranter og hoteller — 10 % er vanlig.",
+        "restaurants": "10 % settes pris på; servicegebyr kan være inkludert.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til personlige tjenester settes pris på."
+      },
+      "Venezuela": {
+        "general": "Tips settes pris på; 10 % på restauranter er standard.",
+        "restaurants": "10 % settes pris på; servicegebyr er noen ganger inkludert.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Afghanistan": {
+        "general": "Tips er ikke vanlig og forventes ikke i de fleste sammenhenger.",
+        "restaurants": "Ingen tips forventes; det er ikke en del av lokal kultur.",
+        "taxis": "Ingen tips forventes; avtal pris på forhånd.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Ingen tips forventes."
+      },
+      "Aserbajdsjan": {
+        "general": "Tips settes pris på og blir mer vanlig i Baku — 10 % på restauranter er et varmt tegn.",
+        "restaurants": "10 % settes pris på på eksklusive og turistrestauranter.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Bhutan": {
+        "general": "Tips er ikke en del av lokal kultur, men settes pris på av ansatte i turistnæringen.",
+        "restaurants": "Små tips settes pris på på turistrestauranter.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til guider og hotellansatte settes pris på."
+      },
+      "Brunei": {
+        "general": "Tips forventes ikke og kan noen ganger frarådes — service er inkludert på eksklusive steder.",
+        "restaurants": "Ingen tips forventes; servicegebyr er ofte inkludert.",
+        "taxis": "Ingen tips forventes.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Ingen tips forventes."
+      },
+      "Kambodsja": {
+        "general": "Tips settes pris på og er vanlig blant ansatte i turistnæringen; det supplerer lave lønninger.",
+        "restaurants": "1–2 USD eller 10 % settes pris på på turistrestauranter.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "1–2 USD til hotellansatte og personlige tjenester settes pris på."
+      },
+      "Kasakhstan": {
+        "general": "Tips settes pris på på eksklusive restauranter og hoteller — 10 % er vanlig.",
+        "restaurants": "10 % settes pris på på restauranter.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til frisør og personlige tjenester settes pris på."
+      },
+      "Kirgisistan": {
+        "general": "Tips forventes ikke sterkt, men små tips for god service settes pris på.",
+        "restaurants": "5–10 % settes pris på på restauranter.",
+        "taxis": "Rund opp beløpet; tips forventes ikke.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Laos": {
+        "general": "Tips settes pris på blant ansatte i turistnæringen og supplerer lave lønninger.",
+        "restaurants": "5–10 % eller å runde opp settes pris på på turistrestauranter.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til hotellansatte og personlige tjenester settes pris på."
+      },
+      "Maldivene": {
+        "general": "Tips settes pris på, særlig på resorts — 10 % for god service er vanlig.",
+        "restaurants": "10 % settes pris på; servicegebyr kan være inkludert i resortregninger.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til resort- og spatjenester settes pris på."
+      },
+      "Mongolia": {
+        "general": "Tips er ikke en lokal tradisjon, men settes pris på av ansatte i turistnæringen.",
+        "restaurants": "Små tips settes pris på på turistrestauranter.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til guider og hotellansatte settes pris på."
+      },
+      "Myanmar": {
+        "general": "Tips settes pris på og supplerer lave lønninger — små tips mottas varmt.",
+        "restaurants": "5–10 % settes pris på på turistrestauranter.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til hotellansatte og personlige tjenester settes pris på."
+      },
+      "Nord-Korea": {
+        "general": "Tips praktiseres ikke og kan bli avvist eller frarådet.",
+        "restaurants": "Ingen tips praktiseres.",
+        "taxis": "Ingen tips praktiseres.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Ingen tips praktiseres."
+      },
+      "Tadsjikistan": {
+        "general": "Tips er ikke en sterk tradisjon, men små tips settes pris på.",
+        "restaurants": "5–10 % settes pris på på restauranter.",
+        "taxis": "Rund opp beløpet; tips forventes ikke.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Turkmenistan": {
+        "general": "Tips forventes ikke sterkt, men settes pris på for god service.",
+        "restaurants": "5–10 % settes pris på på restauranter.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Usbekistan": {
+        "general": "Tips settes pris på i turistområder og eksklusive restauranter — 10 % er vanlig.",
+        "restaurants": "10 % settes pris på på restauranter.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til personlige tjenester settes pris på."
+      },
+      "Øst-Timor": {
+        "general": "Tips forventes ikke sterkt, men settes pris på for god service.",
+        "restaurants": "Små tips settes pris på på restauranter.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Kiribati": {
+        "general": "Tips er ikke vanlig og forventes ikke.",
+        "restaurants": "Ingen tips forventes.",
+        "taxis": "Ingen tips forventes.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Ingen tips forventes."
+      },
+      "Marshalløyene": {
+        "general": "Tips er ikke vanlig i lokale sammenhenger.",
+        "restaurants": "Ingen tips forventes.",
+        "taxis": "Ingen tips forventes.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Ingen tips forventes."
+      },
+      "Mikronesiaføderasjonen": {
+        "general": "Tips er ikke en del av lokal kultur og forventes generelt ikke.",
+        "restaurants": "Ingen tips forventes.",
+        "taxis": "Ingen tips forventes.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Ingen tips forventes."
+      },
+      "Nauru": {
+        "general": "Tips er ikke vanlig og forventes ikke.",
+        "restaurants": "Ingen tips forventes.",
+        "taxis": "Ingen tips forventes.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Ingen tips forventes."
+      },
+      "Palau": {
+        "general": "Tips settes pris på på turiststeder — amerikanske normer gjelder.",
+        "restaurants": "10–15 % settes pris på på turistrestauranter.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til dykkeguider og hotellansatte settes pris på."
+      },
+      "Papua Ny-Guinea": {
+        "general": "Tips er ikke en lokal tradisjon, men settes pris på på turiststeder.",
+        "restaurants": "Små tips settes pris på på turistrestauranter.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til hotellansatte og guider settes pris på."
+      },
+      "Samoa": {
+        "general": "Tips er ikke vanlig og kan noen ganger virke flaut.",
+        "restaurants": "Ingen tips forventes.",
+        "taxis": "Ingen tips forventes.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Ingen tips forventes."
+      },
+      "Salomonøyene": {
+        "general": "Tips er ikke vanlig og forventes generelt ikke.",
+        "restaurants": "Ingen tips forventes.",
+        "taxis": "Ingen tips forventes.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Ingen tips forventes."
+      },
+      "Tonga": {
+        "general": "Tips er ikke en del av lokal kultur og kan noen ganger oppfattes som uhøflig.",
+        "restaurants": "Ingen tips forventes.",
+        "taxis": "Ingen tips forventes.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Ingen tips forventes."
+      },
+      "Tuvalu": {
+        "general": "Tips er ikke vanlig og forventes ikke.",
+        "restaurants": "Ingen tips forventes.",
+        "taxis": "Ingen tips forventes.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Ingen tips forventes."
+      },
+      "Vanuatu": {
+        "general": "Tips er ikke vanlig i lokale sammenhenger, men settes pris på på turiststeder.",
+        "restaurants": "Små tips settes pris på på turistrestauranter.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til hotellansatte og guider settes pris på."
+      },
+      "Algerie": {
+        "general": "Tips settes pris på, men er ikke obligatorisk — 5–10 % på restauranter er et varmt tegn.",
+        "restaurants": "5–10 % settes pris på; service er sjelden inkludert.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til hotellansatte og frisører settes pris på."
+      },
+      "Angola": {
+        "general": "Tips settes pris på, særlig på eksklusive steder i Luanda.",
+        "restaurants": "10 % settes pris på på eksklusive restauranter.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til personlige tjenester settes pris på."
+      },
+      "Benin": {
+        "general": "Tips settes pris på og er vanlig for restaurant- og hotelltjenester.",
+        "restaurants": "5–10 % settes pris på.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Botswana": {
+        "general": "Tips settes pris på og er vanlig — 10 % på restauranter er standard.",
+        "restaurants": "10 % settes pris på; service er sjelden inkludert.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til safariguider og personlige tjenester settes pris på."
+      },
+      "Burkina Faso": {
+        "general": "Tips settes pris på for restaurant- og hotelltjenester.",
+        "restaurants": "5–10 % settes pris på.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Burundi": {
+        "general": "Tips settes pris på, men forventes ikke sterkt.",
+        "restaurants": "5–10 % settes pris på på restauranter.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Kamerun": {
+        "general": "Tips settes pris på og er vanlig på restauranter og hoteller.",
+        "restaurants": "5–10 % settes pris på; service er sjelden inkludert.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til hotellansatte og personlige tjenester settes pris på."
+      },
+      "Kapp Verde": {
+        "general": "Tips settes pris på i turistområder — 10 % på restauranter er vanlig.",
+        "restaurants": "10 % settes pris på; servicegebyr kan være inkludert.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til personlige tjenester settes pris på."
+      },
+      "Den sentralafrikanske republikk": {
+        "general": "Tips forventes ikke sterkt, men små tips settes pris på.",
+        "restaurants": "Små tips settes pris på.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Tsjad": {
+        "general": "Tips forventes ikke sterkt, men små tips settes pris på.",
+        "restaurants": "Små tips settes pris på.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Komorene": {
+        "general": "Tips settes pris på, men forventes ikke sterkt.",
+        "restaurants": "Små tips settes pris på på restauranter.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Kongo-Brazzaville": {
+        "general": "Tips settes pris på på restauranter og hoteller.",
+        "restaurants": "5–10 % settes pris på.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Kongo-Kinshasa": {
+        "general": "Tips settes pris på og supplerer lave lønninger betydelig.",
+        "restaurants": "5–10 % settes pris på på restauranter.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til hotellansatte og personlige tjenester settes pris på."
+      },
+      "Djibouti": {
+        "general": "Tips settes pris på på restauranter og hoteller.",
+        "restaurants": "10 % settes pris på; servicegebyr kan være inkludert.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til hotellansatte og personlige tjenester settes pris på."
+      },
+      "Ekvatorial-Guinea": {
+        "general": "Tips settes pris på på restauranter og hoteller.",
+        "restaurants": "5–10 % settes pris på.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Eritrea": {
+        "general": "Tips forventes ikke sterkt, men små tips settes pris på.",
+        "restaurants": "Små tips settes pris på.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Etiopia": {
+        "general": "Tips settes pris på og er vanlig — 10 % på restauranter er et varmt tegn.",
+        "restaurants": "10 % settes pris på; service er sjelden inkludert.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til hotellansatte og personlige tjenester settes pris på."
+      },
+      "Gabon": {
+        "general": "Tips settes pris på på restauranter og hoteller.",
+        "restaurants": "5–10 % settes pris på.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Gambia": {
+        "general": "Tips forventes og settes pris på i turistområder — 10 % på restauranter er vanlig.",
+        "restaurants": "10 % settes pris på; service kan være inkludert på turistrestauranter.",
+        "taxis": "10 % settes pris på; avtal pris på forhånd.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til hotellansatte og personlige tjenester settes pris på."
+      },
+      "Guinea": {
+        "general": "Tips settes pris på, men forventes ikke sterkt.",
+        "restaurants": "5–10 % settes pris på på restauranter.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Guinea-Bissau": {
+        "general": "Tips settes pris på, men forventes ikke sterkt.",
+        "restaurants": "Små tips settes pris på på restauranter.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Elfenbenskysten": {
+        "general": "Tips settes pris på på restauranter og hoteller.",
+        "restaurants": "5–10 % settes pris på; servicegebyr kan være inkludert.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til hotellansatte og personlige tjenester settes pris på."
+      },
+      "Lesotho": {
+        "general": "Tips settes pris på — 10 % på restauranter er et varmt tegn.",
+        "restaurants": "10 % settes pris på.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til personlige tjenester settes pris på."
+      },
+      "Liberia": {
+        "general": "Tips settes pris på og supplerer lave lønninger.",
+        "restaurants": "5–10 % settes pris på på restauranter.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Libya": {
+        "general": "Tips er beskjedent — små tips settes pris på, men forventes ikke sterkt.",
+        "restaurants": "5 % settes pris på; service er sjelden inkludert.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til hotellansatte og personlige tjenester settes pris på."
+      },
+      "Madagaskar": {
+        "general": "Tips settes pris på og supplerer lave lønninger betydelig.",
+        "restaurants": "5–10 % settes pris på; service er sjelden inkludert.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til hotellansatte og personlige tjenester settes pris på."
+      },
+      "Malawi": {
+        "general": "Tips settes pris på og er vanlig i turistområder.",
+        "restaurants": "10 % settes pris på; service er sjelden inkludert.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til safariguider og personlige tjenester settes pris på."
+      },
+      "Mali": {
+        "general": "Tips settes pris på på restauranter og for personlige tjenester.",
+        "restaurants": "5–10 % settes pris på.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Mauritania": {
+        "general": "Tips forventes ikke sterkt, men små tips settes pris på.",
+        "restaurants": "Små tips settes pris på på restauranter.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Mauritius": {
+        "general": "Tips settes pris på i turistområder — 10 % på restauranter er standard.",
+        "restaurants": "10 % settes pris på; servicegebyr kan være inkludert.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til hotell og personlige tjenester settes pris på."
+      },
+      "Mosambik": {
+        "general": "Tips settes pris på i turistområder og supplerer lave lønninger.",
+        "restaurants": "10 % settes pris på; service er sjelden inkludert.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til hotellansatte og personlige tjenester settes pris på."
+      },
+      "Namibia": {
+        "general": "Tips forventes og settes pris på — 10 % på restauranter er standard.",
+        "restaurants": "10 % settes pris på; service er sjelden inkludert.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til safariguider og personlige tjenester er standard."
+      },
+      "Niger": {
+        "general": "Tips settes pris på, men forventes ikke sterkt.",
+        "restaurants": "Små tips settes pris på på restauranter.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Rwanda": {
+        "general": "Tips settes pris på i turistområder — 10 % på restauranter er et varmt tegn.",
+        "restaurants": "10 % settes pris på; service er sjelden inkludert.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til hotellansatte og personlige tjenester settes pris på."
+      },
+      "São Tomé og Príncipe": {
+        "general": "Tips settes pris på på turiststeder.",
+        "restaurants": "10 % settes pris på.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Senegal": {
+        "general": "Tips settes pris på — 10 % på turistrestauranter er et varmt tegn.",
+        "restaurants": "10 % settes pris på; service er sjelden inkludert.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til hotellansatte og personlige tjenester settes pris på."
+      },
+      "Seychellene": {
+        "general": "Tips settes pris på — 10 % på restauranter er standard i turistområder.",
+        "restaurants": "10 % settes pris på; servicegebyr kan være inkludert.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til hotell og personlige tjenester settes pris på."
+      },
+      "Sierra Leone": {
+        "general": "Tips settes pris på og supplerer lave lønninger.",
+        "restaurants": "5–10 % settes pris på på restauranter.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Somalia": {
+        "general": "Tips forventes ikke sterkt, men små tips settes pris på på turiststeder.",
+        "restaurants": "Små tips settes pris på.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Sør-Sudan": {
+        "general": "Tips settes pris på, men forventes ikke sterkt.",
+        "restaurants": "Små tips settes pris på.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Sudan": {
+        "general": "Tips settes pris på, men er beskjedent — små tips på restauranter er et vennlig tegn.",
+        "restaurants": "5 % settes pris på; service er sjelden inkludert.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Eswatini": {
+        "general": "Tips settes pris på — 10 % på restauranter er et varmt tegn.",
+        "restaurants": "10 % settes pris på; service er sjelden inkludert.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til personlige tjenester settes pris på."
+      },
+      "Togo": {
+        "general": "Tips settes pris på på restauranter og for personlige tjenester.",
+        "restaurants": "5–10 % settes pris på.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Uganda": {
+        "general": "Tips settes pris på og er vanlig i turistområder — 10 % er standard.",
+        "restaurants": "10 % settes pris på; service er sjelden inkludert.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til hotellansatte og personlige tjenester settes pris på."
+      },
+      "Zambia": {
+        "general": "Tips forventes og settes pris på i turistområder — 10 % er standard.",
+        "restaurants": "10 % settes pris på; service er sjelden inkludert.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til safariguider og personlige tjenester er standard."
+      },
+      "Zimbabwe": {
+        "general": "Tips forventes og settes pris på — 10 % på restauranter er standard.",
+        "restaurants": "10 % settes pris på; service er sjelden inkludert.",
+        "taxis": "Små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "10 % til hotellansatte og personlige tjenester settes pris på."
+      },
+      "Iran": {
+        "general": "Tips er ikke sterkt vanlig, men et lite takknemlighetsgest for god service mottas varmt.",
+        "restaurants": "5–10 % settes pris på, men forventes ikke; service er vanligvis inkludert.",
+        "taxis": "Ingen tips forventes; avtal pris på forhånd.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Irak": {
+        "general": "Tips settes pris på på restauranter og hoteller — 10 % er et varmt tegn.",
+        "restaurants": "10 % settes pris på; servicegebyr kan være inkludert på eksklusive steder.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til hotellansatte og personlige tjenester settes pris på."
+      },
+      "Palestina": {
+        "general": "Tips settes pris på på restauranter og hoteller — 10 % er et varmt tegn.",
+        "restaurants": "10 % settes pris på; servicegebyr kan være inkludert.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
+      },
+      "Syria": {
+        "general": "Tips settes pris på og er vanlig — 10 % på restauranter er et varmt tegn.",
+        "restaurants": "10 % settes pris på; servicegebyr kan være inkludert.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til hotellansatte og personlige tjenester settes pris på."
+      },
+      "Jemen": {
+        "general": "Tips settes pris på, men forventes ikke sterkt.",
+        "restaurants": "Små tips settes pris på på restauranter.",
+        "taxis": "Avtal pris; små tips settes pris på.",
+        "shops": "Tips gis ikke i butikker.",
+        "services": "Små tips til personlige tjenester settes pris på."
       }
     }
   },
@@ -672,8 +1554,7 @@
     "shareAppCredit": "Beregnet med Adjust the Tip-appen 📱",
     "removedBillsSection": "Regninger fra turer",
     "scanAmount": "Skann kvittering",
-    "removeSavedName": "Fjerne dette navnet fra forslag?",
-    "currency": "Valuta"
+    "removeSavedName": "Fjerne dette navnet fra forslag?"
   },
   "tripsTab": {
     "title": "Turer",
@@ -734,13 +1615,22 @@
   },
   "about": {
     "title": "Om appen",
-    "description": "Aptip er en drikkepengekalkulator for reisende — navnet sier det hele. Kulturelt tilpassede retningslinjer for drikkepenger i 60+ land — for restauranter, taxi, butikker og tjenester, slik at du alltid gir riktig tips.",
+    "description": "Aptip er en drikkepengekalkulator for reisende — navnet sier det hele. Kulturelt tilpassede retningslinjer for drikkepenger i 197 land — for restauranter, taxi, butikker og tjenester, slik at du alltid gir riktig tips.",
     "feedbackTitle": "Tilbakemelding",
     "feedbackBody": "Har du et forslag eller funnet en feil? Vi vil gjerne høre fra deg.",
     "feedbackBtn": "Send tilbakemelding",
     "feedbackFormTitle": "Send tilbakemelding",
     "feedbackPlaceholder": "Skriv tilbakemeldingen din her…",
-    "feedbackSend": "Send"
+    "feedbackSend": "Send",
+    "releaseTitle": "Versjonsnotater",
+    "releaseVersion": "Versjon 1.0.0",
+    "releaseDate": "April 2025",
+    "releaseItem1": "Drikkepengekalkulator for 197 land — restaurant, taxi, butikk og tjenester",
+    "releaseItem2": "Kulturelt tilpassede drikkepenge­beskrivelser for hvert land",
+    "releaseItem3": "Kvitteringsskanner med OCR for automatisk beløpslesing",
+    "releaseItem4": "Regningsdeler med tursporing og oppgjør",
+    "releaseItem5": "Sanntidskursomregning til din hjemmevaluta",
+    "releaseItem6": "5 språk: engelsk, norsk, fransk, spansk, tysk"
   },
   "help": {
     "title": "Slik bruker du appen",
