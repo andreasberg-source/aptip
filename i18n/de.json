@@ -1688,18 +1688,16 @@
     "noLines": "Keine Zeilen im Bild gefunden"
   },
   "donate": {
-    "title": "Aptip unterstützen",
-    "subtitle": "Enjoying the app? Leave a tip for the developer!",
-    "notReally": "Not really",
-    "likeIt": "Like it",
-    "loveIt": "Love it!",
-    "custom": "Custom",
-    "keepAds": "Keep ads",
-    "donateCta": "Donate {{amount}}",
-    "continueAds": "Continue with ads",
-    "minimumNote": "Minimum $5.99",
-    "thankYou": "Thank you for your support!",
-    "removeAds": "Remove Ads",
-    "tagline": "Donations remove ads and support ongoing development."
+    "title": "Werbung entfernen",
+    "subtitle": "Wie viel schätzen Sie Aptip?",
+    "notReally": "Nicht wirklich",
+    "likeIt": "Gefällt mir",
+    "loveIt": "Ich liebe es!",
+    "keepAds": "Werbung behalten",
+    "continueAds": "Mit Werbung fortfahren",
+    "thankYou": "Vielen Dank für Ihre Unterstützung!",
+    "removeAds": "Werbung entfernen",
+    "tagline": "Das Entfernen der Werbung unterstützt die weitere Entwicklung.",
+    "unlockCta": "Für {{amount}} freischalten"
   }
 }

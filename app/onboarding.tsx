@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import * as Localization from 'expo-localization';
 
 import { useSettingsStore } from '../store/settingsStore';
-import { SORTED_CURRENCIES, detectCurrencyFromLocale } from '../data/currencies';
+import { SORTED_CURRENCIES, detectCurrencyFromLocale, getLocalizedCurrencyName } from '../data/currencies';
 import { Colors, Typography, Radius } from '../constants/Theme';
 import i18n, { changeLanguage, supportedLanguages } from '../i18n';
 
@@ -39,13 +39,19 @@ export default function OnboardingScreen() {
     setCurrentLang(code);
   };
 
+  const localizedCurrencies = useMemo(() => {
+    return SORTED_CURRENCIES
+      .map(c => ({ code: c.code, localizedName: getLocalizedCurrencyName(c.code, currentLang) }))
+      .sort((a, b) => a.localizedName.localeCompare(b.localizedName, currentLang));
+  }, [currentLang]);
+
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return SORTED_CURRENCIES;
-    return SORTED_CURRENCIES.filter(
-      (c) => c.code.toLowerCase().includes(q) || c.name.toLowerCase().includes(q),
+    if (!q) return localizedCurrencies;
+    return localizedCurrencies.filter(
+      (c) => c.code.toLowerCase().includes(q) || c.localizedName.toLowerCase().includes(q),
     );
-  }, [search]);
+  }, [search, localizedCurrencies]);
 
   const handleGetStarted = async () => {
     await patch({
@@ -143,7 +149,7 @@ export default function OnboardingScreen() {
                       {item.code}
                     </Text>
                     <Text style={[styles.currencyName, active && styles.currencyNameActive]}>
-                      {item.name}
+                      {item.localizedName}
                     </Text>
                   </View>
                   {active && <Text style={styles.checkmark}>✓</Text>}

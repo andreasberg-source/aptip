@@ -36,7 +36,8 @@ import type { RawLine } from '../utils/parseAmounts';
 import OcrItemReview from '../components/OcrItemReview';
 import ContinentCountryPicker from '../components/ContinentCountryPicker';
 import ServiceTypeSelector from '../components/ServiceTypeSelector';
-import { tippingData, ContinentKey, ServiceType } from '../data/tippingData';
+import { tippingData, ContinentKey, ServiceType, getLocalizedCountryName } from '../data/tippingData';
+import i18n from '../i18n';
 
 // Lazy-load ML Kit
 let TextRecognition: typeof import('@react-native-ml-kit/text-recognition').default | null = null;
@@ -799,10 +800,10 @@ export default function AddBillScreen() {
                 >
                   <View style={styles.historyRowInfo}>
                     <Text style={[styles.historyRowName, { color: C.darkSlate }]}>
-                      {item.name ? item.name : item.country}
+                      {item.name ? item.name : getLocalizedCountryName(item.country ?? '', i18n.language)}
                     </Text>
                     {item.name ? (
-                      <Text style={[styles.historyRowCountry, { color: C.sage }]}>{item.country}</Text>
+                      <Text style={[styles.historyRowCountry, { color: C.sage }]}>{getLocalizedCountryName(item.country ?? '', i18n.language)}</Text>
                     ) : null}
                     <Text style={[styles.historyRowDate, { color: C.sage }]}>{formatDate(item.date)}</Text>
                   </View>

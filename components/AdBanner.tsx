@@ -55,8 +55,8 @@ function AffiliateBanner() {
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export default function AdBanner() {
-  const hasDonated = useSettingsStore(s => s.hasDonated);
-  if (hasDonated) return null;
+  const adsRemoved = useSettingsStore(s => s.adsRemoved);
+  if (adsRemoved) return null;
 
   if (ACTIVE_AD_SOURCE === 'admob') return <AdMobBanner />;
   if (ACTIVE_AD_SOURCE === 'affiliate') return <AffiliateBanner />;

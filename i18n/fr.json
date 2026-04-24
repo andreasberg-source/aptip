@@ -1688,18 +1688,16 @@
     "noLines": "Aucune ligne trouvée dans l'image"
   },
   "donate": {
-    "title": "Soutenir Aptip",
-    "subtitle": "Vous aimez l'application ? Laissez un pourboire au développeur !",
+    "title": "Supprimer les publicités",
+    "subtitle": "Quelle valeur donnez-vous à Aptip ?",
     "notReally": "Pas vraiment",
     "likeIt": "Je l'aime bien",
     "loveIt": "Je l'adore !",
-    "custom": "Personnalisé",
     "keepAds": "Garder les publicités",
-    "donateCta": "Donner {{amount}}",
     "continueAds": "Continuer avec les publicités",
-    "minimumNote": "Minimum 5,99 $",
     "thankYou": "Merci pour votre soutien !",
     "removeAds": "Supprimer les publicités",
-    "tagline": "Les dons suppriment les publicités et soutiennent le développement continu."
+    "tagline": "Supprimer les publicités soutient le développement.",
+    "unlockCta": "Débloquer pour {{amount}}"
   }
 }

@@ -15,7 +15,7 @@ export interface PersistedSettings {
   hasOnboarded: boolean;
   favouriteCountries: string[];
   savedParticipantNames: string[];
-  hasDonated: boolean;
+  adsRemoved: boolean;
   dismissedTips: string[];
 }
 
@@ -38,7 +38,7 @@ const DEFAULTS: PersistedSettings = {
   hasOnboarded: false,
   favouriteCountries: [],
   savedParticipantNames: [],
-  hasDonated: false,
+  adsRemoved: false,
   dismissedTips: [],
 };
 

@@ -11,6 +11,8 @@ import TipBanner from '../../components/TipBanner';
 import { useColors } from '../../hooks/useColors';
 import { Typography, Radius } from '../../constants/Theme';
 import { formatAmount } from '../../utils/tipCalculations';
+import { getLocalizedCountryName } from '../../data/tippingData';
+import i18n from '../../i18n';
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: '2-digit' });
@@ -140,7 +142,7 @@ export default function HistoryScreen() {
               <>
                 <View style={[styles.entryInfo, { borderBottomColor: C.lightBorder }]}>
                   <Text style={[styles.entryName, { color: C.darkSlate }]} numberOfLines={2}>
-                    {selectedEntry.name || selectedEntry.country}
+                    {selectedEntry.name || getLocalizedCountryName(selectedEntry.country ?? '', i18n.language)}
                   </Text>
                   <Text style={[styles.entryMeta, { color: C.sage }]}>
                     {formatDate(selectedEntry.date)}  ·  {formatAmount(selectedEntry.total)} {selectedEntry.currency}

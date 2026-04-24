@@ -1688,18 +1688,16 @@
     "noLines": "Ingen linjer funnet i bildet"
   },
   "donate": {
-    "title": "Støtt Aptip",
-    "subtitle": "Liker du appen? Legg igjen et tips til utvikleren!",
+    "title": "Fjern annonser",
+    "subtitle": "Hvor mye verdsetter du Aptip?",
     "notReally": "Ikke egentlig",
     "likeIt": "Liker den",
     "loveIt": "Elsker den!",
-    "custom": "Egendefinert",
     "keepAds": "Behold annonser",
-    "donateCta": "Doner {{amount}}",
     "continueAds": "Fortsett med annonser",
-    "minimumNote": "Minimum $5.99",
     "thankYou": "Tusen takk for støtten!",
     "removeAds": "Fjern annonser",
-    "tagline": "Donasjoner fjerner annonser og støtter videre utvikling."
+    "tagline": "Å fjerne annonser støtter videre utvikling.",
+    "unlockCta": "Lås opp for {{amount}}"
   }
 }

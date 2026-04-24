@@ -12,23 +12,31 @@ import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 import { useSettingsStore } from '../store/settingsStore';
-import { SORTED_CURRENCIES } from '../data/currencies';
+import { SORTED_CURRENCIES, getLocalizedCurrencyName } from '../data/currencies';
 import { useColors } from '../hooks/useColors';
 import { Typography, Radius } from '../constants/Theme';
+import i18n from '../i18n';
 
 export default function CurrencyPickerScreen() {
   const { t } = useTranslation();
   const C = useColors();
   const { homeCurrency, patch } = useSettingsStore();
   const [search, setSearch] = useState('');
+  const locale = i18n.language;
+
+  const localizedCurrencies = useMemo(() => {
+    return SORTED_CURRENCIES
+      .map(c => ({ code: c.code, localizedName: getLocalizedCurrencyName(c.code, locale) }))
+      .sort((a, b) => a.localizedName.localeCompare(b.localizedName, locale));
+  }, [locale]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return SORTED_CURRENCIES;
-    return SORTED_CURRENCIES.filter(
-      (c) => c.code.toLowerCase().includes(q) || c.name.toLowerCase().includes(q),
+    if (!q) return localizedCurrencies;
+    return localizedCurrencies.filter(
+      (c) => c.code.toLowerCase().includes(q) || c.localizedName.toLowerCase().includes(q),
     );
-  }, [search]);
+  }, [search, localizedCurrencies]);
 
   const handleSelect = async (code: string) => {
     await patch({ homeCurrency: code });
@@ -76,7 +84,7 @@ export default function CurrencyPickerScreen() {
             >
               <Text style={[styles.code, { color: active ? C.rust : C.sage }]}>{item.code}</Text>
               <Text style={[styles.name, { color: active ? C.rust : C.darkSlate }, active && styles.nameActive]}>
-                {item.name}
+                {item.localizedName}
               </Text>
               {active && <Text style={[styles.check, { color: C.rust }]}>✓</Text>}
             </TouchableOpacity>

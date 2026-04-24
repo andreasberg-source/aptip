@@ -20,7 +20,7 @@ import { useHistoryStore } from '../../store/historyStore';
 import { useTripStore } from '../../store/tripStore';
 import { useColors } from '../../hooks/useColors';
 import { Typography, Radius } from '../../constants/Theme';
-import { CURRENCY_NAMES } from '../../data/currencies';
+import { getLocalizedCurrencyName } from '../../data/currencies';
 import i18n from '../../i18n';
 import { Satisfaction } from '../../utils/tipCalculations';
 
@@ -37,7 +37,7 @@ export default function SettingsScreen() {
   const { updateRates, isLoading, lastUpdated, error } = useExchangeRates();
   const {
     userName, homeCurrency, defaultPeople, defaultSatisfaction,
-    keepScreenAwake, darkMode, hasDonated, patch, savedParticipantNames, removeSavedParticipantName,
+    keepScreenAwake, darkMode, adsRemoved, patch, savedParticipantNames, removeSavedParticipantName,
   } = useSettingsStore();
   const clearNonTrip = useHistoryStore((s) => s.clearNonTrip);
   const { trips } = useTripStore();
@@ -101,7 +101,7 @@ export default function SettingsScreen() {
         >
           <Text style={[s.valueBtnCode, { color: C.rust }]}>{homeCurrency}</Text>
           <Text style={[s.valueBtnName, { color: C.darkSlate }]}>
-            {CURRENCY_NAMES[homeCurrency] ?? homeCurrency}
+            {getLocalizedCurrencyName(homeCurrency, currentLang)}
           </Text>
           <Text style={[s.chevron, { color: C.sage }]}>›</Text>
         </TouchableOpacity>
@@ -282,10 +282,10 @@ export default function SettingsScreen() {
       <View style={[s.compactRow, { borderBottomColor: C.lightBorder }]}>
         <Text style={[s.rowLabel, { color: C.darkSlate }]}>{t('settings.donatedToggle')}</Text>
         <Switch
-          value={hasDonated}
-          onValueChange={(v) => patch({ hasDonated: v })}
+          value={adsRemoved}
+          onValueChange={(v) => patch({ adsRemoved: v })}
           trackColor={{ false: C.lightBorder, true: C.gold }}
-          thumbColor={hasDonated ? C.rust : C.sage}
+          thumbColor={adsRemoved ? C.rust : C.sage}
         />
       </View>
 
