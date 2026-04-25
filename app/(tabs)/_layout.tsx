@@ -22,7 +22,7 @@ export default function TabLayout() {
   return (
     <Tabs
       tabBar={props => (
-        <View style={{ overflow: 'hidden', paddingBottom: insets.bottom, backgroundColor: C.white }}>
+        <View style={{ overflow: 'hidden' }}>
           <AdBanner />
           <BottomTabBar {...props} safeAreaInsets={{ bottom: 0 }} />
         </View>
@@ -33,6 +33,7 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: C.white,
           borderTopColor: C.lightBorder,
+          paddingBottom: insets.bottom,
         },
         tabBarLabelStyle: {
           fontSize: 11,
