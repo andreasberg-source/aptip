@@ -94,6 +94,7 @@ export default function RootLayout() {
           <Stack.Screen name="add-bill"          options={{ presentation: 'fullScreenModal', headerShown: false }} />
           <Stack.Screen name="trip-detail"         options={{ headerShown: false }} />
           <Stack.Screen name="trip-settle"  options={{ headerShown: false }} />
+          <Stack.Screen name="receipt-items" options={{ presentation: 'fullScreenModal', headerShown: false }} />
           <Stack.Screen name="donate" options={{ presentation: 'modal', headerShown: false }} />
           <Stack.Screen name="widget-input" options={{ presentation: 'transparentModal', headerShown: false, animation: 'fade' }} />
         </Stack>

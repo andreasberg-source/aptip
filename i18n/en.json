@@ -1484,7 +1484,20 @@
     "selectTotal": "Tap a total to use as tip base",
     "preTax": "Pre-tax subtotal",
     "postTax": "Total (incl. tax)",
-    "taxLine": "Tax"
+    "taxLine": "Tax",
+    "reviewReceipt": "Review receipt",
+    "assignItems": "Assign items",
+    "step": "Step {{n}} of {{total}}",
+    "itemsSelected": "{{n}} items selected",
+    "noItems": "No items detected",
+    "addItem": "Add item",
+    "useItems": "Use items",
+    "saveItems": "Save items",
+    "nextAssign": "Next: Assign",
+    "perPerson": "Per person",
+    "tapToZoom": "Tap to enlarge",
+    "processingOcr": "Scanning receipt…",
+    "quantityShort": "×{{n}}"
   },
   "splitTab": {
     "title": "Split",

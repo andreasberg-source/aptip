@@ -1484,7 +1484,20 @@
     "selectTotal": "Betrag antippen, um als Trinkgeld-Basis zu verwenden",
     "preTax": "Netto (exkl. MwSt.)",
     "postTax": "Gesamt (inkl. MwSt.)",
-    "taxLine": "MwSt."
+    "taxLine": "MwSt.",
+    "reviewReceipt": "Bon prüfen",
+    "assignItems": "Artikel zuweisen",
+    "step": "Schritt {{n}} von {{total}}",
+    "itemsSelected": "{{n}} Artikel ausgewählt",
+    "noItems": "Keine Artikel erkannt",
+    "addItem": "Artikel hinzufügen",
+    "useItems": "Artikel verwenden",
+    "saveItems": "Artikel speichern",
+    "nextAssign": "Weiter: Zuweisen",
+    "perPerson": "Pro Person",
+    "tapToZoom": "Tippen zum Vergrößern",
+    "processingOcr": "Bon wird gescannt…",
+    "quantityShort": "×{{n}}"
   },
   "splitTab": {
     "title": "Teilen",

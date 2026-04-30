@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import {
   View,
   Text,
@@ -9,16 +9,13 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
-  ActivityIndicator,
   Modal,
   FlatList,
   Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import * as ImagePicker from 'expo-image-picker';
-import { CameraView, useCameraPermissions } from 'expo-camera';
 
 import { useTripStore } from '../store/tripStore';
 import type { Bill, BillItem, SplitMode } from '../store/tripStore';
@@ -31,28 +28,11 @@ import {
   computePercentageSplits,
   computeItemizedSplits,
 } from '../utils/settlement';
-import { extractRawLines } from '../utils/parseAmounts';
-import type { RawLine } from '../utils/parseAmounts';
-import OcrItemReview from '../components/OcrItemReview';
+import { useReceiptStore } from '../store/receiptStore';
 import ContinentCountryPicker from '../components/ContinentCountryPicker';
 import ServiceTypeSelector from '../components/ServiceTypeSelector';
 import { tippingData, ContinentKey, ServiceType, getLocalizedCountryName } from '../data/tippingData';
 import i18n from '../i18n';
-
-// Lazy-load ML Kit
-let TextRecognition: typeof import('@react-native-ml-kit/text-recognition').default | null = null;
-try {
-  TextRecognition = require('@react-native-ml-kit/text-recognition').default;
-} catch {
-  TextRecognition = null;
-}
-
-let manipulateAsync: ((uri: string, actions: any[], options?: any) => Promise<{ uri: string; width: number; height: number }>) | null = null;
-try {
-  manipulateAsync = require('expo-image-manipulator').manipulateAsync;
-} catch {
-  manipulateAsync = null;
-}
 
 const SPLIT_MODES: SplitMode[] = ['equal', 'percentage', 'custom', 'itemized'];
 
@@ -132,17 +112,11 @@ export default function AddBillScreen() {
   });
 
   // Itemized bill items
-  const [items, setItems] = useState<BillItem[]>(existingBill?.items ?? []);
+  const [items, setItems] = useState<BillItem[]>(
+    (existingBill?.items ?? []).map(it => ({ ...it, quantity: (it as any).quantity ?? 1 }))
+  );
 
-  // OCR state
-  const [scanning, setScanning] = useState(false);
-  const [showCamera, setShowCamera] = useState(false);
   const [showImagePreview, setShowImagePreview] = useState(false);
-  const [permission, requestPermission] = useCameraPermissions();
-  const cameraRef = useRef<CameraView>(null);
-  const [cameraLayout, setCameraLayout] = useState({ width: 0, height: 0 });
-  const [ocrItemLines, setOcrItemLines] = useState<RawLine[]>([]);
-  const [showOcrReview, setShowOcrReview] = useState(false);
 
   const participants = trip?.participants ?? [];
   const includedParticipants = participants.filter(p => includedIds.includes(p.id));
@@ -239,76 +213,41 @@ export default function AddBillScreen() {
     router.back();
   }, [canSave, tripId, billId, isEdit, description, currency, totalAmount, paidBy, splitMode, includedIds, items, capturedImageUri, billCountry, billContinent, serviceType, addBill, updateBill]);
 
-  // ── OCR ───────────────────────────────────────────────────────────────────
-  const processOcrUri = useCallback(async (uri: string) => {
-    setScanning(true);
-    setCapturedImageUri(uri);
-    try {
-      if (!TextRecognition) throw new Error('OCR not available');
-      const result = await TextRecognition.recognize(uri);
-      const lines = extractRawLines(result.blocks);
-      if (lines.length === 0) {
-        Alert.alert('No text found', 'Could not detect any text in the image. Try a clearer photo.');
-        return;
-      }
-      setOcrItemLines(lines);
-      setShowOcrReview(true);
-    } catch (e: any) {
-      Alert.alert('Scan error', e.message ?? 'Could not process image');
-    } finally {
-      setScanning(false);
-      setShowCamera(false);
+  // ── Receipt items (via receipt-items screen) ─────────────────────────────
+  const handleScanItems = useCallback(() => {
+    useReceiptStore.getState().setContext({
+      currency,
+      participants: trip?.participants ?? [],
+    });
+    router.push('/receipt-items');
+  }, [currency, trip?.participants]);
+
+  // Consume result when returning from receipt-items screen
+  useFocusEffect(useCallback(() => {
+    const r = useReceiptStore.getState().result;
+    if (!r) return;
+    const newItems: BillItem[] = r.items.map(ri => ({
+      id: ri.id,
+      label: ri.label || 'Item',
+      amount: ri.amount,
+      quantity: ri.quantity,
+      assignedTo: ri.assignedTo,
+    }));
+    if (newItems.length > 0) {
+      setItems(prev => [...prev, ...newItems]);
+      setSplitMode('itemized');
     }
-  }, []);
+    if (r.imageUri) setCapturedImageUri(r.imageUri);
+    useReceiptStore.getState().clearResult();
+  }, []));
 
-  const handlePickImage = useCallback(async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({ quality: 0.9 });
-    if (!result.canceled && result.assets[0]?.uri) {
-      await processOcrUri(result.assets[0].uri);
-    }
-  }, [processOcrUri]);
-
-  const handleOcrConfirm = useCallback((selected: RawLine[]) => {
-    const newItems: BillItem[] = selected
-      .map(l => ({ id: generateId(), label: l.label || 'Item', amount: l.amount || 0, assignedTo: [] }))
-      .filter(item => item.amount > 0);
-    setItems(prev => [...prev, ...newItems]);
-    setSplitMode('itemized');
-    setShowOcrReview(false);
-  }, []);
-
-  // Auto-trigger camera/scan when opened via the "Scan & Split" shortcut button
+  // Auto-trigger receipt-items when opened via the "Scan & Split" shortcut button
   useEffect(() => {
     if (autoScan !== '1' || isEdit) return;
     setSplitMode('itemized');
-    const trigger = async () => {
-      if (TextRecognition) {
-        const { granted } = permission?.granted ? { granted: true } : await requestPermission();
-        if (granted) { setShowCamera(true); return; }
-      }
-      await handlePickImage();
-    };
-    const timer = setTimeout(trigger, 350);
+    const timer = setTimeout(handleScanItems, 350);
     return () => clearTimeout(timer);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const handleCapture = useCallback(async () => {
-    if (!cameraRef.current) return;
-    const photo = await cameraRef.current.takePictureAsync({ quality: 0.9 });
-    if (!photo?.uri) return;
-    let uri = photo.uri;
-    if (manipulateAsync && cameraLayout.width > 0) {
-      try {
-        const cropped = await manipulateAsync(
-          photo.uri,
-          [{ crop: { originX: 0, originY: 0, width: photo.width * 0.9, height: photo.height * 0.9 } }],
-          { compress: 0.9, format: 'jpeg' as any },
-        );
-        uri = cropped.uri;
-      } catch { /* use full image */ }
-    }
-    await processOcrUri(uri);
-  }, [processOcrUri, cameraLayout]);
 
   const toggleIncluded = (pid: string) => {
     setIncludedIds(prev =>
@@ -317,7 +256,7 @@ export default function AddBillScreen() {
   };
 
   const addItem = () => {
-    setItems(prev => [...prev, { id: generateId(), label: '', amount: 0, assignedTo: [] }]);
+    setItems(prev => [...prev, { id: generateId(), label: '', amount: 0, quantity: 1, assignedTo: [] }]);
   };
 
   const updateItem = (id: string, updates: Partial<BillItem>) => {
@@ -348,54 +287,6 @@ export default function AddBillScreen() {
     );
   }
 
-  // ── Camera view ──────────────────────────────────────────────────────────
-  if (showCamera) {
-    if (!permission?.granted) {
-      return (
-        <SafeAreaView style={[styles.safe, { backgroundColor: C.cream }]}>
-          <View style={styles.center}>
-            <Text style={[styles.emptyText, { color: C.darkSlate }]}>{t('scan.permission')}</Text>
-            <TouchableOpacity
-              style={[styles.primaryBtn, { backgroundColor: C.rust, marginTop: 16 }]}
-              onPress={requestPermission}
-            >
-              <Text style={styles.primaryBtnText}>{t('scan.permissionBtn')}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setShowCamera(false)} style={{ marginTop: 12 }}>
-              <Text style={[styles.cancelText, { color: C.sage }]}>Cancel</Text>
-            </TouchableOpacity>
-          </View>
-        </SafeAreaView>
-      );
-    }
-    return (
-      <View style={styles.cameraContainer}>
-        <CameraView
-          ref={cameraRef}
-          style={styles.camera}
-          facing="back"
-          onLayout={e => setCameraLayout(e.nativeEvent.layout)}
-        />
-        <View style={styles.cameraControls}>
-          <TouchableOpacity style={styles.cancelCameraBtn} onPress={() => setShowCamera(false)}>
-            <Text style={styles.cancelCameraBtnText}>✕</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.captureBtn}
-            onPress={handleCapture}
-            disabled={scanning}
-          >
-            {scanning
-              ? <ActivityIndicator color="#fff" />
-              : <Text style={styles.captureBtnText}>{t('scan.capture')}</Text>}
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cancelCameraBtn} onPress={handlePickImage}>
-            <Text style={styles.cancelCameraBtnText}>🖼️</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  }
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: C.cream }]}>
@@ -637,23 +528,10 @@ export default function AddBillScreen() {
               <View style={styles.itemizedToolbar}>
                 <TouchableOpacity
                   style={[styles.scanItemsBtn, { borderColor: C.gold, backgroundColor: C.white }]}
-                  onPress={async () => {
-                    if (TextRecognition) {
-                      if (!permission?.granted) {
-                        const { granted } = await requestPermission();
-                        if (!granted) { await handlePickImage(); return; }
-                      }
-                      setShowCamera(true);
-                    } else {
-                      await handlePickImage();
-                    }
-                  }}
-                  disabled={scanning}
+                  onPress={handleScanItems}
                   activeOpacity={0.7}
                 >
-                  {scanning
-                    ? <ActivityIndicator size="small" color={C.rust} />
-                    : <Text style={[styles.scanItemsBtnText, { color: C.darkSlate }]}>📷 {t('splitTab.scanItems')}</Text>}
+                  <Text style={[styles.scanItemsBtnText, { color: C.darkSlate }]}>📷 {t('splitTab.scanItems')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[styles.addItemBtn, { backgroundColor: C.rust }]}
@@ -675,6 +553,9 @@ export default function AddBillScreen() {
                       placeholderTextColor={C.sage}
                       returnKeyType="done"
                     />
+                    {(item.quantity ?? 1) > 1 && (
+                      <Text style={[styles.itemQtyBadge, { color: C.sage }]}>×{item.quantity}</Text>
+                    )}
                     <TextInput
                       style={[styles.itemAmountInput, { borderColor: C.lightBorder, color: C.darkSlate }]}
                       value={item.amount > 0 ? String(item.amount) : ''}
@@ -758,14 +639,6 @@ export default function AddBillScreen() {
           </TouchableOpacity>
         </View>
       </Modal>
-
-      <OcrItemReview
-        visible={showOcrReview}
-        items={ocrItemLines}
-        currency={currency}
-        onConfirm={handleOcrConfirm}
-        onCancel={() => setShowOcrReview(false)}
-      />
 
       {/* From History Modal */}
       <Modal
@@ -1002,6 +875,7 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   removeItemText: { fontSize: 16, width: 24, textAlign: 'center' },
+  itemQtyBadge: { fontFamily: Typography.mono, fontSize: 12, paddingHorizontal: 4 },
   itemAssignees: {
     flexDirection: 'row',
     flexWrap: 'wrap',

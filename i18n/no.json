@@ -1484,7 +1484,20 @@
     "selectTotal": "Trykk på et beløp for å bruke som grunnlag",
     "preTax": "Eks. skatt",
     "postTax": "Totalt (inkl. mva)",
-    "taxLine": "Mva"
+    "taxLine": "Mva",
+    "reviewReceipt": "Gjennomgå bon",
+    "assignItems": "Tildel varer",
+    "step": "Steg {{n}} av {{total}}",
+    "itemsSelected": "{{n}} varer valgt",
+    "noItems": "Ingen varer funnet",
+    "addItem": "Legg til vare",
+    "useItems": "Bruk varer",
+    "saveItems": "Lagre varer",
+    "nextAssign": "Neste: Tildel",
+    "perPerson": "Per person",
+    "tapToZoom": "Trykk for å forstørre",
+    "processingOcr": "Skanner bon…",
+    "quantityShort": "×{{n}}"
   },
   "splitTab": {
     "title": "Del regning",

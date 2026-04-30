@@ -14,7 +14,8 @@ export type SplitMode = 'equal' | 'percentage' | 'custom' | 'itemized';
 export interface BillItem {
   id: string;
   label: string;
-  amount: number;
+  amount: number;      // line total (unit price × quantity)
+  quantity: number;    // defaults to 1 for existing items
   assignedTo: string[]; // participant IDs; empty = all participants
 }
 

@@ -1484,7 +1484,20 @@
     "selectTotal": "Toca un total para usarlo como base de propina",
     "preTax": "Subtotal (sin impuesto)",
     "postTax": "Total (con IVA)",
-    "taxLine": "IVA"
+    "taxLine": "IVA",
+    "reviewReceipt": "Revisar recibo",
+    "assignItems": "Asignar artículos",
+    "step": "Paso {{n}} de {{total}}",
+    "itemsSelected": "{{n}} artículos seleccionados",
+    "noItems": "No se detectaron artículos",
+    "addItem": "Añadir artículo",
+    "useItems": "Usar artículos",
+    "saveItems": "Guardar artículos",
+    "nextAssign": "Siguiente: Asignar",
+    "perPerson": "Por persona",
+    "tapToZoom": "Toca para ampliar",
+    "processingOcr": "Escaneando recibo…",
+    "quantityShort": "×{{n}}"
   },
   "splitTab": {
     "title": "Dividir",

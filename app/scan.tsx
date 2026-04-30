@@ -8,7 +8,10 @@ import {
   TextInput,
   Image,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -74,6 +77,7 @@ function frameToScreen(
 
 export default function ScanScreen() {
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const { currency, country } = useLocalSearchParams<{ currency?: string; country?: string }>();
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
@@ -266,7 +270,7 @@ export default function ScanScreen() {
 
   // ── Results view ──────────────────────────────────────────────────────────
   return (
-    <View style={styles.flex}>
+    <View style={[styles.flex, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
       {/* Header */}
       <View style={styles.resultsHeader}>
         <TouchableOpacity style={styles.retakeHeaderBtn} onPress={handleRetake}>
@@ -368,27 +372,29 @@ export default function ScanScreen() {
       )}
 
       {/* Manual entry footer */}
-      <View style={styles.manualFooter}>
-        <Text style={styles.manualLabel}>{t('scan.manualEntry')}</Text>
-        <View style={styles.manualRow}>
-          <TextInput
-            style={styles.manualInput}
-            value={manualInput}
-            onChangeText={setManualInput}
-            placeholder={t('scan.manualPlaceholder')}
-            placeholderTextColor={Colors.sage}
-            keyboardType="decimal-pad"
-            returnKeyType="done"
-          />
-          <TouchableOpacity
-            style={[styles.manualUseBtn, !manualInput && styles.disabledBtn]}
-            onPress={handleUseManual}
-            disabled={!manualInput}
-          >
-            <Text style={styles.manualUseBtnText}>{t('scan.manualUse')}</Text>
-          </TouchableOpacity>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <View style={styles.manualFooter}>
+          <Text style={styles.manualLabel}>{t('scan.manualEntry')}</Text>
+          <View style={styles.manualRow}>
+            <TextInput
+              style={styles.manualInput}
+              value={manualInput}
+              onChangeText={setManualInput}
+              placeholder={t('scan.manualPlaceholder')}
+              placeholderTextColor={Colors.sage}
+              keyboardType="decimal-pad"
+              returnKeyType="done"
+            />
+            <TouchableOpacity
+              style={[styles.manualUseBtn, !manualInput && styles.disabledBtn]}
+              onPress={handleUseManual}
+              disabled={!manualInput}
+            >
+              <Text style={styles.manualUseBtnText}>{t('scan.manualUse')}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </View>
   );
 }

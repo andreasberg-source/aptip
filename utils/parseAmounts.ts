@@ -419,7 +419,19 @@ export interface RawLine {
   id: string;
   label: string;
   amount: number | null;
+  quantity: number;
   kind: 'item' | 'total' | 'tax' | 'header';
+}
+
+const QTY_LEAD_RE = /^(\d{1,2})\s*[x×]\s*/i;
+const QTY_TRAIL_RE = /\s+[x×]\s*(\d{1,2})$/i;
+
+function extractQty(label: string): { qty: number; cleaned: string } {
+  let m = label.match(QTY_LEAD_RE);
+  if (m) return { qty: parseInt(m[1], 10), cleaned: label.slice(m[0].length).trim() };
+  m = label.match(QTY_TRAIL_RE);
+  if (m) return { qty: parseInt(m[1], 10), cleaned: label.slice(0, label.length - m[0].length).trim() };
+  return { qty: 1, cleaned: label };
 }
 
 /**
@@ -460,22 +472,25 @@ function _buildRawLines(rawTexts: string[]): RawLine[] {
     const amount = vals.length > 0 ? vals[vals.length - 1] : null;
     const label = extractLabel(trimmed);
 
+    const { qty, cleaned: cleanedLabel } = extractQty(label || trimmed.slice(0, 40));
+    const finalLabel = cleanedLabel || trimmed.slice(0, 40);
+
     // Orphan pairing: current line has label but no amount, next has only a number
-    if (amount === null && label && i + 1 < rawTexts.length) {
+    if (amount === null && finalLabel && i + 1 < rawTexts.length) {
       const nextTrimmed = rawTexts[i + 1].trim();
       const nextLabel = extractLabel(nextTrimmed);
       const nextVals = extractValues(nextTrimmed);
       if (!nextLabel && nextVals.length > 0) {
         const pairedAmount = nextVals[nextVals.length - 1];
         const kind = _classifyKind(lower, pairedAmount);
-        result.push({ id: String(idx++), label: label || trimmed.slice(0, 40), amount: pairedAmount, kind });
+        result.push({ id: String(idx++), label: finalLabel, amount: pairedAmount, quantity: qty, kind });
         i += 2;
         continue;
       }
     }
 
     const kind = _classifyKind(lower, amount);
-    result.push({ id: String(idx++), label: label || trimmed.slice(0, 40), amount, kind });
+    result.push({ id: String(idx++), label: finalLabel, amount, quantity: qty, kind });
     i++;
   }
 

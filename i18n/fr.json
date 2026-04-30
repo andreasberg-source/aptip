@@ -1484,7 +1484,20 @@
     "selectTotal": "Appuyer sur un montant pour l'utiliser comme base",
     "preTax": "Hors taxes",
     "postTax": "Total (TTC)",
-    "taxLine": "TVA"
+    "taxLine": "TVA",
+    "reviewReceipt": "Vérifier le reçu",
+    "assignItems": "Attribuer les articles",
+    "step": "Étape {{n}} sur {{total}}",
+    "itemsSelected": "{{n}} articles sélectionnés",
+    "noItems": "Aucun article détecté",
+    "addItem": "Ajouter un article",
+    "useItems": "Utiliser les articles",
+    "saveItems": "Enregistrer les articles",
+    "nextAssign": "Suivant : Attribuer",
+    "perPerson": "Par personne",
+    "tapToZoom": "Appuyer pour agrandir",
+    "processingOcr": "Scan du reçu…",
+    "quantityShort": "×{{n}}"
   },
   "splitTab": {
     "title": "Partager",

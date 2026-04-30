@@ -9,14 +9,10 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  Alert,
-  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import * as ImagePicker from 'expo-image-picker';
-import { CameraView, useCameraPermissions } from 'expo-camera';
 
 import { useTripStore } from '../../store/tripStore';
 import { useSettingsStore } from '../../store/settingsStore';
@@ -24,22 +20,12 @@ import { useHistoryStore } from '../../store/historyStore';
 import { useColors } from '../../hooks/useColors';
 import { Typography, Radius } from '../../constants/Theme';
 import { formatAmount } from '../../utils/tipCalculations';
-import { parseAmountsFromText, extractRawLines } from '../../utils/parseAmounts';
-import type { RawLine } from '../../utils/parseAmounts';
-import OcrItemReview from '../../components/OcrItemReview';
+import { useReceiptStore } from '../../store/receiptStore';
 import ContinentCountryPicker from '../../components/ContinentCountryPicker';
 import TripPickerDropdown from '../../components/TripPickerDropdown';
 import TipBanner from '../../components/TipBanner';
 import { useCountryFromLocation } from '../../hooks/useCountryFromLocation';
 import { tippingData, ContinentKey } from '../../data/tippingData';
-
-// Lazy-load ML Kit
-let TextRecognition: typeof import('@react-native-ml-kit/text-recognition').default | null = null;
-try {
-  TextRecognition = require('@react-native-ml-kit/text-recognition').default;
-} catch {
-  TextRecognition = null;
-}
 
 
 type QuickMode = 'equal' | 'percentage' | 'custom';
@@ -98,19 +84,12 @@ export default function SplitScreen() {
     { key: '1', name: userName || '', pct: '' },
     { key: '2', name: '', pct: '' },
   ]);
-  const [scanning, setScanning] = useState(false);
-  const [showCamera, setShowCamera] = useState(false);
-  const [ocrItems, setOcrItems] = useState<RawLine[]>([]);
-  const [showOcrReview, setShowOcrReview] = useState(false);
-
   // Save modal state
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [saveName, setSaveName] = useState('');
   const [selectedTripId, setSelectedTripId] = useState<string | null>(null);
   const [savedVisible, setSavedVisible] = useState(false);
 
-  const [permission, requestPermission] = useCameraPermissions();
-  const cameraRef = useRef<CameraView>(null);
   const nextKey = useRef(3);
 
   // Name autocomplete
@@ -185,39 +164,21 @@ export default function SplitScreen() {
     [favouriteCountries, patch],
   );
 
-  const processOcrUri = useCallback(async (uri: string) => {
-    setScanning(true);
-    try {
-      if (!TextRecognition) throw new Error('unavailable');
-      const result = await TextRecognition.recognize(uri);
-      const lines = extractRawLines(result.blocks);
-      if (lines.length === 0) {
-        Alert.alert('No text found', 'Could not detect text. Enter amount manually.');
-        return;
-      }
-      setOcrItems(lines);
-      setShowOcrReview(true);
-    } catch {
-      Alert.alert('Scan', 'Not available in Expo Go. Enter amount manually.');
-    } finally {
-      setScanning(false);
-      setShowCamera(false);
-    }
-  }, []);
+  const handleScanReceipt = useCallback(() => {
+    useReceiptStore.getState().setContext({
+      currency: quickCurrency,
+      participants: [],
+    });
+    router.push('/receipt-items');
+  }, [quickCurrency]);
 
-  const handlePickImage = useCallback(async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({ quality: 0.9 });
-    if (!result.canceled && result.assets[0]?.uri) {
-      await processOcrUri(result.assets[0].uri);
-    }
-  }, [processOcrUri]);
-
-  const handleCapture = useCallback(async () => {
-    if (!cameraRef.current) return;
-    const photo = await cameraRef.current.takePictureAsync({ quality: 0.9 });
-    if (!photo?.uri) return;
-    await processOcrUri(photo.uri);
-  }, [processOcrUri]);
+  useFocusEffect(useCallback(() => {
+    const r = useReceiptStore.getState().result;
+    if (!r) return;
+    const total = r.items.reduce((s, i) => s + i.amount, 0);
+    if (total > 0) setQuickAmount(total.toFixed(2));
+    useReceiptStore.getState().clearResult();
+  }, []));
 
   const addCustomPerson = useCallback(() => {
     setCustomPersons(prev => [...prev, { key: String(nextKey.current++), name: '', amount: '' }]);
@@ -265,46 +226,6 @@ export default function SplitScreen() {
     setSavedVisible(true);
     setTimeout(() => setSavedVisible(false), 2000);
   }, [totalAmount, saveName, quickCurrency, quickContinent, quickCountry, quickPeople, homeCurrency, selectedTripId, activeTrips, addEntry, addBill]);
-
-  // Camera view
-  if (showCamera) {
-    if (!permission?.granted) {
-      return (
-        <SafeAreaView style={[styles.safe, { backgroundColor: C.cream }]}>
-          <View style={styles.center}>
-            <Text style={[styles.centerText, { color: C.darkSlate }]}>{t('scan.permission')}</Text>
-            <TouchableOpacity
-              style={[styles.primaryBtn, { backgroundColor: C.rust, marginTop: 16 }]}
-              onPress={requestPermission}
-            >
-              <Text style={styles.primaryBtnText}>{t('scan.permissionBtn')}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setShowCamera(false)} style={{ marginTop: 12 }}>
-              <Text style={[styles.cancelText, { color: C.sage }]}>{t('cancel')}</Text>
-            </TouchableOpacity>
-          </View>
-        </SafeAreaView>
-      );
-    }
-    return (
-      <View style={styles.cameraContainer}>
-        <CameraView ref={cameraRef} style={styles.camera} facing="back" />
-        <View style={styles.cameraControls}>
-          <TouchableOpacity style={styles.cancelCameraBtn} onPress={() => setShowCamera(false)}>
-            <Text style={styles.cancelCameraBtnText}>✕</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.captureBtn} onPress={handleCapture} disabled={scanning}>
-            {scanning
-              ? <ActivityIndicator color="#fff" />
-              : <Text style={styles.captureBtnText}>{t('scan.capture')}</Text>}
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cancelCameraBtn} onPress={handlePickImage}>
-            <Text style={styles.cancelCameraBtnText}>🖼️</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  }
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: C.cream }]}>
@@ -361,23 +282,10 @@ export default function SplitScreen() {
               />
               <TouchableOpacity
                 style={[styles.scanIconBtn, { borderColor: C.lightBorder, backgroundColor: C.cream }]}
-                onPress={async () => {
-                  if (TextRecognition) {
-                    if (!permission?.granted) {
-                      const { granted } = await requestPermission();
-                      if (!granted) { await handlePickImage(); return; }
-                    }
-                    setShowCamera(true);
-                  } else {
-                    await handlePickImage();
-                  }
-                }}
-                disabled={scanning}
+                onPress={handleScanReceipt}
                 activeOpacity={0.7}
               >
-                {scanning
-                  ? <ActivityIndicator size="small" color={C.rust} />
-                  : <Text style={styles.scanIconText}>📷</Text>}
+                <Text style={styles.scanIconText}>📷</Text>
               </TouchableOpacity>
             </View>
 
@@ -696,17 +604,6 @@ export default function SplitScreen() {
         </View>
       )}
 
-      <OcrItemReview
-        visible={showOcrReview}
-        items={ocrItems}
-        currency={quickCurrency}
-        onConfirm={(selected) => {
-          const total = selected.reduce((s, l) => s + (l.amount ?? 0), 0);
-          if (total > 0) setQuickAmount(total.toFixed(2));
-          setShowOcrReview(false);
-        }}
-        onCancel={() => setShowOcrReview(false)}
-      />
     </SafeAreaView>
   );
 }

@@ -3,7 +3,6 @@ import { Tabs } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { BottomTabBar } from '@react-navigation/bottom-tabs';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useColors } from '../../hooks/useColors';
 import AdBanner from '../../components/AdBanner';
@@ -17,14 +16,13 @@ function TabIcon({ emoji, focused }: { emoji: string; focused: boolean }) {
 export default function TabLayout() {
   const { t } = useTranslation();
   const C = useColors();
-  const insets = useSafeAreaInsets();
 
   return (
     <Tabs
       tabBar={props => (
-        <View style={{ overflow: 'hidden' }}>
+        <View style={{ backgroundColor: C.white, overflow: 'hidden' }}>
           <AdBanner />
-          <BottomTabBar {...props} safeAreaInsets={{ bottom: 0 }} />
+          <BottomTabBar {...props} />
         </View>
       )}
       screenOptions={{
@@ -33,7 +31,6 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: C.white,
           borderTopColor: C.lightBorder,
-          paddingBottom: insets.bottom,
         },
         tabBarLabelStyle: {
           fontSize: 11,
