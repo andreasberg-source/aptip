@@ -52,3 +52,6 @@ aptipfeature.png
 # Accidental nested clones
 *-build/
 aptip-build/
+
+# Generated locale data script output
+scripts/locale-data.ts
