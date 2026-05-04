@@ -23,8 +23,7 @@
     "production": {
       "android": {
         "serviceAccountKeyPath": "./google-play-service-account.json",
-        "track": "beta",
-        "releaseStatus": "draft"
+        "track": "internal"
       }
     }
   }

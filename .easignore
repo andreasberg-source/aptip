@@ -1,5 +1,10 @@
 # Files excluded from the EAS build archive (not needed to compile the app)
 
+# Local tool caches and generated files — permission issues on Linux tar extraction
+.expo/
+.claude/
+scripts/locale-data.ts
+
 # Store listing / marketing (only the Play Store text files, NOT the Zustand store source)
 store/listing/
 PRIVACY_POLICY.md
